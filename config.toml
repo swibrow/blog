@@ -1,0 +1,38 @@
+baseURL = '/'
+languageCode = 'en-us'
+theme = "nightfall"
+
+[menu]
+  [[menu.header]]
+    name = "posts"
+    weight = 1
+    url = "/posts"
+  [[menu.header]]
+    name = "about"
+    weight = 0
+    url = "/about"
+
+[params]
+author = "Samuel Wibrow"
+user = "samuel"
+hostname = "wibrow.net"
+
+[[params.social]]
+key = 0
+name = "github"
+url = "https://github.com/swibrow"
+
+[[params.social]]
+key = 1
+name = "instagram"
+url = "https://www.instagram.com/swibrow/"
+
+[[params.social]]
+key = 2
+name = "linkedin"
+url = "https://www.linkedin.com/in/samuelwibrow/"
+
+[[params.social]]
+key = 3
+name = "email"
+url = "mailto:sam.wibrow@gmail.com"
