@@ -15,3 +15,5 @@ I also have expertise in DevOps, a methodology that emphasizes collaboration and
 When I'm not working, I enjoy spending time outdoors, particularly snowboarding and cycling. I am passionate about staying active and am always looking for new challenges and adventures.
 
 I strive to be an expert in the technology industry through my dedication to my craft and my passion for staying active and enjoying the outdoors. I hope to inspire others to pursue their passions and find balance in their professional and personal lives.
+
+<img src="/me.jpg" width="100%" style="vertical-align:middle"/>

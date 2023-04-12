@@ -2,6 +2,14 @@ baseURL = '/'
 languageCode = 'en-us'
 theme = "nightfall"
 
+[markup.goldmark.renderer]
+  unsafe= true
+
+[module]
+[[module.mounts]]
+  source = 'assets/images'
+  target = 'assets/images'
+
 [menu]
   [[menu.header]]
     name = "posts"
@@ -14,6 +22,7 @@ theme = "nightfall"
 
 [params]
 author = "Samuel Wibrow"
+description = "A blog written with AI"
 user = "samuel"
 hostname = "wibrow.net"
 
