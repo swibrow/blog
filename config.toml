@@ -13,8 +13,12 @@ theme = "nightfall"
 [menu]
   [[menu.header]]
     name = "posts"
-    weight = 1
+    weight = 2
     url = "/posts"
+  [[menu.header]]
+    name = "apps"
+    weight = 1
+    url = "/apps"
   [[menu.header]]
     name = "about"
     weight = 0
@@ -22,7 +26,7 @@ theme = "nightfall"
 
 [params]
 author = "Samuel Wibrow"
-description = "A blog written with AI"
+description = "A blog generated with AI"
 user = "samuel"
 hostname = "wibrow.net"
 
@@ -32,16 +36,16 @@ name = "github"
 url = "https://github.com/swibrow"
 
 [[params.social]]
-key = 1
-name = "instagram"
-url = "https://www.instagram.com/swibrow/"
-
-[[params.social]]
 key = 2
 name = "linkedin"
 url = "https://www.linkedin.com/in/samuelwibrow/"
 
 [[params.social]]
-key = 3
-name = "email"
-url = "mailto:sam.wibrow@gmail.com"
+key = 4
+name = "strava"
+url = "https://www.strava.com/athletes/21868831"
+
+[[params.social]]
+key = 10
+name = "instagram"
+url = "https://www.instagram.com/swibrow/"
