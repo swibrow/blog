@@ -23,6 +23,10 @@ theme = "nightfall"
     name = "about"
     weight = 0
     url = "/about"
+  [[menu.header]]
+    name = "cv"
+    weight = 10
+    url = "/cv.html"
 
 [params]
 author = "Samuel Wibrow"
