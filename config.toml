@@ -23,10 +23,6 @@ theme = "nightfall"
     name = "about"
     weight = 0
     url = "/about"
-  [[menu.header]]
-    name = "cv"
-    weight = 10
-    url = "/cv"
 
 [params]
 author = "Samuel Wibrow"
@@ -48,8 +44,3 @@ url = "https://www.linkedin.com/in/samuelwibrow/"
 key = 4
 name = "strava"
 url = "https://www.strava.com/athletes/21868831"
-
-[[params.social]]
-key = 10
-name = "instagram"
-url = "https://www.instagram.com/swibrow/"

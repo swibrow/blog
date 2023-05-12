@@ -9,7 +9,7 @@ Throughout my professional experience, I have worked with cutting-edge technolog
 
 In my role as a cloud engineer, I am responsible for the deployment, management, and maintenance of cloud-based infrastructure, such as Amazon Web Services (AWS). I have a deep understanding of cloud-based architectures and am skilled in using tools such as Kubernetes, Docker, and Terraform.
 
-I also have expertise in DevOps, a methodology that emphasizes collaboration and communication between development and operations teams. I have experience in automating the software development pipeline, from code development to testing and deployment, using tools such as Jenkins, Git, and Ansible.
+I also have expertise in DevOps, a methodology that emphasizes collaboration and communication between development and operations teams. I have experience in automating the software development pipeline, from code development to testing and deployment, using tools such as CircleCi, Git, and Terraform.
 
 When I'm not working, I enjoy spending time outdoors, particularly snowboarding and cycling. I am passionate about staying active and am always looking for new challenges and adventures.
 
