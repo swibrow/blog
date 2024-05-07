@@ -1,5 +1,7 @@
 +++
 title = "Apps"
+published = false
+readingTime = false
 +++
 
 - <h4>Shortly - URL shortening api</h4>

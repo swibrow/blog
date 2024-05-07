@@ -14,21 +14,30 @@ theme = "nightfall"
   [[menu.header]]
     name = "posts"
     weight = 2
-    url = "/posts"
+    url = "posts"
   [[menu.header]]
     name = "apps"
     weight = 1
-    url = "/apps"
+    url = "apps"
+  [[menu.header]]
+    name = "auto-blog"
+    weight = 3
+    url = "auto-blog"
   [[menu.header]]
     name = "about"
     weight = 0
-    url = "/about"
+    url = "about"
 
 [params]
-author = "Samuel Wibrow"
-description = "A blog generated with AI"
 user = "samuel"
 hostname = "wibrow.net"
+published = false
+readingTime = false
+tags = false
+description = "A blog mostly written with LLMs"
+[params.author]
+  name = "Samuel Wibrow"
+  email = ""
 
 [[params.social]]
 key = 0
