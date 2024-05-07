@@ -1,6 +1,7 @@
 +++
 title = "About"
 date = "2023-04-12"
+showMetadata = false
 +++
 
 Hello, my name is Samuel and I'm a platform engineer, cloud engineer, and DevOps professional. I'm originally from Australia and moved to Germany in 2015 to pursue my career in technology. Over the years, I've gained extensive experience and have established myself as a respected professional in the industry.

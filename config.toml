@@ -13,16 +13,16 @@ theme = "nightfall"
 [menu]
   [[menu.header]]
     name = "posts"
-    weight = 2
+    weight = 10
     url = "posts"
   [[menu.header]]
-    name = "apps"
-    weight = 1
-    url = "apps"
+    name = "gpt-posts"
+    weight = 20
+    url = "gpt-posts"
   [[menu.header]]
-    name = "auto-blog"
-    weight = 3
-    url = "auto-blog"
+    name = "apps"
+    weight = 130
+    url = "apps"
   [[menu.header]]
     name = "about"
     weight = 0
@@ -34,7 +34,8 @@ hostname = "wibrow.net"
 published = false
 readingTime = false
 tags = false
-description = "A blog mostly written with LLMs"
+showMetadata = false
+description = "A blog mostly written by LLMs"
 [params.author]
   name = "Samuel Wibrow"
   email = ""
