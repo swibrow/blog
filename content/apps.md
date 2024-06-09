@@ -1,6 +1,6 @@
 +++
 title = "Apps"
-published = false
+published = true
 readingTime = false
 showMetadata = false
 +++
