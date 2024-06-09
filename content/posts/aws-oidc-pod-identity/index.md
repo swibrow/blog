@@ -25,6 +25,8 @@ Steps:
 - Deploy AWS Pod Identity service
 - Deploy awscli container and test access
 
+Testing files can be found in this [github repo](https://github.com/swibrow/aws-pod-identity-webhook)
+
 ### Creating talos image
 
 head over to and download the image required https://factory.talos.dev/
