@@ -16,10 +16,6 @@ theme = "nightfall"
     weight = 10
     url = "posts"
   [[menu.header]]
-    name = "gpt-posts"
-    weight = 20
-    url = "gpt-posts"
-  [[menu.header]]
     name = "apps"
     weight = 130
     url = "apps"
@@ -36,6 +32,7 @@ readingTime = false
 tags = false
 showMetadata = false
 description = "A blog mostly written by LLMs"
+footerHtml = ''
 [params.author]
   name = "Samuel Wibrow"
   email = ""
