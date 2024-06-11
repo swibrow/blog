@@ -8,13 +8,13 @@ draft = false
 showMetadata = false
 +++
 
-To setup AWS IRSA (IAM Roles for Service Accounts) in your homelab Kubernetes cluster, I used a Raspberry Pi 4 and Talos. IRSA leverages OpenID Connect to authenticate service accounts, providing a secure and convenient method to access AWS resources. This approach simplifies the management of credentials in your Kubernetes environment. Here’s a hacky guide on how I accomplished this setup.
+IRSA leverages OpenID Connect to authenticate service accounts, providing a secure and convenient method to access AWS resources. This approach simplifies the management of credentials in your Kubernetes environment. 
 
-For my testing I grabbed a spare Raspberry Pi 4 4GB and loaded up an SD card with the latest version of talos. This could have easily been done with docker on my mac but I wanted to do a real test so I can migrate the config over to my [homelab](https://github.com/swibrow/pitower) cluster.
+To test AWS IRSA (IAM Roles for Service Accounts) in a selfhosted Kubernetes cluster, I used a spare Raspberry Pi 4 and [Talos](https://www.talos.dev/) (Kubernetes Operating System). This could have easily been done with docker on my mac but I wanted to do a real test so I can migrate the config over to my [homelab](https://github.com/swibrow/pitower) cluster.
 
 Word of warning, I only ran through these steps once so most likely there's quite some errors. I'll update this post as I refine the process.
 
-You can find all the files referenced in [Github](https://github.com/swibrow/aws-pod-identity-webhook)
+You can find all the referenced files [here](https://github.com/swibrow/aws-pod-identity-webhook)
 
 
 ### Booting Talos on Raspberry Pi
