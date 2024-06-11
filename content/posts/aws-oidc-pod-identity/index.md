@@ -244,7 +244,7 @@ You can find all the files referenced in [Github](https://github.com/swibrow/aws
     name: pitower-test
     namespace: test
     annotations:
-      eks.amazonaws.com/role-arn: arn:aws:iam::633355703129:role/pitower-test
+      eks.amazonaws.com/role-arn: arn:aws:iam::1111111111111:role/pitower-test
   ---
   apiVersion: apps/v1
   kind: Deployment
