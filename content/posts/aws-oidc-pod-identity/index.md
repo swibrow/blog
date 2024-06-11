@@ -38,6 +38,7 @@ You can find all the files referenced in [Github](https://github.com/swibrow/aws
 ### Creating the Talos Cluster
 
 1. **Generate Cluster Configuration:**
+   
   Create a `controlplane.patch` file to set custom kube-apiserver settings, using a GitHub repo as the OIDC Provider server.
 
   controlplane.patch
@@ -49,6 +50,9 @@ You can find all the files referenced in [Github](https://github.com/swibrow/aws
           service-account-jwks-uri: https://<node_ip>:6443/openid/v1/jwks
       allowSchedulingOnControlPlanes: true
   ```
+
+  Create a `machine.patch` file to set a pet name for the server.
+  
   machine.patch
   ```yaml
   machine:
