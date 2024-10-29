@@ -1,4 +1,16 @@
 # samuel.wibrow.net
 
-TODO:
-- add comments support - https://github.com/giscus/giscus/tree/main
+
+## local development
+
+deps
+
+```bash
+brew install sass/sass/sass
+```
+
+
+
+
+## TODO
+- [ ] add comments support - https://github.com/giscus/giscus/tree/main

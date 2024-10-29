@@ -20,6 +20,10 @@ theme = "nightfall"
     weight = 130
     url = "apps"
   [[menu.header]]
+    name = "golearn"
+    weight = 140
+    url = "go"
+  [[menu.header]]
     name = "about"
     weight = 0
     url = "about"
