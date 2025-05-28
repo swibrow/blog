@@ -13,15 +13,21 @@ tags = [
 draft = false
 +++
 
-# Building a Kubernetes Operator for the sake of building a Kubernetes Operator
+## The Problem
 
-In my current $job, we recently migrated to ArgoCD from Terraform for application deployments :pray: and with that came the issue of passing terraform outputs into helm inputs. e.g. AWS Managed Prometheus Endpoint. So I spent some time reading about what the hot tool was in 2025 for building a Kubernetes operator. I had a dabble with [Metacontroller](https://metacontroller.github.io/metacontroller/intro.html) but in the end I decided to run with [Kubebuilder](https://book.kubebuilder.io/) as I've seen a few projects already using the framework (Karpenter). So claude and I vibed out for the afternoon and built an operator.
+At my current $job, we recently migrated to ArgoCD from Terraform for application deployments 🙏. With that came an interesting challenge: **how do we pass Terraform outputs into Kubernetes manifests?**
 
-## TL;DR
+For example, our AWS Managed Prometheus endpoint lives in Terraform state, but our apps deployed via ArgoCD need that URL. Sure, we could use External Secrets Operator (and we do!), but it adds an extra layer of indirection when you just want to see what values are being injected into pods.
 
-TFOut - a simple operator that syncs Terraform State outputs stored in S3 into Kubernetes ConfigMaps and Secrets. Nothing crazy, but could be useful maybe.. (we already are using External Secrets Operator which acts as a decent bridge with the only pitfall of being a little bit more effort to view what's injected into the pods).
+## The Solution: TFOut
 
-Simple example of a `TerraformOutputs` resource:
+After exploring what's hot in 2025 for building Kubernetes operators, I had a dabble with [Metacontroller](https://metacontroller.github.io/metacontroller/intro.html) but ultimately chose [Kubebuilder](https://book.kubebuilder.io/) - the same framework powering projects like Karpenter.
+
+So Claude and I vibed out for the afternoon and built **TFOut** - a simple operator that syncs Terraform state outputs from S3 directly into Kubernetes ConfigMaps and Secrets.
+
+### 🎯 Quick Example
+
+Here's all you need to sync your Terraform outputs:
 
 ```yaml
 apiVersion: tfout.wibrow.net/v1alpha1
@@ -39,29 +45,32 @@ spec:
   targetNamespace: production
 ```
 
-And now, hopefully.. all your Terraform outputs are available as ConfigMaps and Secrets in Kubernetes. Sensitive outputs automatically go into Secrets, the rest into ConfigMaps.
+✨ **Result**: All your Terraform outputs are automatically available as ConfigMaps and Secrets in Kubernetes. Sensitive outputs go into Secrets, the rest into ConfigMaps.
 
-## The Whole Package
+## 📦 What's in the Box?
 
-What you get in an afternoon (with the help of our good ol' friend Claude):
-- The operator code (Go + Kubebuilder)
-- Helm charts for deployment
-- Documentation with mkdocs and GitHub Pages
-- GitHub Actions for CI/CD
-- E2E tests with Kind
-- Prometheus metrics + Grafana dashboards
-- RBAC setup
+Building a production-ready operator in an afternoon? Here's what Claude and I shipped:
 
-## How It Works
+### Core Features
+- 🚀 **Operator** - Go + Kubebuilder framework
+- 📊 **Helm charts** - Easy deployment
+- 📚 **Documentation** - MkDocs + GitHub Pages
+- 🔄 **CI/CD** - GitHub Actions workflows
+- 🧪 **E2E tests** - Kind-based testing
+- 📈 **Observability** - Prometheus metrics + Grafana dashboards
+- 🔐 **Security** - Full RBAC setup
 
-The operator watches for `TerraformOutputs` resources and:
-1. Fetches the Terraform state from S3 (if the ETag has changed or it's the first sync)
-2. Parses all outputs
-3. Creates/updates ConfigMaps for non-sensitive values
-4. Creates/updates Secrets for sensitive values
-5. Handles multiple backends with proper merging
+## 🔧 How It Works
 
-Example output:
+The reconciliation loop is beautifully simple:
+
+1. **Watch** - Monitor `TerraformOutputs` resources
+2. **Fetch** - Pull state from S3 (only if ETag changed)
+3. **Parse** - Extract all Terraform outputs
+4. **Sync** - Create/update ConfigMaps and Secrets
+5. **Merge** - Handle multiple backends gracefully
+
+### Example Output
 
 ```bash
 $ kubectl get configmap my-terraform-outputs -o yaml
@@ -71,41 +80,69 @@ data:
   database_host: postgres.internal.example.com
 ```
 
-## The Development Process
+## 💡 Development Journey
 
-Started with Kubebuilder scaffolding, then focused on the actual business logic. The reconciliation loop is straightforward:
+The process was refreshingly straightforward:
 
-Used AI assistance throughout to handle the boilerplate - especially useful for helm templates, GitHub Actions workflows, and test setup.
+1. **Scaffold** - Kubebuilder did the heavy lifting
+2. **Focus** - Wrote the core reconciliation logic
+3. **Iterate** - Claude helped with boilerplate (Helm templates, GitHub Actions, tests)
+4. **Polish** - Added metrics, multi-backend support, and proper error handling
 
-Fix all the issues that came up with the help of AI, and then added some extra features like metrics and multi-backend support.
+## 🌟 Production-Ready Features
 
-## Ready Features
+### 🔍 Smart Change Detection
+Uses S3 ETags to avoid unnecessary syncs - only fetches when state actually changes.
 
-- **Change Detection**: Uses S3 ETags to avoid unnecessary syncs
-- **Multi-Backend Support**: Merge outputs from multiple Terraform states
-- **Metrics**: Sync duration, error counts, output counts - all exposed for Prometheus
-- **Security**: IAM roles for S3 access, RBAC, sensitive data handling
-- **Testing**: Unit tests + E2E tests that spin up a Kind cluster
-
-## Key Takeaways
-
-1. **Sometimes it's fun to turn the tap on with a hammer**
-
-## Give it a crack
-
-If you've been putting off building that operator or controller - maybe give it a shot. The Kubernetes ecosystem has matured enough that you can build tools quickly.
-
-The code is here if you want to check it out: [github.com/swibrow/tfout](https://github.com/swibrow/tfout)
-
-Install with Helm:
-
-```bash
-helm repo add tfout https://swibrow.github.io/tfout
-helm repo update
-helm install tfout tfout/tfout --namespace tfout --create-namespace
+### 🔀 Multi-Backend Support
+Merge outputs from multiple Terraform states seamlessly:
+```yaml
+backends:
+  - s3:
+      bucket: prod-state
+      key: prod/terraform.tfstate
+  - s3:
+      bucket: other-state
+      key: other/terraform.tfstate
 ```
 
-## Terraform Module for Pod Identity
+### 📊 Full Observability
+- Sync duration metrics
+- Error count tracking
+- Output count monitoring
+- Grafana dashboard included!
+
+### 🔒 Enterprise Security
+- IAM roles for S3 access
+- Full RBAC implementation
+- Automatic sensitive data detection
+- Secure Secret creation
+
+### ✅ Comprehensive Testing
+- Unit tests with high coverage
+- E2E tests using Kind clusters
+- Integration tests for S3 operations
+
+## 🚀 Get Started
+
+### Installation
+
+The code is on GitHub: **[github.com/swibrow/tfout](https://github.com/swibrow/tfout)** ⭐
+
+```bash
+# Add the Helm repository
+helm repo add tfout https://swibrow.github.io/tfout
+helm repo update
+
+# Install the operator
+helm install tfout tfout/tfout \
+  --namespace tfout \
+  --create-namespace
+```
+
+## 🔐 AWS Pod Identity Setup
+
+Configure IAM roles for secure S3 access:
 
 ```hcl
 module "pod_identity" {
@@ -138,30 +175,76 @@ module "pod_identity" {
 }
 ```
 
-## Complete Example
+## 📝 Complete Example
+
+Here's a full example with multiple backends and custom naming:
 
 ```yaml
 apiVersion: tfout.wibrow.net/v1alpha1
 kind: TerraformOutputs
 metadata:
-  name: my-terraform-outputs
+  name: platform-outputs
 spec:
   backends:
+    # Production state
     - s3:
         bucket: my-terraform-state
         key: prod/terraform.tfstate
         region: eu-west-1
         roleArn: arn:aws:iam::123456789012:role/terraform-sync-role
+
+    # Shared infrastructure state
     - s3:
-        bucket: my-other-terraform-state
-        key: staging/terraform.tfstate
+        bucket: my-terraform-state
+        key: shared/terraform.tfstate
         region: eu-west-1
         roleArn: arn:aws:iam::123456789012:role/terraform-sync-role
+
   syncInterval: 5m
   targetNamespace: production
-  configMapName: terraform-outputs
-  secretName: terraform-secrets
+  configMapName: platform-config
+  secretName: platform-secrets
 ```
 
-Well, if you made it this far, thanks for reading! I hope this inspires you to build something that you can show your mum as I'm sure she'll be impressed with your operator. If you have any questions or feedback, feel free to reach out on GitHub or LinkedIn.
+### Using the Outputs in Your Apps
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+  - name: app
+    env:
+    - name: API_ENDPOINT
+      valueFrom:
+        configMapKeyRef:
+          name: platform-config
+          key: api_endpoint
+    - name: DATABASE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: platform-secrets
+          key: database_password
+```
+
+## 🎯 Key Takeaways
+
+1. **Kubernetes operators aren't scary** - With modern tooling, you can build production-ready operators quickly
+2. **AI accelerates development** - Claude handled the boilerplate while I focused on business logic
+3. **Sometimes simple is better** - Not every problem needs a complex solution
+4. **The ecosystem has matured** - Tools like Kubebuilder make operator development accessible
+
+## 🤝 Join the Fun!
+
+If you made it this far, thanks for reading! I hope this inspires you to build that operator you've been thinking about. Your mum will definitely be impressed! 😄
+
+Got questions? Find me on:
+- **GitHub**: [github.com/swibrow/tfout](https://github.com/swibrow/tfout)
+- **LinkedIn**: [https://www.linkedin.com/in/samuelwibrow/](https://www.linkedin.com/in/samuelwibrow/)
+
+---
+
+*Built with ❤️ and Claude in an afternoon. Sometimes the best tools are the ones that scratch your own itch.*
 
