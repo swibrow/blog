@@ -5,13 +5,22 @@
     let resumeData = null;
     
     // Load resume data
-    fetch('/resume_public.json')
-        .then(response => response.json())
+    fetch('/resume.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
             resumeData = data;
             updateCommands();
         })
-        .catch(error => console.error('Failed to load resume data:', error));
+        .catch(error => {
+            console.error('Failed to load resume data:', error);
+            // Fallback to basic commands if resume data fails to load
+            initializeFallbackCommands();
+        });
     
     let commands = {
         clear: {
@@ -34,6 +43,43 @@
 Or just type a question!`
         }
     };
+    
+    function initializeFallbackCommands() {
+        commands.about = {
+            response: `<strong>Samuel Wibrow</strong>
+Senior Site Reliability Engineer / Platform Engineer
+
+Experienced SRE with 13+ years designing and operating highly available, scalable infrastructure. 
+Currently focused on AWS, Kubernetes, and building internal developer platforms.
+
+📍 Zurich, Switzerland`
+        };
+        
+        commands.skills = {
+            response: `<strong>Technical Skills:</strong>
+
+<strong>Cloud & Infrastructure:</strong> AWS, Terraform, Kubernetes, Docker
+<strong>Languages:</strong> Python, Bash, Go
+<strong>CI/CD & GitOps:</strong> GitHub Actions, ArgoCD, GitLab CI
+<strong>Observability:</strong> Datadog, Prometheus, EFK Stack`
+        };
+        
+        commands.experience = {
+            response: `<strong>Current Role:</strong>
+Site Reliability Engineer at Tamedia (2023-Present)
+
+Previous experience includes Platform Engineering at Dock Financial 
+and Cloud Engineering at Stylight. 13+ years in IT infrastructure.`
+        };
+        
+        commands.contact = {
+            response: `<strong>Get in touch:</strong>
+
+• GitHub: <a href="https://github.com/swibrow" target="_blank">@swibrow</a>
+• LinkedIn: <a href="https://www.linkedin.com/in/samuelwibrow/" target="_blank">Samuel Wibrow</a>
+• Resume: <a href="/resume.html" target="_blank">View full resume</a>`
+        };
+    }
     
     function updateCommands() {
         if (!resumeData) return;
