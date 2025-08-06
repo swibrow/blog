@@ -1,0 +1,43 @@
+<div class="terminal-container">
+    <div class="terminal">
+        <div class="terminal-header">
+            <span class="terminal-title">Terminal</span>
+            <div class="terminal-controls">
+                <span class="terminal-control minimize">_</span>
+                <span class="terminal-control maximize">□</span>
+                <span class="terminal-control close">×</span>
+            </div>
+        </div>
+        <div class="terminal-body">
+            <div class="terminal-output" id="terminal-output">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">{{ .Site.Params.user }}@{{ .Site.Params.hostname }}:~$</span>
+                    <span class="terminal-text">help</span>
+                </div>
+                <div class="terminal-response">
+                    Welcome! Ask me about Samuel's projects and experience.
+                    <br><br>
+                    Available commands:
+                    <br> • <span class="command">about</span> - Learn about Samuel
+                    <br> • <span class="command">projects</span> - View recent projects
+                    <br> • <span class="command">skills</span> - Technical skills
+                    <br> • <span class="command">contact</span> - Get in touch
+                    <br> • <span class="command">clear</span> - Clear terminal
+                    <br> • <span class="command">help</span> - Show this message
+                    <br><br>
+                    Or just type a question!
+                </div>
+            </div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">{{ .Site.Params.user }}@{{ .Site.Params.hostname }}:~$</span>
+                <input type="text" class="terminal-input" id="terminal-input" autofocus>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    window.terminalUser = "{{ .Site.Params.user }}";
+    window.terminalHostname = "{{ .Site.Params.hostname }}";
+</script>
+<script src="/js/terminal.js"></script>

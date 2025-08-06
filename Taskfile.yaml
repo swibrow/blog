@@ -1,7 +1,0 @@
-version: '3'
-
-tasks:
-  serve:
-    desc: "Run Hugo server"
-    cmds:
-      - hugo server -D

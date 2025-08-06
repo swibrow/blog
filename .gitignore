@@ -7,3 +7,6 @@ resources
 # Terraform
 .terraform
 .terraform.lock.hcl
+
+# Claude
+CLAUDE.md
