@@ -2,7 +2,7 @@
   "basics": {
     "name": "Samuel Wibrow",
     "label": "Senior Site Reliability Engineer / Platform Engineer",
-    "summary": "Experienced Site Reliability Engineer with 13+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, and building internal developer platforms that enable teams to move fast while maintaining reliability.",
+    "summary": "Highly driven and experienced Site Reliability Engineer with 13+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, networking, and building internal developer platforms that enable teams to move fast while maintaining reliability.",
     "location": {
       "city": "Zurich",
       "countryCode": "CH"
@@ -33,7 +33,7 @@
         "Unified AWS infrastructure by implementing stack-based architecture with clear lifecycle separation, reducing Terraform workflow times and improving reliability.",
         "Implemented Datadog Operator to shift observability ownership to developers, improving monitoring coverage and incident response.",
         "Migrated from Terraform managed application deployments to ArgoCD, enabling GitOps workflows and self-service deployments.",
-        "Mentored the team to prioritise engineering excellence and quality over quantity in all deliverables."
+        "Coached the team on focusing on quality engineering practices rather than rushing through tasks."
       ]
     },
     {
@@ -47,7 +47,7 @@
         "Developed comprehensive Helm charts for packaging and deploying complex microservices across multiple environments.",
         "Optimised GitLab CI pipelines, reducing build times by over 50% and improving deployment reliability.",
         "Implemented infrastructure as code using Terraform and Terragrunt for consistent and repeatable deployments.",
-        "Established security best practices including secrets management with Vault and automated security scanning."
+        "Established security best practices including secrets management with Vault and automated secret rotation."
       ]
     },
     {
@@ -60,7 +60,7 @@
         "Led migration from self-managed KOPS to AWS EKS, reducing operational overhead and enabling team autonomy for cluster management.",
         "Built automated multi-region VPC connectivity solution, enabling rapid provisioning of ephemeral test environments.",
         "Migrated core applications serving millions of users monthly to Kubernetes, improving scalability and reducing deployment times by 70%.",
-        "Implemented centralised EFK logging stack processing 1TB+ daily, providing realtime insights and reducing incident resolution time.",
+        "Implemented centralised EFK logging stack processing 1TB+ daily, providing real-time insights and reducing incident resolution time.",
         "Standardised CI/CD pipelines across 5+ teams, introducing shared libraries and best practices for consistent deployments.",
         "Developed internal Python library (Troposphere based) for CloudFormation generation, adopted by all teams."
       ]
@@ -71,7 +71,7 @@
       "startDate": "2017-04",
       "endDate": "2018-05",
       "highlights": [
-        "Led a cloud first approach, successfully integrating cloud based services into the organisation's infrastructure.",
+        "Led a cloud first approach, successfully integrating cloud-based services into the organisation's infrastructure.",
         "Automated employee user lifecycle management, streamlining user provisioning and management by implementing an event driven architecture.",
         "Managed the IT budget, ensuring that resources were allocated efficiently and cost-effectively.",
         "Managed recruitment, successfully building and managing a team of skilled professionals to support the organisation's technology needs."
@@ -86,7 +86,7 @@
         "Implemented desktop and server standard operating environments and automated the deployment with Windows/OSX/Linux deployment servers.",
         "Successfully deployed highly available services on AWS, including Active Directory, Network and FileServer services, to improve system reliability and performance.",
         "Administered network infrastructure, including firewalls, routers, switches, and VPNs, to ensure secure and efficient network operations.",
-        "Deployed a high density wireless network across the company's office, removing the need for any wired connections."
+        "Deployed a high-density wireless network across the company's office, removing the need for any wired connections."
       ]
     },
     {
@@ -103,7 +103,7 @@
       "position": "System Administrator",
       "startDate": "2012-06",
       "endDate": "2013-08",
-      "summary": "Designed and implemented comprehensive IT solutions for over 300 clients, encompassing server hardware configurations, operating system deployments, network service setups, and disaster recovery plans. These solutions were tailored for both data center and on-prem environments."
+      "summary": "Designed and implemented comprehensive IT solutions for over 300 clients, encompassing server hardware configurations, operating system deployments, network service setups, and disaster recovery plans. These solutions were tailored for both data centre and on-premises environments."
     },
     {
       "company": "Best Practice Australia",
@@ -111,7 +111,7 @@
       "position": "System Administrator",
       "startDate": "2010-06",
       "endDate": "2012-04",
-      "summary": "Successfully transitioned the company's on-site, unmanaged IT infrastructure to data center-hosted servers, significantly enhancing system reliability."
+      "summary": "Successfully transitioned the company's on-site, unmanaged IT infrastructure to data centre-hosted servers, significantly enhancing system reliability."
     },
     {
       "company": "Apple",
@@ -119,12 +119,12 @@
       "position": "Customer Support",
       "startDate": "2009-01",
       "endDate": "2010-05",
-      "summary": "Provided technical support to Apple customers across Australia and New Zealand in a high-volume call center. Effectively resolved hardware and software issues, demonstrated strong problem-solving skills, and delivered excellent customer service, contributing to high customer satisfaction rates."
+      "summary": "Provided technical support to Apple customers across Australia and New Zealand in a high-volume call centre. Effectively resolved hardware and software issues, demonstrated strong problem-solving skills, and delivered excellent customer service, contributing to high customer satisfaction rates."
     }
   ],
   "education": [
     {
-      "institution": "Tafe QLD",
+      "institution": "TAFE QLD",
       "area": "Information Technology - Networking",
       "studyType": "Diploma",
       "startDate": "2005",
