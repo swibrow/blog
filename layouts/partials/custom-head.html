@@ -7,3 +7,9 @@ gtag('js', new Date());
 
 gtag('config', 'G-Q39D976QX4');
 </script>
+
+{{ $themeOverrides := resources.Get "sass/theme-overrides.scss" | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $themeOverrides.Permalink }}">
+
+{{ $catppuccin := resources.Get "sass/catppuccin-mocha.scss" | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $catppuccin.Permalink }}">

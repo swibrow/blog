@@ -1,0 +1,44 @@
+// Theme overrides for better readability
+
+// Improve base font size and readability
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+// Better container width for readability
+.container, .postWrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+// Improve post list styling
+.postListItem {
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+// Better spacing between sections
+.postMetadata {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+// Post description styling
+.post-description {
+  font-size: 1.1rem;
+  font-style: italic;
+  opacity: 0.9;
+  margin: 1rem 0 1.5rem;
+}
+
+// Content area spacing
+.post-content {
+  margin-top: 2rem;
+}
