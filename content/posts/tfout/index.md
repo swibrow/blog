@@ -15,7 +15,7 @@ draft = false
 
 ## The Problem
 
-At my current $job, we recently migrated to ArgoCD from Terraform for application deployments 🙏. With that came an interesting challenge: **how do we pass Terraform outputs into Kubernetes manifests?**
+At my current $job, we recently migrated to ArgoCD from Terraform for application deployments 🙏. With that came a challenge: **how do we pass Terraform outputs into Kubernetes manifests?**
 
 For example, our AWS Managed Prometheus endpoint lives in Terraform state, but our apps deployed via ArgoCD need that URL. Sure, we could use External Secrets Operator (and we do!), but it adds an extra layer of indirection when you just want to see what values are being injected into pods.
 
@@ -243,8 +243,3 @@ If you made it this far, thanks for reading! I hope this inspires you to build t
 Got questions? Find me on:
 - **GitHub**: [github.com/swibrow/tfout](https://github.com/swibrow/tfout)
 - **LinkedIn**: [https://www.linkedin.com/in/samuelwibrow/](https://www.linkedin.com/in/samuelwibrow/)
-
----
-
-*Built with ❤️ and Claude in an afternoon. Sometimes the best tools are the ones that scratch your own itch.*
-

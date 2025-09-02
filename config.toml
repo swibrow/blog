@@ -20,9 +20,9 @@ theme = "nightfall"
     weight = 20
     url = "snippets"
   [[menu.header]]
-    name = "apps"
+    name = "projects"
     weight = 130
-    url = "apps"
+    url = "projects"
   [[menu.header]]
     name = "tools"
     weight = 140
@@ -39,7 +39,7 @@ published = false
 readingTime = false
 tags = false
 showMetadata = false
-description = "A blog mostly written by LLMs"
+description = "A blog mostly written with LLMs"
 footerHtml = ''
 [params.author]
   name = "Samuel Wibrow"

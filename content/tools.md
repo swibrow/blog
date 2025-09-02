@@ -4,9 +4,11 @@ readingTime = false
 showMetadata = false
 +++
 
-# Daily Tools & Setup
+Everyday tools to make me feel like a wizard.
 
-My list of goto tools I use daily for development and productivity.
+## Dotfiles
+
+My configuration files and setup scripts: **[swibrow/dotfiles](https://github.com/swibrow/dotfiles)**
 
 ## Package Management
 
@@ -24,6 +26,11 @@ My list of goto tools I use daily for development and productivity.
   - GPU-accelerated rendering
   - Native performance with modern features
   - Excellent font rendering
+
+- **[Starship](https://starship.rs/)** - Cross-shell prompt
+  - Fast and minimal
+  - Highly customizable
+  - Shows git status, package versions, and more
 
 ## Session Management
 
@@ -58,6 +65,11 @@ Essential command-line utilities:
   - Colorized output
   - Parallel command execution
 
+- **[zsh-z](https://github.com/agkozak/zsh-z)** - Jump quickly to directories
+  - Tracks your most used directories
+  - Smart matching with frecency algorithm
+  - `z project` jumps to most frecent directory matching "project"
+
 ## TUI Applications
 
 My favorite terminal user interface applications:
@@ -66,5 +78,10 @@ My favorite terminal user interface applications:
   - Interactive cluster navigation
   - Real-time resource monitoring
   - Log streaming and pod management
+
+- **[yazi](https://github.com/sxyazi/yazi)** - Blazing fast terminal file manager
+  - Async I/O for high performance
+  - Image preview support
+  - Plugin system and customizable keybindings
 
 ---
