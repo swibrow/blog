@@ -16,9 +16,9 @@ theme = "nightfall"
     weight = 10
     url = "posts"
   [[menu.header]]
-    name = "snippets"
+    name = "til"
     weight = 20
-    url = "snippets"
+    url = "til"
   [[menu.header]]
     name = "projects"
     weight = 130

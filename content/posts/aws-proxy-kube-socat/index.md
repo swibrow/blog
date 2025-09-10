@@ -825,4 +825,4 @@ show_manual_connection() {
 }
 ```
 
-Remember: with great power comes great opportunity to accidentally expose your production database to the internet. Use wisely! 🚀
+Remember: with great power comes great opportunity to accidentally expose your production database to the internet. Stay safe out there kids! 🚀

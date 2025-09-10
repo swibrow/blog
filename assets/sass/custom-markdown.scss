@@ -126,21 +126,36 @@
 
   // Horizontal rules
   hr {
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin: 2rem 0;
+    border: none !important;
+    border-top: 4px double rgba(0, 255, 0, 0.6) !important;
+    margin: 3rem 0 !important;
+    height: 4px !important;
+    background: none !important;
+    position: relative;
+    
+    &::after {
+      content: '• • •';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #000;
+      padding: 0 1rem;
+      color: rgba(0, 255, 0, 0.8);
+      font-size: 1.2rem;
+    }
   }
 
-  // Add visual separation between h2 sections (snippets)
+  // Add visual separation between h2 sections (TIL entries)
   h2:not(:first-child) {
     margin-top: 3rem;
     padding-top: 2rem;
     border-top: 1px dashed rgba(255, 255, 255, 0.3);
   }
 
-  // Style for snippet sections
+  // Style for TIL sections
   h3 {
-    color: #00ff00; // Terminal green for snippet titles
+    color: #00ff00; // Terminal green for TIL entry titles
   }
 
   // Definition lists (used in metadata)
