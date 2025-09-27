@@ -7,6 +7,91 @@ I collect a lot of little snippets and notes that I store in my Obsidian vault f
 
 ---
 
+## Random unit conversions
+
+As an SRE, we're often measuring things in unites of time. Eg. billions of requests per month, cost of running x in aws for y time, etc.
+
+### Seconds
+
+| Unit   | Number of Seconds                                   |
+|--------|-----------------------------------------------------|
+| Minute | 60                                                  |
+| Hour   | 3,600 (60 minutes × 60 seconds)                     |
+| Day    | 86,400 (24 hours × 60 minutes × 60 seconds)         |
+| Week   | 604,800 (7 days × 86,400 seconds)                   |
+| Month  | 2,629,746 (30.44 days × 86,400 seconds)             |
+| Year   | 31,536,000 (365 days × 86,400 seconds)              |
+
+### Minutes
+
+| Unit      | Number of Minutes                                |
+|-----------|--------------------------------------------------|
+| Minute    | 1                                                |
+| Hour      | 60                                               |
+| Day       | 1,440 (24 hours × 60 minutes)                    |
+| Week      | 10,080 (7 days × 1,440 minutes)                  |
+| Month     | 43,800 (30.44 days × 1,440 minutes)              |
+| Year      | 525,600 (365 days × 1,440 minutes)               |
+
+### Hours
+
+| Unit      | Number of Hours                                  |
+|-----------|--------------------------------------------------|
+| Hour      | 1                                                |
+| Day       | 24                                               |
+| Week      | 168 (7 days × 24 hours)                          |
+| Month     | 730.5 (30.44 days × 24 hours)                    |
+| Year      | 8,760 (365 days × 24 hours)                      |
+
+
+### 1 Billion units per month
+
+| Unit      | Number of Units per Month                        |
+|-----------|--------------------------------------------------|
+| Per Second| ~380 (1,000,000,000 / 2,629,746 seconds)         |
+| Per Minute| ~22,831 (1,000,000,000 / 43,829 minutes)         |
+| Per Hour  | ~1,369,863 (1,000,000,000 / 730 hours)           |
+| Per Day   | ~32,894,737 (1,000,000,000 / 30.44 days)         |
+| Per Week  | ~230,263,158 (1,000,000,000 / 4.35 weeks)        |
+| Per Month | 1,000,000,000                                    |
+| Per Year  | 12,000,000,000 (1,000,000,000 × 12 months)       |
+
+---
+
+## Creating Terraform IDs based on time.
+
+When creating terraform resources most of the time they should be unique and dynamic, I like to use a time based ID rather than a random string. This way I can easily identify when the resource was created and order them by time if needed. Date string would probs be better but who doesn't like converting hex to decimal and then to date.
+
+This does cause some chicken and egg problems in Terraform sometimes.
+
+```hcl
+resource "time_static" "timestamp_id" {}
+
+locals {
+  timestamp_id = format(
+    "%x", time_static.timestamp_id.unix
+  )
+
+  timestamps = {
+    unix = local.timestamp_id
+    # will give a 9 character hex string after this date
+    four_billion_two_hundred_ninetyfour_million_nine_hundred_sixtyseven_thousand_two_hundred_ninety_five = format(
+      "%x", 4294967295
+    ) # 2106-02-07 06:28:15
+  }
+}
+
+output "timestamps" {
+  value = local.timestamps
+}
+```
+
+Random calculation to figure out when the 32 bit unix timestamp will overflow:
+
+`4,294,967,296 seconds / (365.25 * 24 * 3600) ≈ 136 years from 1970 = 2106`
+
+---
+
 ## Kubernetes Deployment that OOMKilled
 
 This deployment will eventually get OOMKilled as it tries to allocate more memory than the limit set.
