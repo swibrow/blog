@@ -111,4 +111,10 @@ My configuration files and setup scripts: **[swibrow/dotfiles](https://github.co
   - Rust-based alternative to Apache Bench (ab)
   - Gotta love Switzerland's 10 gig pipes
 
+- **[glow](https://github.com/charmbracelet/glow)** - Markdown renderer for the terminal
+  - Beautiful markdown rendering in the CLI
+  - Syntax highlighting and formatting
+  - Read documentation without leaving the terminal
+  - Part of the Charm suite of CLI tools
+
 ---
