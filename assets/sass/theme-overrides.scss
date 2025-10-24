@@ -6,9 +6,15 @@ body {
   line-height: 1.5;
 }
 
+// Override the main container width for better readability across all pages
+.main {
+  max-width: 1400px !important;
+  width: 100% !important;
+}
+
 // Better container width for readability
 .container, .postWrapper {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
 }

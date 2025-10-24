@@ -1,0 +1,48 @@
+{{ define "title"}}
+{{ .Title }} | {{ .Site.Params.author.name }}
+{{ end }}
+
+{{ define "head" }}
+{{ $customMarkdown := resources.Get "sass/custom-markdown.scss" | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $customMarkdown.Permalink }}">
+{{ $tilStyles := resources.Get "sass/til-page.scss" | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $tilStyles.Permalink }}">
+{{ end }}
+
+{{ define "main" }}
+<div class="til-container">
+    <div class="til-content">
+        <div class="postWrapper">
+            <h1>{{ .Title }}</h1>
+            {{ if .Description}}
+                <p class="post-description">{{.Description}}</p>
+            {{ end }}
+            <div class="post-content">
+                {{ .Content }}
+
+                {{ range .Pages.ByDate.Reverse }}
+                <article class="til-post">
+                    <h2 id="{{ .Title | urlize }}">{{ .Title }}</h2>
+                    <time class="til-date">{{ .Date.Format "January 2, 2006" }}</time>
+                    <div class="til-post-content">
+                        {{ .Content }}
+                    </div>
+                </article>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+    <aside class="til-toc">
+        <div class="toc-sticky">
+            <h2>Contents</h2>
+            <nav id="TableOfContents">
+                <ul>
+                    {{ range .Pages.ByDate.Reverse }}
+                    <li><a href="#{{ .Title | urlize }}">{{ .Title }}</a></li>
+                    {{ end }}
+                </ul>
+            </nav>
+        </div>
+    </aside>
+</div>
+{{ end }}

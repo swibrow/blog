@@ -1,0 +1,152 @@
+// Import variables - match theme colors
+$accentColor: #33D17A;  // green from theme
+$backgroundDarker: #252627;
+$fontColor: #f8f8ff;
+$fontCode: 'Fira Mono', monospace;
+
+.til-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.til-content {
+    min-width: 0; // Prevents grid overflow
+}
+
+// TIL post styling
+.til-post {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid $accentColor;
+
+    &:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+    }
+
+    h2 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    .til-date {
+        display: block;
+        font-family: $fontCode;
+        font-size: 0.85rem;
+        color: $accentColor;
+        margin-bottom: 1rem;
+        opacity: 0.8;
+    }
+
+    .til-post-content {
+        h2, h3, h4 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+// Table of contents sidebar
+.til-toc {
+    position: relative;
+
+    .toc-sticky {
+        position: sticky;
+        top: 20px;
+        max-height: calc(100vh - 40px);
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: $backgroundDarker;
+        border: 1px solid $accentColor;
+        border-radius: 4px;
+
+        h2 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: $accentColor;
+            border-bottom: 1px solid $accentColor;
+            padding-bottom: 0.5rem;
+        }
+
+        nav {
+            font-family: $fontCode;
+            font-size: 0.9rem;
+            line-height: 1.6;
+
+            ul {
+                list-style: none;
+                padding-left: 0;
+                margin: 0;
+
+                ul {
+                    padding-left: 1rem;
+                    margin-top: 0.25rem;
+                }
+            }
+
+            li {
+                margin: 0.5rem 0;
+            }
+
+            a {
+                color: $fontColor;
+                text-decoration: none;
+                display: block;
+                padding: 0.25rem 0.5rem;
+                border-left: 2px solid transparent;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    color: $accentColor;
+                    border-left-color: $accentColor;
+                    padding-left: 0.75rem;
+                }
+            }
+        }
+
+        // Scrollbar styling
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: $backgroundDarker;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: $accentColor;
+            border-radius: 3px;
+        }
+    }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+    .til-container {
+        grid-template-columns: 1fr 250px;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .til-container {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .til-toc {
+        order: -1; // Move TOC above content on mobile
+
+        .toc-sticky {
+            position: static;
+            max-height: none;
+            margin-bottom: 2rem;
+        }
+    }
+}

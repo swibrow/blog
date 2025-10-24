@@ -19,3 +19,11 @@ gtag('config', 'G-Q39D976QX4');
 {{ $processed := $catppuccin | css.Sass | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $processed.Permalink }}">
 {{ end }}
+
+{{ if eq .Section "til" }}
+{{ $tilStyles := resources.Get "sass/til-page.scss" }}
+{{ if $tilStyles }}
+{{ $processed := $tilStyles | css.Sass | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $processed.Permalink }}">
+{{ end }}
+{{ end }}
