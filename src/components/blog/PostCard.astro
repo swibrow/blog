@@ -1,4 +1,6 @@
 ---
+import Card from "@components/ui/Card.astro";
+
 interface Props {
   title: string;
   date: Date;
@@ -16,46 +18,32 @@ const formattedDate = date.toLocaleDateString("en-US", {
 });
 ---
 
-<a href={`/posts/${slug}/`} class="group block no-underline">
-  <article
-    class="rounded-md border p-5 transition-all duration-200"
-    style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
-    data-post-card
-  >
-    <h2 class="mb-1 text-lg font-bold" style="color: var(--ctp-blue);">
-      {title}
-    </h2>
-    <time class="mb-2 block font-mono text-xs" style="color: var(--ctp-subtext0);">
-      {formattedDate}
-    </time>
-    {
-      description && (
-        <p class="mb-2 text-sm" style="color: var(--ctp-text);">
-          {description}
-        </p>
-      )
-    }
-    {
-      tags && tags.length > 0 && (
-        <div class="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <span
-              class="rounded px-2 py-0.5 font-mono text-xs"
-              style="background-color: var(--ctp-surface0); color: var(--ctp-subtext1);"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )
-    }
-  </article>
-</a>
-
-<style>
-  [data-post-card]:hover {
-    background-color: var(--ctp-surface0) !important;
-    border-color: var(--ctp-surface1) !important;
-    transform: translateY(-1px);
+<Card href={`/posts/${slug}/`}>
+  <h2 class="mb-1 text-lg font-bold" style="color: var(--ctp-blue);">
+    {title}
+  </h2>
+  <time class="mb-2 block font-mono text-xs" style="color: var(--ctp-subtext0);">
+    {formattedDate}
+  </time>
+  {
+    description && (
+      <p class="mb-2 text-sm" style="color: var(--ctp-text);">
+        {description}
+      </p>
+    )
   }
-</style>
+  {
+    tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span
+            class="rounded px-2 py-0.5 font-mono text-xs"
+            style="background-color: var(--ctp-surface0); color: var(--ctp-subtext1);"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+    )
+  }
+</Card>

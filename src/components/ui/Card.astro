@@ -1,0 +1,40 @@
+---
+interface Props {
+  href?: string;
+}
+
+const { href } = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag
+  href={href}
+  target={href?.startsWith("http") ? "_blank" : undefined}
+  rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+  class:list={["card", { "card-link": !!href }]}
+  data-card
+>
+  <slot />
+</Tag>
+
+<style>
+  .card {
+    display: block;
+    border-radius: 0.375rem;
+    border: 1px solid var(--ctp-surface0);
+    background-color: var(--ctp-mantle);
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+  }
+
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  [data-card]:hover {
+    background-color: var(--ctp-surface0);
+    border-color: var(--ctp-surface1);
+    transform: translateY(-1px);
+  }
+</style>

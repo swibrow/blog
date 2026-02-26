@@ -1,19 +1,92 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@components/layout/SectionHeading.astro";
-import Prose from "@components/ui/Prose.astro";
-import { getCollection, render } from "astro:content";
+import Card from "@components/ui/Card.astro";
 
-const pages = await getCollection("pages");
-const projectsPage = pages.find((p) => p.id === "projects");
-if (!projectsPage) throw new Error("Projects page not found");
-const { Content } = await render(projectsPage);
+const projects = [
+  {
+    name: "Home-Ops",
+    description: "Home automation and lab",
+    links: [{ label: "repo", url: "https://github.com/swibrow/home-ops" }],
+  },
+  {
+    name: "Shortly",
+    description: "URL shortening API",
+    links: [
+      { label: "api docs", url: "https://shortly.wibrow.net/docs" },
+      { label: "ui", url: "https://shortly.wibrow.net/" },
+    ],
+  },
+  {
+    name: "TFOut",
+    description: "Terraform outputs operator",
+    links: [{ label: "docs", url: "https://swibrow.github.io/tfout/" }],
+  },
+  {
+    name: "how",
+    description: "Natural language to shell commands",
+    links: [{ label: "repo", url: "https://github.com/swibrow/how" }],
+  },
+  {
+    name: "GitHub Actions TUI",
+    description: "Terminal UI for GitHub Actions",
+    links: [{ label: "repo", url: "https://github.com/swibrow/github-actions-tui" }],
+  },
+  {
+    name: "Homb",
+    description: "Family organisation management",
+    badge: "Coming soon",
+  },
+  {
+    name: "House Hunter",
+    description: "Finding the perfect home in Switzerland",
+    badge: "Coming soon",
+  },
+];
 ---
 
 <BaseLayout title="Projects">
   <SectionHeading title="projects">
-    <Prose>
-      <Content />
-    </Prose>
+    <div class="flex flex-col gap-4">
+      {
+        projects.map((project) => (
+          <Card>
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h2 class="mb-1 text-lg font-bold" style="color: var(--ctp-blue);">
+                  {project.name}
+                </h2>
+                <p class="mb-0 text-sm" style="color: var(--ctp-text);">
+                  {project.description}
+                </p>
+              </div>
+              {project.badge && (
+                <span
+                  class="shrink-0 rounded px-2 py-0.5 font-mono text-xs"
+                  style="background-color: var(--ctp-surface0); color: var(--ctp-subtext1);"
+                >
+                  {project.badge}
+                </span>
+              )}
+            </div>
+            {project.links && project.links.length > 0 && (
+              <div class="mt-3 flex flex-wrap gap-3">
+                {project.links.map((link) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-xs transition-colors hover:underline"
+                    style="color: var(--ctp-lavender);"
+                  >
+                    {link.label} →
+                  </a>
+                ))}
+              </div>
+            )}
+          </Card>
+        ))
+      }
+    </div>
   </SectionHeading>
 </BaseLayout>
