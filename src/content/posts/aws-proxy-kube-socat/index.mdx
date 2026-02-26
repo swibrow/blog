@@ -1,0 +1,387 @@
+---
+title: "Building a Hacky AWS Proxy Service with kube-proxy, socat, and Bash"
+date: "2025-08-15"
+description: "A simple solution for tunneling AWS services through Kubernetes using bash, socat, and port forwarding"
+tags: ["AWS", "Kubernetes", "Bash", "Proxy", "DevOps"]
+---
+
+*Disclaimer: My good friend Claude wrote this post. I only created a hack and told him about it.*
+
+Ever needed to connect to AWS services like RDS or DocumentDB from your local machine, but they're locked away in private subnets? Instead of doing something reasonable like setting up a VPN, here's a solution that involves using your production Kubernetes cluster as an impromptu bastion host. What could possibly go wrong?
+
+## The Problem
+
+AWS best practices dictate that databases and other sensitive services should live in private subnets, inaccessible from the public internet. While this is great for security, it makes local development a pain. Traditional solutions involve:
+
+- VPN connections (Thats no fun)
+- Bastion hosts (We already have ec2 running)
+- SSH tunnels (thats so 1990s)
+
+What if we could use our existing Kubernetes cluster as a gateway?
+
+## The Hacky Solution
+
+The core idea is simple and asking for trouble: deploy a temporary pod in your Kubernetes cluster that can reach AWS services, then use `kubectl port-forward` to tunnel the connection to your local machine. Here's how it works:
+
+### Architecture Overview
+
+```
+Local Machine → kubectl port-forward → K8s Pod (socat) → AWS Service
+```
+
+The magic happens in three parts:
+
+1. **Kubernetes endpoint** (must be public) - Your cluster's API server
+2. **Proxy pod** - A lightweight container running socat
+3. **Local port forwarding** - kubectl handles the tunnel
+
+### Prerequisites: The Security Nightmare
+
+Before we dive into the code, let's talk about what you need to make this work. Spoiler alert: it requires a security posture that would make your CISO wake up in cold sweats.
+
+You'll need:
+- A Kubernetes cluster where you can create pods (preferably in a namespace where important things live)
+- AWS credentials with permissions to list and connect to your databases
+- `kubectl` access from your local machine to production (what could go wrong?)
+- The ability to run random Alpine containers that open network sockets
+
+If your security team is reading this, maybe stop here and pretend you never saw it.
+
+### The Bash Implementation
+
+Here's where it gets interesting. Instead of hardcoding endpoints like a barbarian, let's use AWS CLI to discover services dynamically:
+
+```bash
+#!/bin/bash
+
+# AWS Service Discovery with fzf magic
+discover_rds_instances() {
+    aws rds describe-db-instances \
+        --query 'DBInstances[*].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port,Engine]' \
+        --output text | column -t
+}
+
+discover_documentdb_clusters() {
+    aws docdb describe-db-clusters \
+        --query 'DBClusters[*].[DBClusterIdentifier,Endpoint,Port]' \
+        --output text | column -t
+}
+
+discover_elasticache_clusters() {
+    aws elasticache describe-cache-clusters \
+        --query 'CacheClusters[*].[CacheClusterId,ConfigurationEndpoint.Address,ConfigurationEndpoint.Port,Engine]' \
+        --output text | column -t
+}
+
+# Interactive selection with fzf (because we're fancy like that)
+select_service() {
+    echo "What are we tunneling to today?"
+    SERVICE_TYPE=$(echo -e "RDS\nDocumentDB\nElastiCache" | fzf --prompt="Service Type: ")
+
+    case $SERVICE_TYPE in
+        "RDS")
+            SELECTION=$(discover_rds_instances | fzf --header="Select RDS Instance")
+            ENDPOINT=$(echo $SELECTION | awk '{print $2}')
+            PORT=$(echo $SELECTION | awk '{print $3}')
+            ;;
+        "DocumentDB")
+            SELECTION=$(discover_documentdb_clusters | fzf --header="Select DocumentDB Cluster")
+            ENDPOINT=$(echo $SELECTION | awk '{print $2}')
+            PORT=$(echo $SELECTION | awk '{print $3}')
+            ;;
+        "ElastiCache")
+            SELECTION=$(discover_elasticache_clusters | fzf --header="Select ElastiCache Cluster")
+            ENDPOINT=$(echo $SELECTION | awk '{print $2}')
+            PORT=$(echo $SELECTION | awk '{print $3}')
+            ;;
+    esac
+}
+
+# The main event
+create_tunnel() {
+    local endpoint=$1
+    local port=$2
+    local local_port=${3:-$port}
+
+    # Generate pod name with timestamp (for concurrent tunnels)
+    POD_NAME="tunnel-$(echo $endpoint | cut -d. -f1)-$(date +%s)"
+
+    echo "Creating tunnel pod: $POD_NAME"
+
+    # Create the socat relay pod
+    kubectl run $POD_NAME \
+        --image=alpine/socat:latest \
+        --restart=Never \
+        --command -- \
+        socat -d -d \
+        TCP-LISTEN:$port,fork,reuseaddr \
+        TCP:$endpoint:$port
+
+    # Wait for pod (with spinner because we're professionals)
+    echo -n "Waiting for pod to be ready"
+    while [[ $(kubectl get pod $POD_NAME -o jsonpath='{.status.phase}') != "Running" ]]; do
+        echo -n "."
+        sleep 1
+    done
+    echo " Done"
+
+    # Port forward with automatic retry
+    echo "Establishing tunnel on localhost:$local_port -> $endpoint:$port"
+    kubectl port-forward pod/$POD_NAME $local_port:$port
+}
+
+# Cleanup function that actually works
+cleanup() {
+    echo "Cleaning up pod: $POD_NAME"
+    kubectl delete pod $POD_NAME --grace-period=0 --force 2>/dev/null || true
+}
+
+# Main script
+main() {
+    # Check prerequisites
+    command -v fzf >/dev/null 2>&1 || { echo "fzf is required but not installed. brew install fzf"; exit 1; }
+    command -v aws >/dev/null 2>&1 || { echo "AWS CLI is required but not installed."; exit 1; }
+    command -v kubectl >/dev/null 2>&1 || { echo "kubectl is required but not installed."; exit 1; }
+
+    # Interactive service selection
+    select_service
+
+    if [[ -z "$ENDPOINT" ]]; then
+        echo "No service selected"
+        exit 1
+    fi
+
+    # Set up cleanup trap
+    trap cleanup EXIT INT TERM
+
+    # Create the tunnel
+    create_tunnel "$ENDPOINT" "$PORT"
+}
+
+# Run it
+main "$@"
+```
+
+### AWS Authentication
+
+The nice part is handling AWS authentication. The script leverages several authentication methods:
+
+1. **IAM Roles for Service Accounts (IRSA)** - If your cluster uses IRSA, the pod automatically inherits permissions
+2. **AWS Secrets Manager** - Store database credentials securely and retrieve them at runtime
+3. **Environment variables** - Pass AWS credentials to the pod (less secure, but works)
+
+Here's how to handle credential retrieval:
+
+```bash
+# Retrieve credentials from AWS Secrets Manager
+get_db_credentials() {
+    local secret_name=$1
+
+    # Use AWS CLI to fetch secrets
+    SECRET_JSON=$(aws secretsmanager get-secret-value \
+        --secret-id $secret_name \
+        --query SecretString \
+        --output text)
+
+    # Parse credentials
+    DB_HOST=$(echo $SECRET_JSON | jq -r '.host')
+    DB_PORT=$(echo $SECRET_JSON | jq -r '.port')
+    DB_USER=$(echo $SECRET_JSON | jq -r '.username')
+    DB_PASS=$(echo $SECRET_JSON | jq -r '.password')
+}
+```
+
+### Making it Production-Ready(ish)
+
+The full implementation includes several enhancements that make it almost responsible:
+
+```bash
+# Enhanced service discovery with filtering
+discover_services_with_tags() {
+    local tag_filter=$1
+
+    # Find RDS instances by tag
+    aws rds describe-db-instances \
+        --query "DBInstances[?Tags[?Key=='Environment' && Value=='$tag_filter']].[DBInstanceIdentifier,Endpoint.Address,Endpoint.Port]" \
+        --output text
+}
+
+# Multi-region support (because why limit the chaos?)
+discover_all_regions() {
+    aws ec2 describe-regions --query 'Regions[*].RegionName' --output text | tr '\t' '\n' | \
+    while read region; do
+        echo "=== Region: $region ==="
+        AWS_REGION=$region discover_rds_instances
+    done
+}
+
+# Concurrent tunnel management
+manage_tunnels() {
+    # List active tunnels
+    list_tunnels() {
+        kubectl get pods -l app=db-tunnel -o json | \
+        jq -r '.items[] | "\(.metadata.name)\t\(.metadata.labels.service)\t\(.metadata.creationTimestamp)"' | \
+        column -t
+    }
+
+    # Kill specific tunnel
+    kill_tunnel() {
+        local tunnel_name=$1
+        kubectl delete pod $tunnel_name --grace-period=0 --force
+    }
+
+    # Kill all tunnels (nuclear option)
+    kill_all_tunnels() {
+        kubectl delete pods -l app=db-tunnel --grace-period=0 --force
+    }
+}
+
+# Connection testing with retry logic
+test_connection() {
+    local host=$1
+    local port=$2
+    local retries=5
+
+    while (( retries > 0 )); do
+        if nc -z $host $port 2>/dev/null; then
+            echo "Connection successful"
+            return 0
+        fi
+        echo "Retrying... ($retries attempts left)"
+        ((retries--))
+        sleep 2
+    done
+
+    echo "Connection failed"
+    return 1
+}
+
+# Advanced fzf integration
+advanced_selection() {
+    # Multi-select with preview
+    aws rds describe-db-instances --output json | \
+    jq -r '.DBInstances[] | [.DBInstanceIdentifier, .Engine, .DBInstanceStatus, .Endpoint.Address] | @tsv' | \
+    fzf --multi \
+        --preview 'aws rds describe-db-instances --db-instance-identifier {1} --output json | jq .' \
+        --preview-window right:50% \
+        --header "Select databases (TAB for multi-select)"
+}
+```
+
+## Security Considerations
+
+While this approach is undeniably hacky, it can be made reasonably secure:
+
+1. **Temporary pods** - Pods are ephemeral and cleaned up after use
+2. **RBAC controls** - Limit who can create pods in the namespace
+3. **Network policies** - Restrict pod egress to specific AWS services
+4. **Audit logging** - Track all kubectl commands for compliance
+
+## Future Improvements
+
+While the bash implementation works, there's room for improvement:
+
+### 1. Rewrite Client in Go
+
+A Go client would provide:
+- Better error handling
+- Concurrent connection management
+- Native Kubernetes API integration
+- Cross-platform binary distribution
+
+```go
+// Pseudo-code for Go implementation
+type ProxyManager struct {
+    k8sClient kubernetes.Interface
+    awsClient aws.Client
+}
+
+func (pm *ProxyManager) CreateTunnel(service AWSService) (*Tunnel, error) {
+    // Create pod spec with socat
+    pod := pm.buildProxyPod(service)
+
+    // Deploy to cluster
+    created, err := pm.k8sClient.CoreV1().Pods(namespace).Create(pod)
+
+    // Set up port forwarding
+    return pm.establishTunnel(created)
+}
+```
+
+### 2. Dedicated Proxy Server
+
+Instead of socat, build a purpose-built proxy server:
+
+```go
+// Multi-protocol proxy server
+type ProxyServer struct {
+    authMethods []AuthMethod
+    protocols   map[string]ProtocolHandler
+}
+
+// Support multiple auth methods
+type AuthMethod interface {
+    Authenticate(ctx context.Context) (*Credentials, error)
+}
+
+// Handle different protocols
+type ProtocolHandler interface {
+    Proxy(src, dst net.Conn) error
+}
+```
+
+This would enable:
+- Multiple simultaneous connections
+- Protocol-aware proxying (SQL query logging, etc.)
+- Built-in authentication handling
+- Metrics and monitoring
+
+### 3. TTL on Proxy Containers
+
+Implement automatic cleanup with TTLs:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-proxy
+  annotations:
+    proxy.ttl: "3600"  # 1 hour
+spec:
+  containers:
+  - name: proxy
+    image: custom-proxy:latest
+    lifecycle:
+      preStop:
+        exec:
+          command: ["/cleanup.sh"]
+```
+
+A controller could watch for expired pods and clean them up automatically.
+
+## Conclusion
+
+This hacky solution demonstrates the power of combining simple tools in creative ways. While it's not enterprise-ready , it solves a real problem with minimal dependencies. The bash implementation serves as a great prototype for a more robust solution.
+
+The key takeaways:
+- Kubernetes can be an effective proxy layer
+- Bash + standard Unix tools can prototype complex systems
+- Security doesn't have to be sacrificed for convenience
+- Sometimes the "wrong" solution is the right one for your use case
+
+
+
+## Try It Yourself
+
+Want to experience the thrill of explaining this to your security team? Here's a one-liner that combines everything:
+
+```bash
+# The full experience with fzf selection
+aws rds describe-db-instances --output json | \
+jq -r '.DBInstances[] | "\(.DBInstanceIdentifier)|\(.Endpoint.Address):\(.Endpoint.Port)"' | \
+fzf --delimiter='|' --preview 'echo "Connecting to: {2}"' | \
+awk -F'|' '{print $2}' | \
+xargs -I {} sh -c 'kubectl run tunnel-$RANDOM --image=alpine/socat --restart=Never -- socat TCP-LISTEN:5432,fork,reuseaddr TCP:{} && kubectl port-forward pod/tunnel-$RANDOM 5432:5432'
+```
+
+Remember: with great power comes great opportunity to accidentally expose your production database to the internet. Stay safe out there kids!

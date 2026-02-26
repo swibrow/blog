@@ -1,0 +1,99 @@
+@import "tailwindcss";
+@import "./catppuccin.css";
+@import "./prose.css";
+@import "./terminal.css";
+
+/* Fonts loaded via Google Fonts link in BaseLayout */
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Fira Mono", ui-monospace, monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--ctp-base);
+  color: var(--ctp-text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Links */
+a {
+  color: var(--ctp-blue);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--ctp-sky);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--ctp-lavender);
+  line-height: 1.3;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--ctp-surface2);
+  color: var(--ctp-text);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--ctp-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ctp-surface1);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ctp-surface2);
+}
+
+/* Code blocks - Shiki theme integration */
+pre {
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  position: relative;
+}
+
+pre > code {
+  display: block;
+  padding: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Inline code */
+code:not(pre code) {
+  background-color: var(--ctp-surface0);
+  color: var(--ctp-peach);
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}

@@ -1,0 +1,16 @@
+---
+import SnowEffect from "@components/react/SnowEffect.tsx";
+---
+
+<footer
+  class="border-t py-6"
+  style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
+>
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between px-4 font-mono text-xs"
+    style="color: var(--ctp-subtext0);"
+  >
+    <span>&copy; {new Date().getFullYear()} Samuel Wibrow</span>
+    <SnowEffect client:idle />
+  </div>
+</footer>

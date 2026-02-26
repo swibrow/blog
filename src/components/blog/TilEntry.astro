@@ -1,0 +1,44 @@
+---
+interface Props {
+  title: string;
+  date: Date;
+  id: string;
+}
+
+const { title, date, id } = Astro.props;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<article class="til-post" id={id}>
+  <h2 class="mb-1 text-xl font-bold" style="color: var(--ctp-lavender);">
+    {title}
+  </h2>
+  <time
+    class="til-date mb-3 block font-mono text-sm"
+    style="color: var(--ctp-green); opacity: 0.8;"
+  >
+    {formattedDate}
+  </time>
+  <div class="prose">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .til-post {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--ctp-green);
+  }
+
+  .til-post:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+</style>

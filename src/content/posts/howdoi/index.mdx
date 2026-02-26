@@ -1,0 +1,87 @@
+---
+author: "Samuel Wibrow"
+title: "howdoi - Natural Language to Shell Commands"
+date: "2026-02-18"
+description: "A CLI tool that turns plain English into shell commands, powered by LLMs running locally with Ollama"
+tags: ["go", "cli", "ai", "ollama", "llm"]
+draft: false
+---
+
+You know *what* you want to do in the terminal, but can't remember the exact flags. Was it `find -mtime` or `find -mmin`? Does `tar` need `-xvf` or `-xzf`? You Google it, wade through Stack Overflow circa 2012, and eventually find the answer buried under AI-generated SEO spam.
+
+**[howdoi](https://github.com/swibrow/howdoi)** fixes that. It's a Go CLI that turns plain English into shell commands.
+
+```bash
+$ howdoi find all go files modified in the last 24 hours
+
+  find . -name '*.go' -mtime -1
+
+  Finds all files ending in .go that were modified within the last day.
+```
+
+No fluff. No ads. No cookie banners. Just the command and a short explanation.
+
+---
+
+## Running it locally with Ollama
+
+The tool supports Anthropic, OpenAI, and Ollama as backends. I use **[Ollama](https://ollama.com/)** for local inference - no API keys, no network calls, no usage costs. Just a model running on my machine. Everything stays private and it works offline, which is handy on a plane or in an environment where you'd rather not send queries to external APIs.
+
+---
+
+## Setup
+
+Install with Go or grab a binary from the [releases page](https://github.com/swibrow/howdoi/releases):
+
+```bash
+go install github.com/swibrow/howdoi@latest
+```
+
+Then initialise the config:
+
+```bash
+howdoi config init
+```
+
+This creates `~/.config/howdoi/config.yaml`. Point it at Ollama:
+
+```yaml
+provider: ollama
+ollama:
+  model: llama3
+  url: http://localhost:11434
+```
+
+That's it. No API key required - just make sure Ollama is running.
+
+---
+
+## Usage
+
+Basic query:
+
+```bash
+howdoi reverse a string in bash
+```
+
+Auto-execute the returned command with `-y`:
+
+```bash
+howdoi -y list listening ports
+```
+
+Pipe directly into your shell with `-q` (quiet mode):
+
+```bash
+howdoi -q convert png to jpg with imagemagick | sh
+```
+
+---
+
+## Examples
+
+{/* TODO: Add screenshots */}
+
+---
+
+The code is on GitHub: **[github.com/swibrow/howdoi](https://github.com/swibrow/howdoi)** - MIT licensed, written in Go, contributions welcome.

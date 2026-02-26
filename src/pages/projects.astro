@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Prose from "@components/ui/Prose.astro";
+import { getCollection, render } from "astro:content";
+
+const pages = await getCollection("pages");
+const projectsPage = pages.find((p) => p.id === "projects");
+if (!projectsPage) throw new Error("Projects page not found");
+const { Content } = await render(projectsPage);
+---
+
+<BaseLayout title="Projects">
+  <div class="mx-auto max-w-4xl px-4 py-12">
+    <h1 class="mb-8 font-mono text-2xl font-bold" style="color: var(--ctp-lavender);">
+      ~/projects
+    </h1>
+    <Prose>
+      <Content />
+    </Prose>
+  </div>
+</BaseLayout>

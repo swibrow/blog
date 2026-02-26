@@ -1,0 +1,141 @@
+/* Markdown content styling */
+.prose {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.prose p {
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+}
+
+/* Heading hierarchy */
+.prose h1 {
+  font-size: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.prose h2 {
+  font-size: 1.6rem;
+  margin-top: 1.8rem;
+  margin-bottom: 0.8rem;
+}
+
+.prose h3 {
+  font-size: 1.3rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.prose h4, .prose h5, .prose h6 {
+  font-size: 1.1rem;
+  margin-top: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Lists */
+.prose ul, .prose ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  line-height: 1.6;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose li ul, .prose li ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  border-left: 4px solid var(--ctp-green);
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--ctp-subtext0);
+}
+
+.prose blockquote p {
+  margin-bottom: 0.5rem;
+}
+
+/* Tables */
+.prose table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+}
+
+.prose th, .prose td {
+  padding: 0.75rem;
+  border: 1px solid var(--ctp-surface1);
+  text-align: left;
+}
+
+.prose th {
+  background-color: var(--ctp-surface0);
+  color: var(--ctp-lavender);
+  font-weight: bold;
+}
+
+.prose tr:nth-child(even) {
+  background-color: var(--ctp-mantle);
+}
+
+/* Images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem auto;
+  border-radius: 4px;
+}
+
+/* Links */
+.prose a {
+  color: var(--ctp-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: var(--ctp-sky);
+  text-decoration-style: wavy;
+}
+
+/* Horizontal rules */
+.prose hr {
+  border: none;
+  border-top: 4px double var(--ctp-green);
+  margin: 3rem 0;
+  position: relative;
+  opacity: 0.6;
+}
+
+.prose hr::after {
+  content: "\2022 \2022 \2022";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--ctp-base);
+  padding: 0 1rem;
+  color: var(--ctp-green);
+  font-size: 1.2rem;
+}
+
+/* Definition lists */
+.prose dl dt {
+  font-weight: bold;
+}
+
+.prose dl dd {
+  margin-left: 0;
+  margin-bottom: 0.5rem;
+}

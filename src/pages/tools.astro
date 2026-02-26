@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Prose from "@components/ui/Prose.astro";
+import { getCollection, render } from "astro:content";
+
+const pages = await getCollection("pages");
+const toolsPage = pages.find((p) => p.id === "tools");
+if (!toolsPage) throw new Error("Tools page not found");
+const { Content } = await render(toolsPage);
+---
+
+<BaseLayout title="Tools">
+  <div class="mx-auto max-w-4xl px-4 py-12">
+    <h1 class="mb-8 font-mono text-2xl font-bold" style="color: var(--ctp-lavender);">
+      ~/tools
+    </h1>
+    <Prose>
+      <Content />
+    </Prose>
+  </div>
+</BaseLayout>

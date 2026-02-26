@@ -1,0 +1,89 @@
+---
+import ThemeToggle from "@components/react/ThemeToggle.tsx";
+
+const navItems = [
+  { name: "~/posts", href: "/posts/" },
+  { name: "~/til", href: "/til/" },
+  { name: "~/projects", href: "/projects/" },
+  { name: "~/tools", href: "/tools/" },
+  { name: "~/about", href: "/about/" },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b"
+  style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
+>
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <a href="/" class="flex items-center gap-1 font-mono text-sm no-underline hover:no-underline" style="color: var(--ctp-text);">
+      <span style="color: var(--ctp-green);">samuel@wibrow.net</span>
+      <span style="color: var(--ctp-subtext0);">~</span>
+      <span style="color: var(--ctp-text);">$</span>
+      <span class="cursor-blink" style="color: var(--ctp-green);">_</span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden items-center gap-4 md:flex">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="font-mono text-sm transition-colors hover:no-underline"
+            style="color: var(--ctp-text);"
+            data-nav-link
+          >
+            {item.name}
+          </a>
+        ))
+      }
+      <ThemeToggle client:load />
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="flex flex-col gap-1.5 md:hidden"
+      aria-label="Toggle menu"
+    >
+      <span class="block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+      <span class="block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+      <span class="block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+    </button>
+  </div>
+
+  <!-- Mobile nav -->
+  <nav
+    id="mobile-nav"
+    class="hidden flex-col gap-2 border-t px-4 py-3 md:hidden"
+    style="border-color: var(--ctp-surface0);"
+  >
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class="font-mono text-sm transition-colors"
+          style="color: var(--ctp-text);"
+        >
+          {item.name}
+        </a>
+      ))
+    }
+    <div class="pt-2">
+      <ThemeToggle client:load />
+    </div>
+  </nav>
+</header>
+
+<style>
+  [data-nav-link]:hover {
+    color: var(--ctp-green) !important;
+  }
+</style>
+
+<script>
+  document.getElementById("menu-toggle")?.addEventListener("click", () => {
+    const nav = document.getElementById("mobile-nav");
+    nav?.classList.toggle("hidden");
+    nav?.classList.toggle("flex");
+  });
+</script>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="404 - Not Found">
+  <div class="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+    <div class="font-mono">
+      <p class="mb-4 text-lg" style="color: var(--ctp-green);">
+        samuel@wibrow.net:~$
+        <span style="color: var(--ctp-text);">cd {Astro.url.pathname}</span>
+      </p>
+      <p class="mb-8 text-lg" style="color: var(--ctp-red);">
+        bash: cd: {Astro.url.pathname}: No such file or directory
+      </p>
+      <p class="text-6xl font-bold" style="color: var(--ctp-surface2);">404</p>
+      <p class="mt-4 mb-8" style="color: var(--ctp-subtext0);">
+        Command not found. The page you're looking for doesn't exist.
+      </p>
+      <a
+        href="/"
+        class="inline-block rounded border px-6 py-2 font-mono transition-colors"
+        style="border-color: var(--ctp-green); color: var(--ctp-green);"
+      >
+        cd ~
+      </a>
+    </div>
+  </div>
+</BaseLayout>

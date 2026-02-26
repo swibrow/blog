@@ -1,7 +1,9 @@
-public
-resources
+# Astro
+node_modules/
+dist/
+.astro/
 
-# VS Code
+# OS
 .DS_Store
 
 # Terraform
@@ -10,3 +12,7 @@ resources
 
 # Claude
 CLAUDE.md
+
+# IDE
+.vscode/
+.idea/

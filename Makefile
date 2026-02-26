@@ -1,41 +1,26 @@
-.PHONY: serve build clean new-post submodule-init submodule-update help
+.PHONY: serve build clean help
 
 # Default target
 help:
 	@echo "Available commands:"
-	@echo "  make serve           - Run Hugo server with drafts enabled"
-	@echo "  make build           - Build the site to public/ directory"
-	@echo "  make clean           - Clean the public/ directory"
-	@echo "  make new-post        - Create a new blog post (use POST=name)"
-	@echo "  make submodule-init  - Initialize git submodules"
-	@echo "  make submodule-update - Update git submodules to latest"
-	@echo "  make help            - Show this help message"
+	@echo "  make serve    - Run Astro dev server"
+	@echo "  make build    - Build the site to dist/ directory"
+	@echo "  make clean    - Clean the dist/ directory"
+	@echo "  make preview  - Preview production build"
+	@echo "  make help     - Show this help message"
 
-# Run Hugo server
+# Run dev server
 serve:
-	hugo server -D
+	bun dev
 
 # Build the site
 build:
-	hugo
+	bun run build
+
+# Preview production build
+preview:
+	bun run preview
 
 # Clean build directory
 clean:
-	rm -rf public/
-
-# Create new post
-new-post:
-	@if [ -z "$(POST)" ]; then \
-		echo "Usage: make new-post POST=my-post-name"; \
-		exit 1; \
-	fi
-	hugo new posts/$(POST)/index.md
-
-# Initialize git submodules
-submodule-init:
-	git submodule init
-	git submodule update
-
-# Update git submodules
-submodule-update:
-	git submodule update --remote
+	rm -rf dist/ .astro/

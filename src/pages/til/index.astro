@@ -1,0 +1,80 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TilEntry from "@components/blog/TilEntry.astro";
+import TilToc from "@components/blog/TilToc.astro";
+import { getCollection, render } from "astro:content";
+
+const entries = (await getCollection("til"))
+  .filter((entry) => !entry.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const tocItems = entries.map((entry) => ({
+  title: entry.data.title,
+  id: entry.id,
+}));
+
+const renderedEntries = await Promise.all(
+  entries.map(async (entry) => {
+    const { Content } = await render(entry);
+    return { entry, Content };
+  })
+);
+---
+
+<BaseLayout title="Today I Learned" description="A collection of my daily learnings. Some useful, some not so much.">
+  <div class="mx-auto max-w-6xl px-4 py-12">
+    <h1 class="mb-2 font-mono text-2xl font-bold" style="color: var(--ctp-lavender);">
+      ~/til
+    </h1>
+    <p class="mb-8" style="color: var(--ctp-subtext1);">
+      A collection of my daily learnings. Some useful, some not so much.
+    </p>
+
+    <div class="til-container">
+      <div class="til-content">
+        {
+          renderedEntries.map(({ entry, Content }) => (
+            <TilEntry
+              title={entry.data.title}
+              date={entry.data.date}
+              id={entry.id}
+            >
+              <Content />
+            </TilEntry>
+          ))
+        }
+      </div>
+      <TilToc items={tocItems} />
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .til-container {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+
+  .til-content {
+    min-width: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .til-container {
+      grid-template-columns: 1fr 250px;
+      gap: 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .til-container {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    .til-content {
+      order: 1;
+    }
+  }
+</style>
