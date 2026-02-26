@@ -1,0 +1,22 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  wide?: boolean;
+}
+
+const { title, subtitle, wide = false } = Astro.props;
+const maxWidth = wide ? "max-w-6xl" : "max-w-4xl";
+---
+
+<div class={`mx-auto ${maxWidth} px-4 py-12 md:py-16 lg:py-20`}>
+  <h1 class="mb-2 font-mono text-2xl font-bold md:text-3xl lg:text-4xl" style="color: var(--ctp-lavender);">
+    ~/{title}
+  </h1>
+  {subtitle && (
+    <p class="mb-0" style="color: var(--ctp-subtext1);">{subtitle}</p>
+  )}
+  <div class="mt-8">
+    <slot />
+  </div>
+</div>

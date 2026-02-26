@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
 import PostCard from "@components/blog/PostCard.astro";
 import { getCollection } from "astro:content";
 
@@ -9,10 +10,7 @@ const posts = (await getCollection("posts"))
 ---
 
 <BaseLayout title="Posts">
-  <div class="mx-auto max-w-4xl px-4 py-12">
-    <h1 class="mb-8 font-mono text-2xl font-bold" style="color: var(--ctp-lavender);">
-      ~/posts
-    </h1>
+  <SectionHeading title="posts">
     <div class="flex flex-col gap-4">
       {
         posts.map((post) => (
@@ -26,5 +24,5 @@ const posts = (await getCollection("posts"))
         ))
       }
     </div>
-  </div>
+  </SectionHeading>
 </BaseLayout>
