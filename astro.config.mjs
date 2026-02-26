@@ -10,9 +10,6 @@ export default defineConfig({
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
-    resolve: {
-      dedupe: ["react", "react-dom"],
-    },
   },
   markdown: {
     shikiConfig: {

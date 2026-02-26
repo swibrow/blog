@@ -19,7 +19,7 @@ function applyTheme(theme: Theme): void {
   localStorage.setItem("theme", theme);
 }
 
-const SunIcon: React.FC = () => (
+const SunIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="20"
@@ -43,7 +43,7 @@ const SunIcon: React.FC = () => (
   </svg>
 );
 
-const MoonIcon: React.FC = () => (
+const MoonIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="20"
@@ -59,7 +59,7 @@ const MoonIcon: React.FC = () => (
   </svg>
 );
 
-const ThemeToggle: React.FC = () => {
+const ThemeToggle = () => {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState<boolean>(false);
 

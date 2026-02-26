@@ -36,7 +36,7 @@ function getInitialEnabled(): boolean {
   return false;
 }
 
-const SnowEffect: React.FC = () => {
+const SnowEffect = () => {
   const [enabled, setEnabled] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

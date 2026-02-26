@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import Snake from "./games/Snake";
-import Wordle from "./games/Wordle";
-import Game2048 from "./games/Game2048";
-import TicTacToe from "./games/TicTacToe";
-import Pong from "./games/Pong";
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+
+const Snake = lazy(() => import("./games/Snake"));
+const Wordle = lazy(() => import("./games/Wordle"));
+const Game2048 = lazy(() => import("./games/Game2048"));
+const TicTacToe = lazy(() => import("./games/TicTacToe"));
+const Pong = lazy(() => import("./games/Pong"));
 
 /* ---------- Types ---------- */
 
@@ -367,18 +368,31 @@ const GAME_COMMANDS: Record<string, GameType> = {
 };
 
 function renderGame(game: GameType, onExit: () => void) {
-  switch (game) {
-    case "snake":
-      return <Snake onExit={onExit} />;
-    case "wordle":
-      return <Wordle onExit={onExit} />;
-    case "2048":
-      return <Game2048 onExit={onExit} />;
-    case "ttt":
-      return <TicTacToe onExit={onExit} />;
-    case "pong":
-      return <Pong onExit={onExit} />;
-  }
+  const gameEl = (() => {
+    switch (game) {
+      case "snake":
+        return <Snake onExit={onExit} />;
+      case "wordle":
+        return <Wordle onExit={onExit} />;
+      case "2048":
+        return <Game2048 onExit={onExit} />;
+      case "ttt":
+        return <TicTacToe onExit={onExit} />;
+      case "pong":
+        return <Pong onExit={onExit} />;
+    }
+  })();
+  return (
+    <Suspense
+      fallback={
+        <div className="terminal-game" style={{ color: "var(--ctp-subtext0)" }}>
+          Loading...
+        </div>
+      }
+    >
+      {gameEl}
+    </Suspense>
+  );
 }
 
 /* ---------- Component ---------- */

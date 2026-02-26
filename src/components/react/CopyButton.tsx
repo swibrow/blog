@@ -4,7 +4,7 @@ interface CopyButtonProps {
   code: string;
 }
 
-const CopyButton: React.FC<CopyButtonProps> = ({ code }) => {
+const CopyButton = ({ code }: CopyButtonProps) => {
   const [copied, setCopied] = useState<boolean>(false);
 
   const handleCopy = useCallback(async (): Promise<void> => {
