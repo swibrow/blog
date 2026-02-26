@@ -385,8 +385,19 @@ function renderGame(game: GameType, onExit: () => void) {
 
 const PROMPT = "samuel@wibrow.net:~$";
 
+const WELCOME_ART = `<pre style="margin:0;font-family:inherit;font-size:12px;line-height:1.3"><span style="color:var(--ctp-green)">        /\\      /\\
+       /  \\    /  \\      /\\        </span><span style="color:var(--ctp-text)">Samuel Wibrow</span><span style="color:var(--ctp-green)">
+      /    \\  /    \\    /  \\       </span><span style="color:var(--ctp-subtext0)">SRE / Platform Engineer</span><span style="color:var(--ctp-green)">
+     /      \\/      \\  /    \\
+    /        \\       \\/      \\     </span><span style="color:var(--ctp-peach)">  o _ o</span><span style="color:var(--ctp-green)">
+___/          \\___    \\       \\    </span><span style="color:var(--ctp-peach)">  |/</span><span style="color:var(--ctp-blue)">(_)</span><span style="color:var(--ctp-peach)">\\|</span><span style="color:var(--ctp-green)">
+                  \\____\\_______\\___</span><span style="color:var(--ctp-peach)">/<span style="color:var(--ctp-blue)">o   o</span>\\</span></pre>
+<span style="color:var(--ctp-subtext1)">Type <span class="command">help</span> for commands or <span class="command">games</span> to play.</span>`;
+
 const Terminal = () => {
-  const [output, setOutput] = useState<OutputLine[]>([]);
+  const [output, setOutput] = useState<OutputLine[]>([
+    { id: 0, type: "response", content: WELCOME_ART },
+  ]);
   const [inputValue, setInputValue] = useState<string>("");
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [visible, setVisible] = useState<boolean>(true);
