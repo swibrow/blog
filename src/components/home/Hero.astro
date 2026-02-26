@@ -20,16 +20,16 @@ const socialLinks = [
 ];
 ---
 
-<section class="relative overflow-hidden py-16 md:py-24">
+<section class="relative flex min-h-[70vh] items-center justify-center overflow-hidden py-16 md:py-24">
   <MountainBackdrop />
-  <div class="relative z-10 mx-auto max-w-4xl px-4 text-center">
-    <h1 class="mb-4 font-mono text-3xl font-bold md:text-5xl" style="color: var(--ctp-green);">
+  <div class="relative z-10 mx-auto max-w-5xl px-4 text-center">
+    <h1 class="mb-4 font-mono text-4xl font-bold md:text-6xl lg:text-7xl" style="color: var(--ctp-green);">
       Samuel Wibrow
     </h1>
-    <p class="mb-8 font-mono text-lg" style="color: var(--ctp-subtext1);">
+    <p class="mb-8 font-mono text-lg md:text-xl lg:text-2xl" style="color: var(--ctp-subtext1);">
       SRE by trade, over-engineer by nature, blogger by AI proxy
     </p>
-    <div class="flex items-center justify-center gap-6">
+    <div class="flex items-center justify-center gap-8">
       {
         socialLinks.map((link) => (
           <a
@@ -37,7 +37,7 @@ const socialLinks = [
             target="_blank"
             rel="noopener noreferrer"
             title={link.name}
-            class="transition-colors"
+            class="transition-colors [&_svg]:h-5 [&_svg]:w-5 md:[&_svg]:h-6 md:[&_svg]:w-6 lg:[&_svg]:h-7 lg:[&_svg]:w-7"
             style="color: var(--ctp-subtext1);"
             data-social-link
           >

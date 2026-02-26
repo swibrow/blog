@@ -17,6 +17,22 @@
   }
 }
 
+@media (min-width: 1400px) {
+  .terminal-container {
+    width: 750px;
+    bottom: 30px;
+    right: 30px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .terminal-container {
+    width: 900px;
+    bottom: 40px;
+    right: 40px;
+  }
+}
+
 .terminal {
   background-color: var(--ctp-base);
   border: 1px solid var(--ctp-surface0);
@@ -208,6 +224,56 @@
 
 .terminal {
   position: relative;
+}
+
+/* Large screen scaling */
+@media (min-width: 1400px) {
+  .terminal-body {
+    min-height: 380px;
+    max-height: 500px;
+    padding: 20px;
+  }
+
+  .terminal-line,
+  .terminal-response,
+  .terminal-input {
+    font-size: 15px;
+  }
+
+  .terminal-title {
+    font-size: 15px;
+  }
+
+  .terminal-header {
+    padding: 10px 14px;
+  }
+
+  .terminal-control {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .terminal-body {
+    min-height: 450px;
+    max-height: 600px;
+    padding: 24px;
+  }
+
+  .terminal-line,
+  .terminal-response,
+  .terminal-input {
+    font-size: 16px;
+  }
+
+  .terminal-title {
+    font-size: 16px;
+  }
+
+  .terminal-header {
+    padding: 12px 16px;
+  }
 }
 
 /* Wordle shake animation */
