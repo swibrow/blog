@@ -3,7 +3,7 @@
 @import "./prose.css";
 @import "./terminal.css";
 
-/* Fonts loaded via Google Fonts link in BaseLayout */
+/* Fonts loaded via Google Fonts link in index.html */
 
 /* Base styles */
 html {
@@ -63,8 +63,9 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--ctp-surface2);
 }
 
-/* Code blocks - Shiki theme integration */
+/* Code blocks */
 pre {
+  background-color: var(--ctp-mantle);
   border: 1px solid var(--ctp-surface0);
   border-radius: 6px;
   margin: 1.5rem 0;
@@ -77,6 +78,7 @@ pre > code {
   padding: 1rem;
   font-size: 0.9rem;
   line-height: 1.5;
+  color: var(--ctp-text);
 }
 
 /* Inline code */
@@ -96,4 +98,13 @@ code:not(pre code) {
 
 .cursor-blink {
   animation: blink 1s step-end infinite;
+}
+
+/* Light mode enhancements */
+.light .terminal {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.light pre {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
 }
