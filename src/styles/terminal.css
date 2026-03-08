@@ -276,6 +276,43 @@
   }
 }
 
+/* Embedded mode (header dropdown) */
+.terminal-embedded {
+  width: 100%;
+  font-family: "Fira Mono", monospace;
+}
+
+.terminal-embedded .terminal {
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background-color: var(--ctp-crust);
+}
+
+.terminal-body-embedded {
+  padding: 16px;
+  min-height: 250px;
+  max-height: 50vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1400px) {
+  .terminal-body-embedded {
+    min-height: 300px;
+    max-height: 50vh;
+    padding: 20px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .terminal-body-embedded {
+    min-height: 350px;
+    max-height: 50vh;
+    padding: 24px;
+  }
+}
+
 /* Wordle shake animation */
 @keyframes shake {
   0%, 100% { transform: translateX(0); }

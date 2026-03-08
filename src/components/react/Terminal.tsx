@@ -209,21 +209,254 @@ function searchResume(data: ResumeData, query: string): string | null {
   return response;
 }
 
+/* ---------- Virtual filesystem ---------- */
+
+function buildFilesystem(data: ResumeData | null): Record<string, string | Record<string, string>> {
+  if (!data) return {};
+
+  const fs: Record<string, string | Record<string, string>> = {};
+
+  // /basics
+  fs["basics"] = {
+    "name.txt": data.basics.name,
+    "label.txt": data.basics.label,
+    "summary.txt": data.basics.summary,
+    "location.txt": `${data.basics.location.city}, ${data.basics.location.countryCode}`,
+  };
+
+  // /work/<company>
+  const workDir: Record<string, string> = {};
+  data.work.forEach((job) => {
+    const key = job.company.toLowerCase().replace(/\s+/g, "-");
+    const endDate = job.endDate || "Present";
+    let content = `${job.position}\n${job.startDate} to ${endDate}`;
+    if (job.location) content += `\n${job.location}`;
+    if (job.summary) content += `\n\n${job.summary}`;
+    if (job.highlights && job.highlights.length > 0) {
+      content += "\n\nHighlights:\n" + job.highlights.map((h) => `- ${h}`).join("\n");
+    }
+    workDir[`${key}.txt`] = content;
+  });
+  fs["work"] = workDir;
+
+  // /skills/<category>
+  const skillsDir: Record<string, string> = {};
+  data.skills.forEach((group) => {
+    const key = group.name.toLowerCase().replace(/[&\s]+/g, "-").replace(/--+/g, "-");
+    skillsDir[`${key}.txt`] = group.keywords.join("\n");
+  });
+  fs["skills"] = skillsDir;
+
+  // /education
+  const eduDir: Record<string, string> = {};
+  data.education.forEach((edu) => {
+    const key = edu.institution.toLowerCase().replace(/\s+/g, "-");
+    eduDir[`${key}.txt`] = `${edu.studyType} - ${edu.area}\n${edu.institution} (${edu.startDate}-${edu.endDate})`;
+  });
+  fs["education"] = eduDir;
+
+  // /certificates
+  const certDir: Record<string, string> = {};
+  data.certificates.forEach((cert) => {
+    const key = cert.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "");
+    certDir[`${key}.txt`] = `${cert.name}\n${cert.date}\n${cert.url}`;
+  });
+  fs["certificates"] = certDir;
+
+  return fs;
+}
+
+function resolvePath(cwd: string, target: string): string {
+  if (target.startsWith("/") || target.startsWith("~")) {
+    // Absolute path
+    const parts = target.replace("~", "").split("/").filter(Boolean);
+    return "/" + parts.join("/");
+  }
+  // Relative path
+  const base = cwd === "/" ? [] : cwd.split("/").filter(Boolean);
+  const parts = target.split("/");
+  for (const p of parts) {
+    if (p === "." || p === "") continue;
+    if (p === "..") { base.pop(); }
+    else { base.push(p); }
+  }
+  return "/" + base.join("/");
+}
+
+function getNode(fs: Record<string, string | Record<string, string>>, path: string): string | Record<string, string> | null {
+  const parts = path.split("/").filter(Boolean);
+  if (parts.length === 0) return fs as unknown as Record<string, string>;
+  if (parts.length === 1) return fs[parts[0]] ?? null;
+  if (parts.length === 2) {
+    const dir = fs[parts[0]];
+    if (typeof dir === "object" && dir !== null) return dir[parts[1]] ?? null;
+    return null;
+  }
+  return null;
+}
+
+function shellLs(fs: Record<string, string | Record<string, string>>, cwd: string, args: string): string {
+  const target = args.trim() ? resolvePath(cwd, args.trim()) : cwd;
+  const node = getNode(fs, target);
+  if (node === null) return `ls: cannot access '${args.trim() || target}': No such file or directory`;
+  if (typeof node === "string") return target.split("/").pop() || target;
+  const entries = Object.keys(node).sort();
+  return entries.map((e) => {
+    const isDir = typeof node[e] === "object";
+    return isDir
+      ? `<span style="color:var(--ctp-blue);font-weight:bold">${e}/</span>`
+      : `<span style="color:var(--ctp-text)">${e}</span>`;
+  }).join("\n");
+}
+
+function shellCat(fs: Record<string, string | Record<string, string>>, cwd: string, args: string): string {
+  if (!args.trim()) return "cat: missing operand";
+  const target = resolvePath(cwd, args.trim());
+  const node = getNode(fs, target);
+  if (node === null) return `cat: ${args.trim()}: No such file or directory`;
+  if (typeof node === "object") return `cat: ${args.trim()}: Is a directory`;
+  return node;
+}
+
+function shellTree(fs: Record<string, string | Record<string, string>>, cwd: string): string {
+  const node = getNode(fs, cwd);
+  if (node === null || typeof node === "string") return "Not a directory";
+  const lines: string[] = [];
+  const baseName = cwd === "/" ? "~" : cwd;
+  lines.push(`<span style="color:var(--ctp-blue);font-weight:bold">${baseName}</span>`);
+
+  const entries = Object.entries(node).sort(([a], [b]) => a.localeCompare(b));
+  entries.forEach(([name, value], i) => {
+    const isLast = i === entries.length - 1;
+    const prefix = isLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ";
+    if (typeof value === "object" && value !== null) {
+      lines.push(`${prefix}<span style="color:var(--ctp-blue);font-weight:bold">${name}/</span>`);
+      const subEntries = Object.keys(value).sort();
+      subEntries.forEach((sub, j) => {
+        const subIsLast = j === subEntries.length - 1;
+        const subConnector = isLast ? "    " : "\u2502   ";
+        const subPrefix = subIsLast ? "\u2514\u2500\u2500 " : "\u251C\u2500\u2500 ";
+        lines.push(`${subConnector}${subPrefix}${sub}`);
+      });
+    } else {
+      lines.push(`${prefix}${name}`);
+    }
+  });
+
+  return lines.join("\n");
+}
+
+function shellFind(fs: Record<string, string | Record<string, string>>, args: string): string {
+  const pattern = args.trim().toLowerCase();
+  if (!pattern) return "find: missing search pattern\nUsage: find <pattern>";
+  const results: string[] = [];
+
+  for (const [dirName, dirContent] of Object.entries(fs)) {
+    if (dirName.toLowerCase().includes(pattern)) {
+      results.push(`<span style="color:var(--ctp-blue)">/${dirName}/</span>`);
+    }
+    if (typeof dirContent === "object" && dirContent !== null) {
+      for (const fileName of Object.keys(dirContent)) {
+        if (fileName.toLowerCase().includes(pattern)) {
+          results.push(`/${dirName}/<span style="color:var(--ctp-green)">${fileName}</span>`);
+        }
+      }
+    }
+  }
+
+  if (results.length === 0) return `No files matching '${pattern}'`;
+  return results.join("\n");
+}
+
+function shellGrep(fs: Record<string, string | Record<string, string>>, args: string): string {
+  const parts = args.trim().split(/\s+/);
+  const pattern = parts[0]?.toLowerCase();
+  if (!pattern) return "grep: missing pattern\nUsage: grep <pattern> [path]";
+
+  const targetPath = parts[1] || null;
+  const results: string[] = [];
+
+  for (const [dirName, dirContent] of Object.entries(fs)) {
+    if (typeof dirContent === "object" && dirContent !== null) {
+      for (const [fileName, fileContent] of Object.entries(dirContent)) {
+        if (targetPath) {
+          const filePath = `/${dirName}/${fileName}`;
+          const targetResolved = targetPath.replace("~", "");
+          if (!filePath.startsWith(targetResolved) && !`/${dirName}`.startsWith(targetResolved)) continue;
+        }
+        const lines = fileContent.split("\n");
+        const matchingLines = lines.filter((l) => l.toLowerCase().includes(pattern));
+        if (matchingLines.length > 0) {
+          results.push(`<span style="color:var(--ctp-mauve)">/${dirName}/${fileName}</span>:`);
+          matchingLines.forEach((line) => {
+            const highlighted = line.replace(
+              new RegExp(`(${pattern.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"),
+              '<span style="color:var(--ctp-red);font-weight:bold">$1</span>'
+            );
+            results.push(`  ${highlighted}`);
+          });
+        }
+      }
+    }
+  }
+
+  if (results.length === 0) return `No matches for '${pattern}'`;
+  return results.join("\n");
+}
+
+function shellHead(fs: Record<string, string | Record<string, string>>, cwd: string, args: string): string {
+  const parts = args.trim().split(/\s+/);
+  let count = 5;
+  let file = "";
+  for (const p of parts) {
+    if (p.startsWith("-")) { count = parseInt(p.slice(1)) || 5; }
+    else { file = p; }
+  }
+  if (!file) return "head: missing operand";
+  const target = resolvePath(cwd, file);
+  const node = getNode(fs, target);
+  if (node === null) return `head: ${file}: No such file or directory`;
+  if (typeof node === "object") return `head: ${file}: Is a directory`;
+  return node.split("\n").slice(0, count).join("\n");
+}
+
+function shellWc(fs: Record<string, string | Record<string, string>>, cwd: string, args: string): string {
+  if (!args.trim()) return "wc: missing operand";
+  const target = resolvePath(cwd, args.trim());
+  const node = getNode(fs, target);
+  if (node === null) return `wc: ${args.trim()}: No such file or directory`;
+  if (typeof node === "object") return `wc: ${args.trim()}: Is a directory`;
+  const lines = node.split("\n").length;
+  const words = node.split(/\s+/).filter(Boolean).length;
+  const chars = node.length;
+  return `  ${lines}  ${words}  ${chars} ${args.trim()}`;
+}
+
 /* ---------- Build commands ---------- */
 
 function buildCommands(data: ResumeData | null): Record<string, CommandDef> {
   const cmds: Record<string, CommandDef> = {
     help: {
-      response: `Available commands:
+      response: `<strong>Navigation:</strong>
+\u2022 <span class="command">ls [path]</span> - List directory contents
+\u2022 <span class="command">cd &lt;path&gt;</span> - Change directory
+\u2022 <span class="command">pwd</span> - Print working directory
+\u2022 <span class="command">cat &lt;file&gt;</span> - Display file contents
+\u2022 <span class="command">tree</span> - Show directory tree
+\u2022 <span class="command">find &lt;pattern&gt;</span> - Search for files by name
+\u2022 <span class="command">grep &lt;pattern&gt; [path]</span> - Search file contents
+\u2022 <span class="command">head [-n] &lt;file&gt;</span> - Show first n lines
+\u2022 <span class="command">wc &lt;file&gt;</span> - Count lines, words, chars
+\u2022 <span class="command">whoami</span> - Who am I?
+
+<strong>Quick Access:</strong>
 \u2022 <span class="command">about</span> - Learn about Samuel
 \u2022 <span class="command">experience</span> - Work experience
 \u2022 <span class="command">skills</span> - Technical skills
-\u2022 <span class="command">education</span> - Education & certifications
 \u2022 <span class="command">contact</span> - Get in touch
 \u2022 <span class="command">company [name]</span> - Details about specific company
 \u2022 <span class="command">games</span> - List playable games
 \u2022 <span class="command">clear</span> - Clear terminal
-\u2022 <span class="command">help</span> - Show this message
 
 Or just type a question!`,
     },
@@ -254,17 +487,18 @@ Currently focused on AWS, Kubernetes, and building internal developer platforms.
     cmds.skills = {
       response: `<strong>Technical Skills:</strong>
 
-<strong>Cloud & Infrastructure:</strong> AWS, Terraform, Kubernetes, Docker
-<strong>Languages:</strong> Python, Bash, Go
-<strong>CI/CD & GitOps:</strong> GitHub Actions, ArgoCD, GitLab CI
-<strong>Observability:</strong> Datadog, Prometheus, EFK Stack`,
+<strong>Cloud & Infrastructure:</strong> AWS (10+ years), Terraform, Terragrunt, Kubernetes, Docker
+<strong>AI & Automation:</strong> Claude, ChatGPT/OpenAI, Ollama, LLM Tooling
+<strong>Languages:</strong> Go, Python, TypeScript, Bash, React
+<strong>CI/CD & GitOps:</strong> GitHub Actions, ArgoCD, GitLab CI, Renovate
+<strong>Observability:</strong> Datadog, Prometheus, LGTM Stack, EFK Stack`,
     };
     cmds.experience = {
       response: `<strong>Current Role:</strong>
 Site Reliability Engineer at Tamedia (2023-Present)
 
 Previous experience includes Platform Engineering at Dock Financial
-and Cloud Engineering at Stylight. 13+ years in IT infrastructure.`,
+and Cloud Engineering at Stylight. 15+ years in IT infrastructure.`,
     };
     cmds.contact = {
       response: `<strong>Get in touch:</strong>
@@ -317,8 +551,16 @@ function handleQuestion(
       "I have extensive Kubernetes experience including migrating from KOPS to EKS, implementing GitOps with ArgoCD, developing Helm charts, and managing production workloads. Currently using Karpenter for autoscaling.",
     terraform: () =>
       "I'm a Terraform certified professional with experience building reusable modules, managing multi-environment infrastructure, and implementing GitOps workflows. Check out the /terraform directory in this blog repo for examples!",
+    ai: () =>
+      "I'm actively using AI/LLMs in my workflow. I built 'how' — a Go CLI that converts natural language to shell commands using Claude, OpenAI, or Ollama locally. I use Claude extensively for AI-assisted development and built my Kubernetes operator TFOut in an afternoon with it. I'm exploring how LLMs can transform infrastructure automation and developer tooling.",
+    llm: () =>
+      "I work with multiple LLM providers: Claude/Anthropic API, OpenAI/ChatGPT, and Ollama for local inference. My 'how' CLI tool supports all three backends. I'm a big fan of running models locally with Ollama for privacy and offline use.",
+    go: () =>
+      "Go is one of my primary languages. I've built a Kubernetes operator (TFOut) using Kubebuilder and a CLI tool (how) for natural language to shell commands. Both are open source on GitHub.",
     python: () =>
       "Python is one of my primary languages. I've developed internal libraries for CloudFormation generation, automation tools, and infrastructure management scripts.",
+    typescript: () =>
+      "I use TypeScript and React for frontend development. This portfolio site is built with React 19, Vite, React Router, and Framer Motion — all in TypeScript.",
     experience: () => {
       const years = new Date().getFullYear() - 2010;
       return `I have ${years}+ years of experience in IT, with the last ${years - 3} years focused on Site Reliability Engineering and Platform Engineering. Currently at ${data.work[0].company} as a ${data.work[0].position}.`;
@@ -351,13 +593,67 @@ const KNOWN_COMMANDS = [
   "contact",
   "company",
   "clear",
+  "exit",
   "games",
   "snake",
   "wordle",
   "2048",
   "ttt",
   "pong",
+  "ls",
+  "cd",
+  "pwd",
+  "cat",
+  "tree",
+  "find",
+  "grep",
+  "head",
+  "wc",
+  "whoami",
 ];
+
+function findCommonPrefix(items: string[]): string {
+  if (items.length === 0) return "";
+  let prefix = items[0];
+  for (let i = 1; i < items.length; i++) {
+    while (!items[i].startsWith(prefix)) {
+      prefix = prefix.slice(0, -1);
+    }
+  }
+  return prefix;
+}
+
+function getPathCompletions(
+  fs: Record<string, string | Record<string, string>>,
+  cwd: string,
+  partial: string
+): string[] {
+  // Determine the directory to list and the fragment to match
+  const lastSlash = partial.lastIndexOf("/");
+  let dirPath: string;
+  let fragment: string;
+
+  if (lastSlash === -1) {
+    dirPath = cwd;
+    fragment = partial;
+  } else {
+    dirPath = resolvePath(cwd, partial.substring(0, lastSlash + 1));
+    fragment = partial.substring(lastSlash + 1);
+  }
+
+  const node = getNode(fs, dirPath);
+  if (node === null || typeof node === "string") return [];
+
+  const prefix = lastSlash === -1 ? "" : partial.substring(0, lastSlash + 1);
+  const entries = Object.keys(node);
+
+  return entries
+    .filter((name) => name.toLowerCase().startsWith(fragment))
+    .map((name) => {
+      const isDir = typeof node[name] === "object";
+      return prefix + name + (isDir ? "/" : "");
+    });
+}
 
 const GAME_COMMANDS: Record<string, GameType> = {
   snake: "snake",
@@ -397,30 +693,69 @@ function renderGame(game: GameType, onExit: () => void) {
 
 /* ---------- Component ---------- */
 
-const PROMPT = "samuel@wibrow.net:~$";
+function getPrompt(cwd: string): string {
+  const path = cwd === "/" ? "~" : `~${cwd}`;
+  return `samuel@wibrow.net:${path}$`;
+}
 
-const WELCOME_ART = `<pre style="margin:0;font-family:inherit;font-size:12px;line-height:1.3"><span style="color:var(--ctp-green)">        /\\      /\\
-       /  \\    /  \\      /\\        </span><span style="color:var(--ctp-text)">Samuel Wibrow</span><span style="color:var(--ctp-green)">
-      /    \\  /    \\    /  \\       </span><span style="color:var(--ctp-subtext0)">SRE / Platform Engineer</span><span style="color:var(--ctp-green)">
-     /      \\/      \\  /    \\
-    /        \\       \\/      \\     </span><span style="color:var(--ctp-peach)">  o _ o</span><span style="color:var(--ctp-green)">
-___/          \\___    \\       \\    </span><span style="color:var(--ctp-peach)">  |/</span><span style="color:var(--ctp-blue)">(_)</span><span style="color:var(--ctp-peach)">\\|</span><span style="color:var(--ctp-green)">
-                  \\____\\_______\\___</span><span style="color:var(--ctp-peach)">/<span style="color:var(--ctp-blue)">o   o</span>\\</span></pre>
-<span style="color:var(--ctp-subtext1)">Type <span class="command">help</span> for commands or <span class="command">games</span> to play.</span>`;
+// Visible art widths: 17,16,25,26,27,29,29,28,35,32 -> pad to 37
+//                      +20,+21,+12,+11,+10,+8,+8,+9,+2,+5
+const WELCOME_ART = `<div style="display:flex;gap:2ch;font-family:inherit;font-size:11px;line-height:1.3;margin:0">
+<pre style="margin:0;font-family:inherit"><span style="color:var(--ctp-blue)">          *  .  *</span>
+<span style="color:var(--ctp-green)">      /\\      /\\</span>
+<span style="color:var(--ctp-green)">     /  \\  </span><span style="color:var(--ctp-text)">*</span><span style="color:var(--ctp-green)"> /  \\      /\\</span>
+<span style="color:var(--ctp-green)">    /    \\  /    \\    /  \\</span>
+<span style="color:var(--ctp-green)">   /      \\/      \\  /    \\</span>
+<span style="color:var(--ctp-green)">  /    </span><span style="color:var(--ctp-teal)">~~~</span><span style="color:var(--ctp-green)">  \\       \\/      \\</span>
+<span style="color:var(--ctp-green)">_/   </span><span style="color:var(--ctp-teal)">~~~~~</span><span style="color:var(--ctp-green)">  \\___    \\       \\</span>
+<span style="color:var(--ctp-peach)">  o _ o</span><span style="color:var(--ctp-green)">       \\____\\_______\\</span>
+<span style="color:var(--ctp-peach)">  |/</span><span style="color:var(--ctp-blue)">(O)</span><span style="color:var(--ctp-peach)">\\|</span><span style="color:var(--ctp-yellow)">  ________________________</span>
+<span style="color:var(--ctp-peach)"> /</span><span style="color:var(--ctp-blue)">o   o</span><span style="color:var(--ctp-peach)">\\</span><span style="color:var(--ctp-yellow)"> /</span>  <span style="color:var(--ctp-subtext0)">~~~  ~~~  ~~  ~~~</span>  <span style="color:var(--ctp-yellow)">\\</span></pre>
+<pre style="margin:0;font-family:inherit">
+<span style="color:var(--ctp-text);font-weight:bold">samuel</span><span style="color:var(--ctp-subtext0)">@</span><span style="color:var(--ctp-green);font-weight:bold">wibrow.net</span>
+<span style="color:var(--ctp-surface1)">─────────────────────────</span>
+<span style="color:var(--ctp-blue)">OS</span>       <span style="color:var(--ctp-text)">Zurich, CH 🇨🇭</span>
+<span style="color:var(--ctp-blue)">Role</span>     <span style="color:var(--ctp-text)">Senior SRE @ Tamedia</span>
+<span style="color:var(--ctp-blue)">Uptime</span>   <span style="color:var(--ctp-text)">15+ years</span>
+<span style="color:var(--ctp-blue)">Stack</span>    <span style="color:var(--ctp-text)">AWS / K8s / Terraform</span>
+<span style="color:var(--ctp-blue)">Lang</span>     <span style="color:var(--ctp-text)">Go / Python / TS</span>
+<span style="color:var(--ctp-blue)">Shell</span>    <span style="color:var(--ctp-text)">Neovim / Zsh</span>
+<span style="color:var(--ctp-blue)">Hobby</span>    <span style="color:var(--ctp-text)">Cycling / Snowboarding</span></pre>
+</div>
+<span style="color:var(--ctp-subtext0)">Type </span><span class="command">help</span><span style="color:var(--ctp-subtext0)"> for commands, </span><span class="command">ls</span><span style="color:var(--ctp-subtext0)"> to explore, or </span><span class="command">games</span><span style="color:var(--ctp-subtext0)"> to play.</span>`;
 
-const Terminal = () => {
-  const [output, setOutput] = useState<OutputLine[]>([
-    { id: 0, type: "response", content: WELCOME_ART },
-  ]);
+export interface TerminalHandle {
+  submitCommand: (cmd: string) => void;
+  tabComplete: (input: string) => string | null;
+}
+
+interface TerminalProps {
+  embedded?: boolean;
+  externalInput?: boolean;
+  onClose?: () => void;
+}
+
+function loadSessionState<T>(key: string, fallback: T): T {
+  try {
+    const stored = sessionStorage.getItem(key);
+    if (stored) return JSON.parse(stored);
+  } catch { /* ignore */ }
+  return fallback;
+}
+
+const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, externalInput, onClose }, ref) => {
+  const defaultOutput: OutputLine[] = [{ id: 0, type: "response", content: WELCOME_ART }];
+  const [output, setOutput] = useState<OutputLine[]>(() => loadSessionState("terminal-output", defaultOutput));
   const [inputValue, setInputValue] = useState<string>("");
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
   const [visible, setVisible] = useState<boolean>(true);
   const [bodyVisible, setBodyVisible] = useState<boolean>(true);
-  const [commandHistory, setCommandHistory] = useState<string[]>([]);
+  const [commandHistory, setCommandHistory] = useState<string[]>(() => loadSessionState("terminal-history", []));
   const [historyIndex, setHistoryIndex] = useState<number>(-1);
   const [activeGame, setActiveGame] = useState<GameType | null>(null);
+  const [cwd, setCwd] = useState<string>("/");
 
-  // Drag state
+  // Drag state (unused in embedded mode)
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isMaximized, setIsMaximized] = useState(false);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
@@ -433,8 +768,17 @@ const Terminal = () => {
 
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const lineIdRef = useRef<number>(0);
+  const lineIdRef = useRef<number>(output.reduce((max, line) => Math.max(max, line.id), 0));
   const terminalRef = useRef<HTMLDivElement>(null);
+
+  // Persist output and history to sessionStorage
+  useEffect(() => {
+    try { sessionStorage.setItem("terminal-output", JSON.stringify(output)); } catch { /* ignore */ }
+  }, [output]);
+
+  useEffect(() => {
+    try { sessionStorage.setItem("terminal-history", JSON.stringify(commandHistory)); } catch { /* ignore */ }
+  }, [commandHistory]);
 
   // Fetch resume data on mount
   useEffect(() => {
@@ -576,7 +920,7 @@ const Terminal = () => {
         lines.push({
           id: lineIdRef.current,
           type: "command",
-          content: `<span class="terminal-prompt">${PROMPT}</span> <span class="terminal-text">${command}</span>`,
+          content: `<span class="terminal-prompt">${getPrompt(cwd)}</span> <span class="terminal-text">${command}</span>`,
         });
         if (response) {
           lineIdRef.current += 1;
@@ -589,7 +933,7 @@ const Terminal = () => {
         return lines;
       });
     },
-    []
+    [cwd]
   );
 
   const processCommand = useCallback(
@@ -607,10 +951,87 @@ const Terminal = () => {
       }
 
       const commands = buildCommands(resumeData);
+      const fs = buildFilesystem(resumeData);
 
       // clear
       if (trimmedInput === "clear") {
-        setOutput([]);
+        setOutput([{ id: 0, type: "response", content: WELCOME_ART }]);
+        setCommandHistory([]);
+        setCwd("/");
+        lineIdRef.current = 0;
+        return;
+      }
+
+      if (trimmedInput === "exit") {
+        if (onClose) onClose();
+        return;
+      }
+
+      // Shell commands
+      const cmd = trimmedInput.split(/\s+/)[0];
+      const args = originalInput.substring(cmd.length).trim();
+
+      if (cmd === "pwd") {
+        addLine(originalInput, `~${cwd === "/" ? "" : cwd}`);
+        return;
+      }
+
+      if (cmd === "whoami") {
+        addLine(originalInput, resumeData ? `${resumeData.basics.name} (${resumeData.basics.label})` : "samuel");
+        return;
+      }
+
+      if (cmd === "cd") {
+        if (!args || args === "~" || args === "/") {
+          setCwd("/");
+          addLine(originalInput);
+          return;
+        }
+        const target = resolvePath(cwd, args.toLowerCase());
+        const node = getNode(fs, target);
+        if (node === null) {
+          addLine(originalInput, `cd: ${args}: No such file or directory`);
+        } else if (typeof node === "string") {
+          addLine(originalInput, `cd: ${args}: Not a directory`);
+        } else {
+          setCwd(target);
+          addLine(originalInput);
+        }
+        return;
+      }
+
+      if (cmd === "ls" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellLs(fs, cwd, args.toLowerCase()));
+        return;
+      }
+
+      if (cmd === "cat" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellCat(fs, cwd, args.toLowerCase()));
+        return;
+      }
+
+      if (cmd === "tree" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellTree(fs, cwd));
+        return;
+      }
+
+      if (cmd === "find" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellFind(fs, args.toLowerCase()));
+        return;
+      }
+
+      if (cmd === "grep" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellGrep(fs, args.toLowerCase()));
+        return;
+      }
+
+      if (cmd === "head" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellHead(fs, cwd, args.toLowerCase()));
+        return;
+      }
+
+      if (cmd === "wc" && Object.keys(fs).length > 0) {
+        addLine(originalInput, shellWc(fs, cwd, args.toLowerCase()));
         return;
       }
 
@@ -661,7 +1082,7 @@ const Terminal = () => {
         );
       }
     },
-    [resumeData, addLine]
+    [resumeData, addLine, cwd]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -695,22 +1116,44 @@ const Terminal = () => {
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
-      const current = inputValue.trim().toLowerCase();
+      const current = inputValue.trim();
       if (!current) return;
 
-      const matches = KNOWN_COMMANDS.filter((cmd) => cmd.startsWith(current));
-      if (matches.length === 1) {
-        setInputValue(matches[0]);
-      } else if (matches.length > 1) {
-        // Find common prefix
-        let prefix = matches[0];
-        for (let i = 1; i < matches.length; i++) {
-          while (!matches[i].startsWith(prefix)) {
-            prefix = prefix.slice(0, -1);
+      const parts = current.split(/\s+/);
+      const fs = buildFilesystem(resumeData);
+
+      if (parts.length <= 1) {
+        // Complete command names
+        const matches = KNOWN_COMMANDS.filter((cmd) => cmd.startsWith(current.toLowerCase()));
+        if (matches.length === 1) {
+          setInputValue(matches[0] + " ");
+        } else if (matches.length > 1) {
+          const prefix = findCommonPrefix(matches);
+          if (prefix.length > current.length) {
+            setInputValue(prefix);
+          } else {
+            // Show possible completions
+            addLine(current, matches.join("  "));
           }
         }
-        if (prefix.length > current.length) {
-          setInputValue(prefix);
+      } else {
+        // Complete file/directory paths
+        const cmd = parts[0];
+        const partial = parts[parts.length - 1].toLowerCase();
+        const completions = getPathCompletions(fs, cwd, partial);
+
+        if (completions.length === 1) {
+          const completed = completions[0];
+          const newParts = [...parts.slice(0, -1), completed];
+          setInputValue(newParts.join(" "));
+        } else if (completions.length > 1) {
+          const prefix = findCommonPrefix(completions);
+          if (prefix.length > partial.length) {
+            const newParts = [...parts.slice(0, -1), prefix];
+            setInputValue(newParts.join(" "));
+          } else {
+            addLine(current, completions.join("  "));
+          }
         }
       }
     }
@@ -722,7 +1165,102 @@ const Terminal = () => {
     setTimeout(() => inputRef.current?.focus(), 0);
   }, []);
 
-  if (!visible) return null;
+  // Expose submitCommand for external use (header input)
+  React.useImperativeHandle(ref, () => ({
+    submitCommand: (cmd: string) => {
+      processCommand(cmd);
+    },
+    tabComplete: (input: string): string | null => {
+      const current = input.trim();
+      if (!current) return null;
+
+      const parts = current.split(/\s+/);
+      const fs = buildFilesystem(resumeData);
+
+      if (parts.length <= 1) {
+        const matches = KNOWN_COMMANDS.filter((cmd) => cmd.startsWith(current.toLowerCase()));
+        if (matches.length === 1) return matches[0] + " ";
+        if (matches.length > 1) {
+          const prefix = findCommonPrefix(matches);
+          if (prefix.length > current.length) return prefix;
+          addLine(current, matches.join("  "));
+        }
+        return null;
+      }
+
+      const partial = parts[parts.length - 1].toLowerCase();
+      const completions = getPathCompletions(fs, cwd, partial);
+
+      if (completions.length === 1) {
+        return [...parts.slice(0, -1), completions[0]].join(" ");
+      }
+      if (completions.length > 1) {
+        const prefix = findCommonPrefix(completions);
+        if (prefix.length > partial.length) {
+          return [...parts.slice(0, -1), prefix].join(" ");
+        }
+        addLine(current, completions.join("  "));
+      }
+      return null;
+    },
+  }), [processCommand, resumeData, cwd, addLine]);
+
+  if (!visible && !embedded) return null;
+
+  /* ---------- Embedded mode (header dropdown) ---------- */
+
+  if (embedded) {
+    return (
+      <div className="terminal-embedded" ref={terminalRef}>
+        <div className="terminal">
+          <div className="terminal-body terminal-body-embedded">
+            {activeGame ? (
+              renderGame(activeGame, handleGameExit)
+            ) : (
+              <>
+                <div className="terminal-output" ref={outputRef}>
+                  {output.map((line) =>
+                    line.type === "command" ? (
+                      <div
+                        key={line.id}
+                        className="terminal-line"
+                        dangerouslySetInnerHTML={{ __html: line.content }}
+                      />
+                    ) : (
+                      <div
+                        key={line.id}
+                        className="terminal-response"
+                        dangerouslySetInnerHTML={{ __html: line.content }}
+                      />
+                    )
+                  )}
+                </div>
+
+                {!externalInput && (
+                  <div className="terminal-input-line">
+                    <span className="terminal-prompt">{getPrompt(cwd)}</span>
+                    <input
+                      ref={inputRef}
+                      className="terminal-input"
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      autoFocus
+                      spellCheck={false}
+                      autoComplete="off"
+                    />
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ---------- Floating mode (original) ---------- */
 
   const containerStyle: React.CSSProperties = position
     ? {
@@ -793,7 +1331,7 @@ const Terminal = () => {
                 </div>
 
                 <div className="terminal-input-line">
-                  <span className="terminal-prompt">{PROMPT}</span>
+                  <span className="terminal-prompt">{getPrompt(cwd)}</span>
                   <input
                     ref={inputRef}
                     className="terminal-input"
@@ -821,6 +1359,8 @@ const Terminal = () => {
       </div>
     </div>
   );
-};
+});
+
+Terminal.displayName = "Terminal";
 
 export default Terminal;

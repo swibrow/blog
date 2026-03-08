@@ -2,7 +2,7 @@
   "basics": {
     "name": "Samuel Wibrow",
     "label": "Senior Site Reliability Engineer / Platform Engineer",
-    "summary": "Highly driven and experienced Site Reliability Engineer with 13+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, networking, and building internal developer platforms that enable teams to move fast while maintaining reliability.",
+    "summary": "Highly driven and experienced Site Reliability Engineer with 15+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, networking, and building internal developer platforms that enable teams to move fast while maintaining reliability. Actively leveraging AI and LLMs to accelerate infrastructure automation and developer tooling.",
     "location": {
       "city": "Zurich",
       "countryCode": "CH"
@@ -162,17 +162,31 @@
         "Karpenter",
         "Helm",
         "Kustomize",
+        "Kubebuilder",
+        "Talos",
         "AWS ECS"
       ]
     },
     {
       "name": "Cloud & Infrastructure",
       "keywords": [
-        "AWS (10 years)",
+        "AWS (10+ years)",
         "Terraform",
+        "Terragrunt",
         "CloudFormation",
-        "CDK (basic)",
+        "CDK",
         "GCP (basic)"
+      ]
+    },
+    {
+      "name": "AI & Automation",
+      "keywords": [
+        "Claude / Anthropic API",
+        "OpenAI / ChatGPT",
+        "Ollama",
+        "LLM Tooling",
+        "AI-Assisted Development",
+        "Renovate"
       ]
     },
     {
@@ -182,16 +196,18 @@
         "Prometheus Stack",
         "LGTM Stack",
         "EFK Stack",
-        "AWS"
+        "AWS CloudWatch"
       ]
     },
     {
       "name": "Languages",
       "keywords": [
+        "Go",
         "Python",
+        "TypeScript",
         "Bash",
-        "PowerShell",
-        "Go (basic)"
+        "React",
+        "PowerShell"
       ]
     },
     {
@@ -199,8 +215,8 @@
       "keywords": [
         "GitHub Actions",
         "GitLab CI",
-        "Flux",
         "ArgoCD",
+        "Flux",
         "CircleCI"
       ]
     },
@@ -221,6 +237,7 @@
         "Git",
         "Linux",
         "Docker",
+        "Neovim",
         "Many CNCF projects"
       ]
     }

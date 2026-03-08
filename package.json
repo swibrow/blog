@@ -3,27 +3,30 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "@types/bun": "latest",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "tailwindcss": "^4.2.1"
+    "@vitejs/plugin-react": "^4.5.2",
+    "tailwindcss": "^4.2.1",
+    "vite": "^6.3.5"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
-    "astro": "^5.18.0",
+    "@giscus/react": "^3.1.0",
+    "framer-motion": "^12.12.1",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.6.1",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
   }
 }
