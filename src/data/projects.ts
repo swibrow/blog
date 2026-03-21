@@ -40,6 +40,11 @@ export const projects: Project[] = [
     ],
   },
   {
+    name: "agent-ops",
+    description: "Operational tooling for managing AI agents",
+    links: [{ label: "repo", url: "https://github.com/swibrow/agent-ops" }],
+  },
+  {
     name: "Homb",
     description: "Family organisation management",
     badge: "Coming soon",

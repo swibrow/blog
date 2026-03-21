@@ -111,6 +111,18 @@ export const tools: Tool[] = [
     description: "Beautiful markdown renderer for the terminal",
     category: "TUI Applications",
   },
+  {
+    name: "GitHub Actions TUI",
+    url: "https://github.com/swibrow/github-actions-tui",
+    description: "Terminal UI for monitoring and managing GitHub Actions workflows",
+    category: "TUI Applications",
+  },
+  {
+    name: "agent-ops",
+    url: "https://github.com/swibrow/agent-ops",
+    description: "Operational tooling for managing AI agents",
+    category: "CLI Utilities",
+  },
 ];
 
 export const categories = [...new Set(tools.map((t) => t.category))];
