@@ -1,5 +1,3 @@
-import matter from "gray-matter";
-
 export interface Post {
   slug: string;
   title: string;
@@ -10,40 +8,50 @@ export interface Post {
   content: string;
 }
 
-interface PostFrontmatter {
-  title: string;
-  date: string | Date;
-  description?: string;
-  author: string;
-  tags?: string[];
-  draft?: boolean;
-}
-
 const postFiles = import.meta.glob<string>(
   "../content/posts/*.md",
   { eager: true, query: "?raw", import: "default" },
 );
 
-function toDateString(value: string | Date): string {
-  if (value instanceof Date) {
-    return value.toISOString().slice(0, 10);
+type Frontmatter = Record<string, string | string[] | boolean>;
+
+function parseFrontmatter(raw: string): { data: Frontmatter; content: string } {
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
+  if (!match) return { data: {}, content: raw };
+  const [, block, content] = match;
+  const data: Frontmatter = {};
+  for (const line of block.split(/\r?\n/)) {
+    const m = line.match(/^([A-Za-z_][\w-]*):\s*(.*)$/);
+    if (!m) continue;
+    const [, key, rawValue] = m;
+    const value = rawValue.trim();
+    if (value === "true" || value === "false") {
+      data[key] = value === "true";
+    } else if (value.startsWith("[") && value.endsWith("]")) {
+      data[key] = value
+        .slice(1, -1)
+        .split(",")
+        .map((s) => s.trim().replace(/^["']|["']$/g, ""))
+        .filter(Boolean);
+    } else {
+      data[key] = value.replace(/^["']|["']$/g, "");
+    }
   }
-  return value;
+  return { data, content };
 }
 
 export const posts: Post[] = Object.entries(postFiles)
   .map(([path, raw]) => {
     const slug = path.split("/").pop()!.replace(".md", "");
-    const { data, content } = matter(raw);
-    const fm = data as PostFrontmatter;
+    const { data, content } = parseFrontmatter(raw);
     return {
       slug,
-      title: fm.title,
-      date: toDateString(fm.date),
-      description: fm.description ?? "",
-      author: fm.author,
-      tags: fm.tags ?? [],
-      draft: fm.draft ?? false,
+      title: (data.title as string) ?? "",
+      date: (data.date as string) ?? "",
+      description: (data.description as string) ?? "",
+      author: (data.author as string) ?? "",
+      tags: (data.tags as string[]) ?? [],
+      draft: (data.draft as boolean) ?? false,
       content,
     };
   })
