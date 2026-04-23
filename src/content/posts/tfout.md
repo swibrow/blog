@@ -1,3 +1,11 @@
+---
+title: "Building a Kubernetes Operator for the sake of building a Kubernetes Operator"
+date: 2025-05-28
+description: "A simple operator to sync Terraform outputs into Kubernetes ConfigMaps and Secrets"
+author: "Samuel Wibrow"
+tags: [kubernetes, operator, kubebuilder, claude, ai]
+---
+
 ## The Problem
 
 At my current $job, we recently migrated to ArgoCD from Terraform for application deployments. With that came a challenge: **how do we pass Terraform outputs into Kubernetes manifests?**

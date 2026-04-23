@@ -1,3 +1,11 @@
+---
+title: "how - Natural Language to Shell Commands"
+date: 2026-02-18
+description: "A CLI tool that turns plain English into shell commands, powered by LLMs running locally with Ollama"
+author: "Samuel Wibrow"
+tags: [go, cli, ai, ollama, llm]
+---
+
 You know *what* you want to do in the terminal, but can't remember the exact flags. Was it `find -mtime` or `find -mmin`? Does `tar` need `-xvf` or `-xzf`? You Google it, wade through Stack Overflow circa 2012, and eventually find the answer buried under AI-generated SEO spam.
 
 **[how](https://github.com/swibrow/how)** fixes that. It's a Go CLI that turns plain English into shell commands.

@@ -1,3 +1,11 @@
+---
+title: "Trying a 66-Key Sofle Split Keyboard"
+date: 2025-09-10
+description: ""
+author: "Samuel Wibrow"
+tags: [keyboards, mechanical-keyboards, ergonomics, diy]
+---
+
 ## The Journey to Split Keyboards
 I've been using mechanical keyboards for years, but always stuck with traditional 80% layouts. My first attempt at going split was with a Corne keyboard, but it failed after just a few weeks. However, the appeal of better ergonomics and reduced strain during long coding sessions kept drawing me back to split keyboards. Plus, there's something oddly satisfying about completely relearning how to type--because who doesn't enjoy feeling like a complete beginner again?
 

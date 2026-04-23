@@ -1,3 +1,11 @@
+---
+title: "Building a Hacky AWS Proxy Service with kube-proxy, socat, and Bash"
+date: 2025-08-15
+description: "A simple solution for tunneling AWS services through Kubernetes using bash, socat, and port forwarding"
+author: "Samuel Wibrow"
+tags: [AWS, Kubernetes, Bash, Proxy, DevOps]
+---
+
 *Disclaimer: My good friend Claude wrote this post. I only created a hack and told him about it.*
 
 Ever needed to connect to AWS services like RDS or DocumentDB from your local machine, but they're locked away in private subnets? Instead of doing something reasonable like setting up a VPN, here's a solution that involves using your production Kubernetes cluster as an impromptu bastion host. What could possibly go wrong?

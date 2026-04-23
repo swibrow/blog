@@ -1,3 +1,11 @@
+---
+title: "Replicating AWS IRSA Workflow for my Homelab with Talos and a Raspberry Pi"
+date: 2024-06-09
+description: "Dumping access keys for oidc!"
+author: "Samuel Wibrow"
+tags: [aws, oidc, kubernetes, talos]
+---
+
 IRSA leverages OpenID Connect to authenticate service accounts, providing a secure and convenient method to access AWS resources. This approach simplifies the management of credentials in your Kubernetes environment.
 
 To test AWS IRSA (IAM Roles for Service Accounts) in a selfhosted Kubernetes cluster, I used a spare Raspberry Pi 4 and [Talos](https://www.talos.dev/) (Kubernetes Operating System). This could have easily been done with docker on my mac but I wanted to do a real test so I can migrate the config over to my [homelab](https://github.com/swibrow/pitower) cluster.
