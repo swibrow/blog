@@ -1,0 +1,56 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+import Card from "@components/ui/Card.astro";
+import { projects } from "@/data/projects";
+
+const description =
+  "Open-source side projects: Kubernetes operators, CLI tools, and homelab automation. Includes TFOut, how, agent-ops, and more.";
+---
+
+<BaseLayout title="Projects — Samuel Wibrow" description={description}>
+  <SectionHeading title="projects" subtitle="Things I've built">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        projects.map((project) => (
+          <Card>
+            <div class="flex items-start justify-between gap-2">
+              <h2
+                class="font-mono text-base font-bold"
+                style="color: var(--ctp-blue);"
+              >
+                {project.name}
+              </h2>
+              {project.badge && (
+                <span
+                  class="shrink-0 rounded-full px-2 py-0.5 font-mono text-xs"
+                  style="background-color: var(--ctp-surface0); color: var(--ctp-yellow);"
+                >
+                  {project.badge}
+                </span>
+              )}
+            </div>
+            <p class="mt-1 mb-2 text-sm" style="color: var(--ctp-text);">
+              {project.description}
+            </p>
+            {project.links && (
+              <div class="flex flex-wrap gap-3">
+                {project.links.map((link) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="font-mono text-xs hover:underline"
+                    style="color: var(--ctp-lavender);"
+                  >
+                    {link.label} →
+                  </a>
+                ))}
+              </div>
+            )}
+          </Card>
+        ))
+      }
+    </div>
+  </SectionHeading>
+</BaseLayout>

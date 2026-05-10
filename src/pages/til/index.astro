@@ -1,0 +1,64 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+import TilSearch from "@components/react/TilSearch";
+
+const all = await getCollection("til", ({ data }) => !data.draft);
+const entries = all
+  .map((e) => ({
+    slug: e.id,
+    title: e.data.title,
+    date: e.data.date.toISOString(),
+    tags: e.data.tags,
+  }))
+  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const description =
+  "Today I Learned — short notes on Kubernetes, AWS, Terraform, ArgoCD, CLI tools, and other ops gotchas worth remembering.";
+---
+
+<BaseLayout title="TIL — Samuel Wibrow" description={description}>
+  <SectionHeading title="til" subtitle="Today I Learned — short notes worth remembering">
+    <TilSearch entries={entries} client:only="react" />
+
+    <noscript>
+      <div class="flex flex-col gap-3">
+        {
+          entries.map((entry) => (
+            <a
+              href={`/til/${entry.slug}`}
+              class="block rounded-lg border p-4"
+              style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
+            >
+              <h2 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
+                {entry.title}
+              </h2>
+              <div class="flex items-center gap-2 mt-1">
+                <time class="font-mono text-xs" style="color: var(--ctp-subtext0);">
+                  {new Date(entry.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                {entry.tags.length > 0 && (
+                  <div class="flex flex-wrap gap-1">
+                    {entry.tags.map((tag) => (
+                      <span
+                        class="rounded px-1.5 py-0.5 font-mono text-xs"
+                        style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </noscript>
+  </SectionHeading>
+</BaseLayout>

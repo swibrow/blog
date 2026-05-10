@@ -6,11 +6,10 @@ interface CommentsProps {
 }
 
 export default function Comments({ term }: CommentsProps) {
-  const [theme, setTheme] = useState(() =>
-    document.documentElement.classList.contains("light") ? "light" : "dark"
-  );
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
+    setTheme(document.documentElement.classList.contains("light") ? "light" : "dark");
     const observer = new MutationObserver(() => {
       setTheme(document.documentElement.classList.contains("light") ? "light" : "dark");
     });

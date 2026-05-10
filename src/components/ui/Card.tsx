@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 interface CardProps {
   href?: string;
   external?: boolean;
@@ -22,26 +20,18 @@ export default function Card({ href, external, children, className = "" }: CardP
     },
   };
 
-  if (href && external) {
+  if (href) {
     return (
       <a
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={external ? "_blank" : undefined}
+        rel={external ? "noopener noreferrer" : undefined}
         className={baseStyles}
         style={style}
         {...hoverHandlers}
       >
         {children}
       </a>
-    );
-  }
-
-  if (href) {
-    return (
-      <Link to={href} className={baseStyles} style={style} {...hoverHandlers}>
-        {children}
-      </Link>
     );
   }
 

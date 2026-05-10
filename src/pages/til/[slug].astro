@@ -1,0 +1,144 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Comments from "@components/ui/Comments";
+import { readingTime } from "@/lib/readingTime";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("til", ({ data }) => !data.draft);
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const minutes = readingTime(entry.body ?? "");
+const dateISO = entry.data.date.toISOString();
+const dateDisplay = entry.data.date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const canonical = new URL(`/til/${entry.id}`, Astro.site).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  headline: entry.data.title,
+  datePublished: dateISO,
+  author: {
+    "@type": "Person",
+    name: "Samuel Wibrow",
+    url: "https://samuel.wibrow.net/about",
+  },
+  mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+  keywords: entry.data.tags.join(", "),
+};
+---
+
+<BaseLayout
+  title={`TIL: ${entry.data.title} — Samuel Wibrow`}
+  description={`Today I Learned: ${entry.data.title}. ${entry.data.tags.map((t) => `#${t}`).join(" ")}`}
+  type="article"
+  publishedTime={dateISO}
+  tags={entry.data.tags}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <article class="post mx-auto max-w-3xl px-4 py-12">
+    <a class="back-link" href="/til">← back to til</a>
+
+    <header class="post-header">
+      <p class="til-tag">
+        <span style="color: var(--ctp-yellow);">til</span>
+        <span style="color: var(--ctp-subtext0);">·</span>
+        <time datetime={dateISO}>{dateDisplay}</time>
+        <span style="color: var(--ctp-subtext0);">·</span>
+        <span>{minutes} min read</span>
+      </p>
+      <h1>{entry.data.title}</h1>
+      {entry.data.tags.length > 0 && (
+        <div class="post-tags">
+          {entry.data.tags.map((tag) => (
+            <a class="tag" href={`/til?tag=${encodeURIComponent(tag)}`}>
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <Comments client:only="react" term={entry.id} />
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    color: var(--ctp-subtext0);
+    font-family: "Fira Mono", monospace;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+  }
+  .back-link:hover {
+    color: var(--ctp-green);
+  }
+  .post-header {
+    margin-bottom: 2rem;
+  }
+  .til-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    color: var(--ctp-subtext0);
+    font-family: "Fira Mono", monospace;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+  .post-header h1 {
+    color: var(--ctp-lavender);
+    font-family: "Fira Mono", monospace;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  @media (min-width: 768px) {
+    .post-header h1 {
+      font-size: 2.25rem;
+    }
+  }
+  .post-tags {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    background: var(--ctp-surface0);
+    color: var(--ctp-subtext0);
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-family: "Fira Mono", monospace;
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+  .tag:hover {
+    background: var(--ctp-surface1);
+    color: var(--ctp-text);
+  }
+</style>

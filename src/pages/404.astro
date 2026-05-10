@@ -1,0 +1,39 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="404 — Page Not Found"
+  description="The page you're looking for doesn't exist."
+  noindex
+>
+  <main class="mx-auto max-w-2xl px-4 py-24 text-center">
+    <div class="font-mono text-sm" style="color: var(--ctp-subtext0);">
+      <p>
+        <span style="color: var(--ctp-green);">samuel@wibrow.net</span>
+        <span style="color: var(--ctp-subtext0);">:</span>
+        <span style="color: var(--ctp-text);">~$</span>
+        cd {Astro.url.pathname}
+      </p>
+      <p style="color: var(--ctp-red);">cd: no such file or directory: {Astro.url.pathname}</p>
+    </div>
+
+    <h1
+      class="mt-8 mb-2 font-mono text-6xl font-bold"
+      style="color: var(--ctp-red);"
+    >
+      404
+    </h1>
+    <p class="mb-8 font-mono" style="color: var(--ctp-subtext1);">
+      The page you're looking for doesn't exist.
+    </p>
+
+    <a
+      href="/"
+      class="inline-block font-mono text-sm transition-colors"
+      style="color: var(--ctp-blue);"
+    >
+      ← cd ~/home
+    </a>
+  </main>
+</BaseLayout>

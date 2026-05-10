@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+import Card from "@components/ui/Card.astro";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+
+const description =
+  "Long-form posts on Kubernetes, AWS, platform engineering, and SRE work — building operators, debugging clusters, and shipping infrastructure that doesn't fall over.";
+---
+
+<BaseLayout title="Posts — Samuel Wibrow" description={description}>
+  <SectionHeading title="posts" subtitle="Long-form posts on platform, infra, and tooling">
+    <div class="flex flex-col gap-4">
+      {
+        posts.map((post) => (
+          <Card href={`/posts/${post.id}`}>
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h2 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
+                  {post.data.title}
+                </h2>
+                {post.data.description && (
+                  <p class="mt-1 text-sm" style="color: var(--ctp-subtext1);">
+                    {post.data.description}
+                  </p>
+                )}
+              </div>
+              <time
+                class="shrink-0 font-mono text-xs"
+                style="color: var(--ctp-subtext0);"
+                datetime={post.data.date.toISOString()}
+              >
+                {post.data.date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </time>
+            </div>
+            {post.data.tags.length > 0 && (
+              <div class="mt-2 flex flex-wrap gap-2">
+                {post.data.tags.map((tag) => (
+                  <span
+                    class="rounded px-1.5 py-0.5 font-mono text-xs"
+                    style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </Card>
+        ))
+      }
+    </div>
+  </SectionHeading>
+</BaseLayout>

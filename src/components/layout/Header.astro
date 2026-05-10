@@ -1,0 +1,133 @@
+---
+import HeaderTerminal from "./HeaderTerminal";
+import ThemeToggle from "@components/react/ThemeToggle";
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = "/" } = Astro.props;
+
+const navItems = [
+  { name: "~/home", href: "/", exact: true },
+  { name: "~/posts", href: "/posts" },
+  { name: "~/til", href: "/til" },
+  { name: "~/projects", href: "/projects" },
+  { name: "~/tools", href: "/tools" },
+  { name: "~/about", href: "/about" },
+];
+
+function isActive(item: { href: string; exact?: boolean }, path: string) {
+  if (item.exact) return path === item.href;
+  return path === item.href || path.startsWith(item.href + "/");
+}
+---
+
+<div
+  class="site-header sticky top-0 z-50 border-b"
+  style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0); position: sticky;"
+>
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+    <HeaderTerminal client:only="react" />
+
+    <nav class="hidden items-center gap-4 md:flex shrink-0">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="font-mono text-sm transition-colors hover:no-underline nav-link"
+            data-active={isActive(item, currentPath) ? "true" : "false"}
+          >
+            {item.name}
+          </a>
+        ))
+      }
+      <ThemeToggle client:only="react" />
+    </nav>
+
+    <div class="flex items-center gap-3 md:hidden shrink-0">
+      <button
+        type="button"
+        class="mobile-menu-toggle flex flex-col gap-1.5"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <span class="bar block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+        <span class="bar block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+        <span class="bar block h-0.5 w-6 transition-all" style="background-color: var(--ctp-text);"></span>
+      </button>
+    </div>
+  </div>
+
+  <nav
+    class="mobile-nav flex-col gap-2 border-t px-4 py-3 md:hidden"
+    style="border-color: var(--ctp-surface0); display: none;"
+  >
+    {
+      navItems.map((item) => (
+        <a
+          href={item.href}
+          class="font-mono text-sm transition-colors nav-link"
+          data-active={isActive(item, currentPath) ? "true" : "false"}
+        >
+          {item.name}
+        </a>
+      ))
+    }
+    <div class="pt-2">
+      <ThemeToggle client:only="react" />
+    </div>
+  </nav>
+</div>
+
+<style>
+  .site-header {
+    position: sticky;
+  }
+  .nav-link {
+    color: var(--ctp-text);
+  }
+  .nav-link:hover,
+  .nav-link[data-active="true"] {
+    color: var(--ctp-green);
+  }
+  .header-terminal-popover {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    background-color: var(--ctp-mantle);
+    border-bottom: 1px solid var(--ctp-surface0);
+    z-index: 49;
+  }
+  .mobile-menu-toggle[aria-expanded="true"] + * .mobile-nav,
+  .site-header[data-menu-open="true"] .mobile-nav {
+    display: flex !important;
+  }
+</style>
+
+<script>
+  // Mobile menu toggle — keeps Header server-rendered (no React island for nav).
+  (function () {
+    const root = document.querySelector<HTMLElement>(".site-header");
+    if (!root) return;
+    const toggle = root.querySelector<HTMLButtonElement>(".mobile-menu-toggle");
+    const menu = root.querySelector<HTMLElement>(".mobile-nav");
+    if (!toggle || !menu) return;
+
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute("aria-expanded", String(open));
+      menu.style.display = open ? "flex" : "none";
+    };
+
+    toggle.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") !== "true";
+      setOpen(open);
+    });
+
+    // Close mobile menu when a nav link is clicked
+    menu.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => setOpen(false));
+    });
+  })();
+</script>

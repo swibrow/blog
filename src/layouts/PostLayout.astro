@@ -1,0 +1,170 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import TableOfContents from "@components/TableOfContents.astro";
+import Comments from "@components/ui/Comments";
+import { readingTime } from "@/lib/readingTime";
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  author: string;
+  tags: string[];
+  slug: string;
+  rawContent: string;
+  headings: MarkdownHeading[];
+}
+
+const { title, description, date, author, tags, slug, rawContent, headings } =
+  Astro.props;
+
+const minutes = readingTime(rawContent);
+const dateISO = date.toISOString();
+const dateDisplay = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const canonical = new URL(`/posts/${slug}`, Astro.site).toString();
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description,
+  datePublished: dateISO,
+  dateModified: dateISO,
+  author: {
+    "@type": "Person",
+    name: author,
+    url: "https://samuel.wibrow.net/about",
+  },
+  publisher: {
+    "@type": "Person",
+    name: "Samuel Wibrow",
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": canonical,
+  },
+  keywords: tags.join(", "),
+  image: new URL("/me.jpg", Astro.site).toString(),
+};
+---
+
+<BaseLayout
+  title={`${title} — Samuel Wibrow`}
+  description={description}
+  type="article"
+  publishedTime={dateISO}
+  tags={tags}
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <article class="post mx-auto max-w-3xl px-4 py-12">
+    <a class="back-link" href="/posts">← back to posts</a>
+
+    <header class="post-header">
+      <h1>{title}</h1>
+      {description && <p class="post-description">{description}</p>}
+      <div class="post-meta">
+        <time datetime={dateISO}>{dateDisplay}</time>
+        <span class="dot">·</span>
+        <span>{minutes} min read</span>
+        {author && (
+          <>
+            <span class="dot">·</span>
+            <span>by {author}</span>
+          </>
+        )}
+      </div>
+      {tags.length > 0 && (
+        <div class="post-tags">
+          {tags.map((tag) => (
+            <a class="tag" href={`/posts?tag=${encodeURIComponent(tag)}`}>
+              {tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <TableOfContents headings={headings} />
+
+    <div class="prose">
+      <slot />
+    </div>
+
+    <Comments client:only="react" term={slug} />
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    color: var(--ctp-subtext0);
+    font-family: "Fira Mono", monospace;
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+  }
+  .back-link:hover {
+    color: var(--ctp-green);
+  }
+  .post-header {
+    margin-bottom: 2rem;
+  }
+  .post-header h1 {
+    color: var(--ctp-lavender);
+    font-family: "Fira Mono", monospace;
+    font-size: 1.875rem;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  @media (min-width: 768px) {
+    .post-header h1 {
+      font-size: 2.25rem;
+    }
+  }
+  .post-description {
+    color: var(--ctp-subtext1);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+  .post-meta {
+    color: var(--ctp-subtext0);
+    font-family: "Fira Mono", monospace;
+    font-size: 0.875rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .post-tags {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tag {
+    background: var(--ctp-surface0);
+    color: var(--ctp-subtext0);
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    font-family: "Fira Mono", monospace;
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+  .tag:hover {
+    background: var(--ctp-surface1);
+    color: var(--ctp-text);
+  }
+</style>

@@ -3,6 +3,11 @@ node_modules/
 dist/
 .astro/
 
+# Use bun.lock — npm/yarn lockfiles would diverge from CI
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
 # OS
 .DS_Store
 

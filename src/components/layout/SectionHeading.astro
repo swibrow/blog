@@ -1,0 +1,36 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  wide?: boolean;
+}
+
+const { title, subtitle, wide = false } = Astro.props;
+const widthClass = wide ? "max-w-6xl" : "max-w-4xl";
+---
+
+<main class={`mx-auto px-4 py-12 ${widthClass} fade-in`}>
+  <div class="mb-8">
+    <h1 class="font-mono text-3xl font-bold mb-2" style="color: var(--ctp-green)">
+      ~/{title}
+    </h1>
+    {
+      subtitle && (
+        <p class="font-mono text-sm" style="color: var(--ctp-subtext0)">
+          {subtitle}
+        </p>
+      )
+    }
+  </div>
+  <slot />
+</main>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+</style>

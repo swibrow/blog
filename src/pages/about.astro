@@ -1,0 +1,101 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+import Card from "@components/ui/Card.astro";
+
+const title = "About — Samuel Wibrow";
+const description =
+  "Senior SRE / Platform Engineer based in Zurich. 15+ years in IT infrastructure, currently working with AWS, Kubernetes, and Terraform at Tamedia.";
+
+const skills = [
+  { category: "Platform & Orchestration", items: ["Kubernetes", "AWS EKS", "Karpenter", "Helm", "Kustomize", "Kubebuilder", "Talos"] },
+  { category: "Cloud & Infrastructure", items: ["AWS (10+ years)", "Terraform", "Terragrunt", "CloudFormation", "CDK"] },
+  { category: "AI & Automation", items: ["Claude / Anthropic", "OpenAI / ChatGPT", "Ollama", "LLM Tooling", "AI-Assisted Dev"] },
+  { category: "Observability", items: ["Datadog", "Prometheus Stack", "LGTM Stack", "EFK Stack"] },
+  { category: "Languages", items: ["Go", "Python", "TypeScript", "Bash", "React"] },
+  { category: "CI/CD & GitOps", items: ["GitHub Actions", "GitLab CI", "ArgoCD", "Flux", "Renovate"] },
+  { category: "Networking & Security", items: ["TCP/IP", "DNS", "VPN", "OAuth2/OIDC", "Vault"] },
+  { category: "Tools", items: ["Git", "Linux", "Docker", "Neovim", "CNCF Ecosystem"] },
+];
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Samuel Wibrow",
+  jobTitle: "Senior SRE / Platform Engineer",
+  url: "https://samuel.wibrow.net",
+  image: "https://samuel.wibrow.net/me.jpg",
+  sameAs: [
+    "https://github.com/swibrow",
+    "https://www.linkedin.com/in/samuelwibrow/",
+    "https://www.strava.com/athletes/21868831",
+  ],
+  worksFor: { "@type": "Organization", name: "Tamedia" },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Zurich",
+    addressCountry: "Switzerland",
+  },
+  knowsAbout: skills.flatMap((s) => s.items),
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(personJsonLd)}
+  />
+
+  <SectionHeading title="about">
+    <div class="prose">
+      <p>
+        Senior SRE / Platform Engineer at Tamedia in Zurich. I build platforms
+        and keep production running, mostly with AWS, Kubernetes, and
+        Terraform. 15+ years in IT infrastructure, the last decade in cloud
+        and platform engineering.
+      </p>
+      <p>
+        Originally from Brisbane, Australia. Moved to Munich in 2015 (Stylight),
+        then to Zurich in 2023 for the mountains and the Raclette. Worked my
+        way through sysadmin, cloud engineering, and platform teams along the
+        way.
+      </p>
+      <p>
+        Outside of work I'm either cycling, snowboarding, or starting side
+        projects I'll never finish.
+      </p>
+      <p>
+        <img src="/me.jpg" alt="Samuel Wibrow" loading="lazy" />
+      </p>
+    </div>
+
+    <div class="mt-12">
+      <h2 class="mb-6 font-mono text-xl font-bold" style="color: var(--ctp-green);">
+        ~/skills
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          skills.map((group) => (
+            <Card>
+              <h3 class="mb-2 font-mono text-sm font-bold" style="color: var(--ctp-blue);">
+                {group.category}
+              </h3>
+              <div class="flex flex-wrap gap-2">
+                {group.items.map((item) => (
+                  <span
+                    class="rounded px-2 py-0.5 font-mono text-xs"
+                    style="background-color: var(--ctp-surface0); color: var(--ctp-text);"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+  </SectionHeading>
+</BaseLayout>
