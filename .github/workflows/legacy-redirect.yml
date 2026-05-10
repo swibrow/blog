@@ -1,0 +1,44 @@
+name: Publish .net redirect to GitHub Pages
+
+# Serves samuel.wibrow.net via GitHub Pages with a path-preserving JS
+# redirect to samuel.wibrow.dev. Decoupled from the main build workflow
+# so changes to the site don't redeploy the redirect.
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "redirect-site/**"
+      - ".github/workflows/legacy-redirect.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload redirect site
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./redirect-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
