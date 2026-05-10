@@ -27,6 +27,7 @@ function isActive(item: { href: string; exact?: boolean }, path: string) {
   class="site-header sticky top-0 z-50 border-b"
   style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0); position: sticky;"
 >
+  <div id="header-terminal-popover-slot"></div>
   <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
     <HeaderTerminal client:only="react" />
 
@@ -91,14 +92,12 @@ function isActive(item: { href: string; exact?: boolean }, path: string) {
   .nav-link[data-active="true"] {
     color: var(--ctp-green);
   }
-  .header-terminal-popover {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 100%;
-    background-color: var(--ctp-mantle);
+  /* Popover slot — empty until HeaderTerminal portals content into it */
+  #header-terminal-popover-slot:not(:empty) {
     border-bottom: 1px solid var(--ctp-surface0);
-    z-index: 49;
+  }
+  .header-terminal-popover {
+    background-color: var(--ctp-mantle);
   }
   .mobile-menu-toggle[aria-expanded="true"] + * .mobile-nav,
   .site-header[data-menu-open="true"] .mobile-nav {

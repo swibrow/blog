@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
 import Terminal from "@components/react/Terminal";
 import { promptHost } from "@/lib/promptHost";
 
@@ -11,17 +12,27 @@ export default function HeaderTerminal() {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [headerInput, setHeaderInput] = useState("");
   const [host] = useState(() => promptHost());
+  const [popoverSlot, setPopoverSlot] = useState<HTMLElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const promptRef = useRef<HTMLDivElement>(null);
+  const popoverRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<TerminalHandle>(null);
 
+  // Locate the portal target Astro provides in Header.astro.
+  useEffect(() => {
+    setPopoverSlot(document.getElementById("header-terminal-popover-slot"));
+  }, []);
+
+  // Close on click outside the prompt + popover, and on Escape.
   useEffect(() => {
     if (!terminalOpen) return;
 
+    const isInside = (target: Node) =>
+      (promptRef.current?.contains(target) ?? false) ||
+      (popoverRef.current?.contains(target) ?? false);
+
     const handleClickOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setTerminalOpen(false);
-      }
+      if (!isInside(e.target as Node)) setTerminalOpen(false);
     };
 
     const handleEscape = (e: KeyboardEvent) => {
@@ -65,22 +76,28 @@ export default function HeaderTerminal() {
     inputRef.current?.focus();
   };
 
-  return (
-    <div ref={wrapperRef} className="contents">
-      {terminalOpen && (
-        <div className="header-terminal-popover">
-          <div className="mx-auto max-w-6xl px-4">
-            <Terminal
-              embedded
-              externalInput
-              ref={terminalRef}
-              onClose={() => setTerminalOpen(false)}
-            />
-          </div>
-        </div>
-      )}
+  const popover =
+    terminalOpen && popoverSlot
+      ? createPortal(
+          <div ref={popoverRef} className="header-terminal-popover">
+            <div className="mx-auto max-w-6xl px-4">
+              <Terminal
+                embedded
+                externalInput
+                ref={terminalRef}
+                onClose={() => setTerminalOpen(false)}
+              />
+            </div>
+          </div>,
+          popoverSlot
+        )
+      : null;
 
+  return (
+    <>
+      {popover}
       <div
+        ref={promptRef}
         className="flex items-center gap-1 font-mono text-sm cursor-text min-w-0 flex-1 mr-4"
         onClick={handlePromptClick}
       >
@@ -111,6 +128,6 @@ export default function HeaderTerminal() {
           autoComplete="off"
         />
       </div>
-    </div>
+    </>
   );
 }
