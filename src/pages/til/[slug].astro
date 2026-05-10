@@ -33,7 +33,7 @@ const jsonLd = {
   author: {
     "@type": "Person",
     name: "Samuel Wibrow",
-    url: "https://samuel.wibrow.dev/about",
+    url: new URL("/about", Astro.site).toString(),
   },
   mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
   keywords: entry.data.tags.join(", "),

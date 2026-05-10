@@ -39,7 +39,7 @@ const jsonLd = {
   author: {
     "@type": "Person",
     name: author,
-    url: "https://samuel.wibrow.dev/about",
+    url: new URL("/about", Astro.site).toString(),
   },
   publisher: {
     "@type": "Person",

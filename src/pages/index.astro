@@ -20,12 +20,12 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "Samuel Wibrow",
-  url: "https://samuel.wibrow.dev",
+  url: Astro.site!.toString(),
   description,
   author: {
     "@type": "Person",
     name: "Samuel Wibrow",
-    url: "https://samuel.wibrow.dev/about",
+    url: new URL("/about", Astro.site).toString(),
   },
 };
 ---

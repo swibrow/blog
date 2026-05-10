@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from "react";
+import { promptHost } from "@/lib/promptHost";
 
 const Snake = lazy(() => import("./games/Snake"));
 const Wordle = lazy(() => import("./games/Wordle"));
@@ -693,14 +694,14 @@ function renderGame(game: GameType, onExit: () => void) {
 
 /* ---------- Component ---------- */
 
-function getPrompt(cwd: string): string {
+function getPrompt(cwd: string, host: string): string {
   const path = cwd === "/" ? "~" : `~${cwd}`;
-  return `samuel@wibrow.net:${path}$`;
+  return `samuel@${host}:${path}$`;
 }
 
 // Visible art widths: 17,16,25,26,27,29,29,28,35,32 -> pad to 37
 //                      +20,+21,+12,+11,+10,+8,+8,+9,+2,+5
-const WELCOME_ART = `<div style="display:flex;gap:2ch;font-family:inherit;font-size:11px;line-height:1.3;margin:0">
+const welcomeArt = (host: string) => `<div style="display:flex;gap:2ch;font-family:inherit;font-size:11px;line-height:1.3;margin:0">
 <pre style="margin:0;font-family:inherit"><span style="color:var(--ctp-blue)">          *  .  *</span>
 <span style="color:var(--ctp-green)">      /\\      /\\</span>
 <span style="color:var(--ctp-green)">     /  \\  </span><span style="color:var(--ctp-text)">*</span><span style="color:var(--ctp-green)"> /  \\      /\\</span>
@@ -712,7 +713,7 @@ const WELCOME_ART = `<div style="display:flex;gap:2ch;font-family:inherit;font-s
 <span style="color:var(--ctp-peach)">  |/</span><span style="color:var(--ctp-blue)">(O)</span><span style="color:var(--ctp-peach)">\\|</span><span style="color:var(--ctp-yellow)">  ________________________</span>
 <span style="color:var(--ctp-peach)"> /</span><span style="color:var(--ctp-blue)">o   o</span><span style="color:var(--ctp-peach)">\\</span><span style="color:var(--ctp-yellow)"> /</span>  <span style="color:var(--ctp-subtext0)">~~~  ~~~  ~~  ~~~</span>  <span style="color:var(--ctp-yellow)">\\</span></pre>
 <pre style="margin:0;font-family:inherit">
-<span style="color:var(--ctp-text);font-weight:bold">samuel</span><span style="color:var(--ctp-subtext0)">@</span><span style="color:var(--ctp-green);font-weight:bold">wibrow.net</span>
+<span style="color:var(--ctp-text);font-weight:bold">samuel</span><span style="color:var(--ctp-subtext0)">@</span><span style="color:var(--ctp-green);font-weight:bold">${host}</span>
 <span style="color:var(--ctp-surface1)">─────────────────────────</span>
 <span style="color:var(--ctp-blue)">OS</span>       <span style="color:var(--ctp-text)">Zurich, CH 🇨🇭</span>
 <span style="color:var(--ctp-blue)">Role</span>     <span style="color:var(--ctp-text)">Senior SRE @ Tamedia</span>
@@ -744,7 +745,8 @@ function loadSessionState<T>(key: string, fallback: T): T {
 }
 
 const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, externalInput, onClose }, ref) => {
-  const defaultOutput: OutputLine[] = [{ id: 0, type: "response", content: WELCOME_ART }];
+  const [host] = useState(() => promptHost());
+  const defaultOutput: OutputLine[] = [{ id: 0, type: "response", content: welcomeArt(host) }];
   const [output, setOutput] = useState<OutputLine[]>(() => loadSessionState("terminal-output", defaultOutput));
   const [inputValue, setInputValue] = useState<string>("");
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
@@ -920,7 +922,7 @@ const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, ex
         lines.push({
           id: lineIdRef.current,
           type: "command",
-          content: `<span class="terminal-prompt">${getPrompt(cwd)}</span> <span class="terminal-text">${command}</span>`,
+          content: `<span class="terminal-prompt">${getPrompt(cwd, host)}</span> <span class="terminal-text">${command}</span>`,
         });
         if (response) {
           lineIdRef.current += 1;
@@ -955,7 +957,7 @@ const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, ex
 
       // clear
       if (trimmedInput === "clear") {
-        setOutput([{ id: 0, type: "response", content: WELCOME_ART }]);
+        setOutput([{ id: 0, type: "response", content: welcomeArt(host) }]);
         setCommandHistory([]);
         setCwd("/");
         lineIdRef.current = 0;
@@ -1238,7 +1240,7 @@ const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, ex
 
                 {!externalInput && (
                   <div className="terminal-input-line">
-                    <span className="terminal-prompt">{getPrompt(cwd)}</span>
+                    <span className="terminal-prompt">{getPrompt(cwd, host)}</span>
                     <input
                       ref={inputRef}
                       className="terminal-input"
@@ -1303,7 +1305,7 @@ const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, ex
               aria-label="Maximize terminal"
             />
           </div>
-          <span className="terminal-title">samuel@wibrow.net</span>
+          <span className="terminal-title">samuel@{host}</span>
         </div>
 
         {bodyVisible && (
@@ -1331,7 +1333,7 @@ const Terminal = React.forwardRef<TerminalHandle, TerminalProps>(({ embedded, ex
                 </div>
 
                 <div className="terminal-input-line">
-                  <span className="terminal-prompt">{getPrompt(cwd)}</span>
+                  <span className="terminal-prompt">{getPrompt(cwd, host)}</span>
                   <input
                     ref={inputRef}
                     className="terminal-input"

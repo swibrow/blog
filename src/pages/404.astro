@@ -1,5 +1,8 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { promptHost } from "@/lib/promptHost";
+
+const host = promptHost(Astro.site?.hostname);
 ---
 
 <BaseLayout
@@ -10,7 +13,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
   <main class="mx-auto max-w-2xl px-4 py-24 text-center">
     <div class="font-mono text-sm" style="color: var(--ctp-subtext0);">
       <p>
-        <span style="color: var(--ctp-green);">samuel@wibrow.net</span>
+        <span style="color: var(--ctp-green);">samuel@{host}</span>
         <span style="color: var(--ctp-subtext0);">:</span>
         <span style="color: var(--ctp-text);">~$</span>
         cd {Astro.url.pathname}

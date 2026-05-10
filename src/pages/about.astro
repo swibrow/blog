@@ -23,8 +23,8 @@ const personJsonLd = {
   "@type": "Person",
   name: "Samuel Wibrow",
   jobTitle: "Senior SRE / Platform Engineer",
-  url: "https://samuel.wibrow.dev",
-  image: "https://samuel.wibrow.dev/me.jpg",
+  url: Astro.site!.toString(),
+  image: new URL("/me.jpg", Astro.site).toString(),
   sameAs: [
     "https://github.com/swibrow",
     "https://www.linkedin.com/in/samuelwibrow/",

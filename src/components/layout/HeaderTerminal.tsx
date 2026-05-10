@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Terminal from "@components/react/Terminal";
+import { promptHost } from "@/lib/promptHost";
 
 interface TerminalHandle {
   submitCommand: (cmd: string) => void;
@@ -9,6 +10,7 @@ interface TerminalHandle {
 export default function HeaderTerminal() {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [headerInput, setHeaderInput] = useState("");
+  const [host] = useState(() => promptHost());
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const terminalRef = useRef<TerminalHandle>(null);
@@ -83,7 +85,7 @@ export default function HeaderTerminal() {
         onClick={handlePromptClick}
       >
         <span className="shrink-0" style={{ color: "var(--ctp-green)" }}>
-          samuel@wibrow.net
+          samuel@{host}
         </span>
         <span className="shrink-0" style={{ color: "var(--ctp-subtext0)" }}>
           ~
