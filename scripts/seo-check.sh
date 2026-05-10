@@ -2,14 +2,14 @@
 # Live SEO smoke test.
 #
 # Usage:
-#   ./scripts/seo-check.sh                 # tests https://samuel.wibrow.net
+#   ./scripts/seo-check.sh                 # tests https://samuel.wibrow.dev
 #   SITE=http://localhost:4321 ./scripts/seo-check.sh   # tests local preview
 #
 # Exits non-zero if any check fails.
 
 set -u
 
-SITE="${SITE:-https://samuel.wibrow.net}"
+SITE="${SITE:-https://samuel.wibrow.dev}"
 PASS=0
 FAIL=0
 
@@ -94,8 +94,8 @@ SITEMAP_INDEX=$(curl -s "$SITE/sitemap-index.xml")
 SITEMAP=$(curl -s "$SITE/sitemap-0.xml")
 COUNT=$(printf '%s' "$SITEMAP" | grep -oE '<loc>[^<]+</loc>' | wc -l | xargs)
 [[ "$COUNT" -ge 20 ]] && ok "Sitemap has $COUNT URLs (≥20)" || fail "Sitemap has only $COUNT URLs"
-assert_contains "$SITEMAP" "samuel.wibrow.net/posts/aws-oidc-pod-identity" "Sitemap includes post URLs"
-assert_contains "$SITEMAP" "samuel.wibrow.net/til/fzf"                     "Sitemap includes TIL URLs"
+assert_contains "$SITEMAP" "samuel.wibrow.dev/posts/aws-oidc-pod-identity" "Sitemap includes post URLs"
+assert_contains "$SITEMAP" "samuel.wibrow.dev/til/fzf"                     "Sitemap includes TIL URLs"
 
 hdr "6. robots.txt"
 ROBOTS=$(curl -s "$SITE/robots.txt")

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://samuel.wibrow.net/sitemap-index.xml
+Sitemap: https://samuel.wibrow.dev/sitemap-index.xml
