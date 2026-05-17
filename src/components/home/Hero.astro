@@ -8,10 +8,17 @@ import NetworkBackground from "./NetworkBackground";
   <NetworkBackground client:only="react" />
 
   <div class="hero-content">
-    <h1 class="hero-title">Samuel Wibrow</h1>
-    <p class="hero-subtitle">SRE by trade, over-engineer by nature</p>
+    <h1 class="hero-title">
+      <span class="typewriter typewriter-1">Samuel Wibrow</span>
+    </h1>
+    <p class="hero-subtitle hero-subtitle--top">
+      <span class="typewriter typewriter-2">SRE, Zurich</span>
+    </p>
+    <p class="hero-subtitle">
+      <span id="hero-line-3" class="typewriter typewriter-3">Hexing YAML into compliance</span>
+    </p>
 
-    <div class="hero-socials">
+    <div id="hero-socials" class="hero-socials">
       <a
         href="https://github.com/swibrow"
         target="_blank"
@@ -49,6 +56,42 @@ import NetworkBackground from "./NetworkBackground";
   </div>
 </section>
 
+<script is:inline>
+  (function () {
+    var lines = [
+      "Hexing YAML into compliance",
+      "Coaxing pods out of the void",
+      "Sweet-talking AWS bills down",
+      "Whispering sweet bytes to clouds",
+      "Reinventing wheels in Go",
+      "Yak-shaving on the weekends",
+      "Probably writing another CLI",
+      "Praying to the kube-scheduler",
+      "Reading kubectl entrails",
+      "Bargaining with cron daemons",
+    ];
+    var el = document.getElementById("hero-line-3");
+    if (!el) return;
+    var pick = lines[Math.floor(Math.random() * lines.length)];
+    if (pick === el.textContent) return;
+    el.textContent = pick;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var n = pick.length;
+    var dur = +(n * 0.07).toFixed(3);
+    var done = +(2.98 + dur).toFixed(3);
+    el.style.setProperty("--end-width", n + "ch");
+    el.style.animation =
+      "type-3 " + dur + "s steps(" + n + ", end) 2.98s forwards," +
+      " cursor-on 0s linear 2.98s forwards," +
+      " blink 1s step-end infinite " + done + "s";
+
+    var socials = document.getElementById("hero-socials");
+    if (socials) socials.style.animationDelay = (done + 0.2).toFixed(3) + "s";
+  })();
+</script>
+
 <style>
   .hero {
     position: relative;
@@ -78,7 +121,7 @@ import NetworkBackground from "./NetworkBackground";
     font-size: 2.5rem;
     font-weight: 700;
     color: var(--ctp-green);
-    animation: hero-fade-in 0.6s ease-out both;
+    min-height: 1.2em;
   }
   @media (min-width: 768px) {
     .hero-title { font-size: 4rem; }
@@ -91,7 +134,10 @@ import NetworkBackground from "./NetworkBackground";
     font-family: "Fira Mono", ui-monospace, monospace;
     font-size: 1.125rem;
     color: var(--ctp-subtext1);
-    animation: hero-fade-in 0.6s ease-out 0.2s both;
+    min-height: 1.4em;
+  }
+  .hero-subtitle--top {
+    margin-bottom: 0.25rem;
   }
   @media (min-width: 768px) {
     .hero-subtitle { font-size: 1.25rem; }
@@ -104,7 +150,53 @@ import NetworkBackground from "./NetworkBackground";
     align-items: center;
     justify-content: center;
     gap: 2rem;
-    animation: hero-fade-in 0.6s ease-out 0.4s both;
+    animation: hero-fade-in 0.6s ease-out 4.9s both;
+  }
+
+  .typewriter {
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    vertical-align: bottom;
+    width: 0;
+    border-right: 0.08em solid transparent;
+    animation-fill-mode: forwards;
+  }
+  .typewriter-1 {
+    animation:
+      type-1 0.91s steps(13, end) 0.3s forwards,
+      cursor-on 0s linear 0.3s forwards,
+      cursor-off 0s linear 1.41s forwards;
+  }
+  .typewriter-2 {
+    animation:
+      type-2 0.77s steps(11, end) 1.71s forwards,
+      cursor-on 0s linear 1.71s forwards,
+      cursor-off 0s linear 2.68s forwards;
+  }
+  .typewriter-3 {
+    animation:
+      type-3 1.89s steps(27, end) 2.98s forwards,
+      cursor-on 0s linear 2.98s forwards,
+      blink 1s step-end infinite 4.87s;
+  }
+  @keyframes type-1 { to { width: 13ch; } }
+  @keyframes type-2 { to { width: 11ch; } }
+  @keyframes type-3 { to { width: var(--end-width, 27ch); } }
+  @keyframes cursor-on { to { border-right-color: currentColor; } }
+  @keyframes cursor-off { to { border-right-color: transparent; } }
+  @keyframes blink {
+    0%, 50% { border-right-color: currentColor; }
+    50.01%, 100% { border-right-color: transparent; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .typewriter {
+      width: auto;
+      animation: none;
+      border-right-color: transparent;
+    }
+    .hero-socials { animation: none; }
   }
   .social-link {
     color: var(--ctp-subtext1);
