@@ -4,14 +4,21 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import Hero from "@components/home/Hero.astro";
 import Card from "@components/ui/Card.astro";
 import { projects } from "@/data/projects";
+import { tools } from "@/data/tools";
 
 const posts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const tilEntries = (await getCollection("til", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 
 const featuredProjects = projects
   .filter((p) => p.links && p.links.length > 0)
   .slice(0, 4);
+
+const featuredTools = tools.slice(0, 6);
 
 const description =
   "Senior SRE / Platform Engineer based in Zurich. Posts on Kubernetes, AWS, Terraform, and platform engineering — plus side projects, tools, and TIL notes.";
@@ -40,7 +47,49 @@ const websiteJsonLd = {
 
   <Hero />
 
-  <section class="mx-auto max-w-6xl px-4 py-20">
+  <section
+    class="mx-auto max-w-6xl px-4 py-20"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
+        ~/whoami
+      </h2>
+      <a href="/about" class="font-mono text-sm" style="color: var(--ctp-lavender);">
+        full bio →
+      </a>
+    </div>
+    <div class="flex flex-col gap-8 sm:flex-row sm:items-start">
+      <img
+        src="/me.jpg"
+        alt="Samuel Wibrow"
+        loading="lazy"
+        class="h-32 w-32 shrink-0 rounded-lg object-cover sm:h-40 sm:w-40"
+      />
+      <div class="flex flex-col gap-3">
+        <div>
+          <h3 class="font-mono text-lg font-bold" style="color: var(--ctp-blue);">
+            Samuel Wibrow
+          </h3>
+          <p class="font-mono text-sm" style="color: var(--ctp-subtext0);">
+            Senior SRE / Platform Engineer · Tamedia · Zurich
+          </p>
+        </div>
+        <p class="text-sm" style="color: var(--ctp-text);">
+          Platform engineer turned SRE, currently keeping AWS and Kubernetes
+          clusters honest at Tamedia. Fifteen-plus years in infrastructure,
+          most of it spent automating away the parts that used to page me
+          at 3am. Off the clock: bikes, snowboards, and a growing pile of
+          half-finished side projects.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 py-20"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
     <div class="mb-8 flex items-center justify-between">
       <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
         ~/recent-posts
@@ -100,6 +149,56 @@ const websiteJsonLd = {
   >
     <div class="mb-8 flex items-center justify-between">
       <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
+        ~/til
+      </h2>
+      <a href="/til" class="font-mono text-sm" style="color: var(--ctp-lavender);">
+        view all →
+      </a>
+    </div>
+    <div class="flex flex-col gap-4">
+      {
+        tilEntries.map((entry) => (
+          <Card href={`/til/${entry.id}`}>
+            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+              <h3 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
+                {entry.data.title}
+              </h3>
+              <time
+                class="shrink-0 font-mono text-xs"
+                style="color: var(--ctp-subtext0);"
+                datetime={entry.data.date.toISOString()}
+              >
+                {entry.data.date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </time>
+            </div>
+            {entry.data.tags.length > 0 && (
+              <div class="mt-2 flex flex-wrap gap-2">
+                {entry.data.tags.map((tag) => (
+                  <span
+                    class="rounded px-1.5 py-0.5 font-mono text-xs"
+                    style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 py-20"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
         ~/projects
       </h2>
       <a href="/projects" class="font-mono text-sm" style="color: var(--ctp-lavender);">
@@ -131,6 +230,34 @@ const websiteJsonLd = {
                 ))}
               </div>
             )}
+          </Card>
+        ))
+      }
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 py-20"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
+    <div class="mb-8 flex items-center justify-between">
+      <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
+        ~/tools
+      </h2>
+      <a href="/tools" class="font-mono text-sm" style="color: var(--ctp-lavender);">
+        view all →
+      </a>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        featuredTools.map((tool) => (
+          <Card href={tool.url} external>
+            <h3 class="mb-1 font-mono text-base font-bold" style="color: var(--ctp-blue);">
+              {tool.name}
+            </h3>
+            <p class="text-sm" style="color: var(--ctp-text);">
+              {tool.description}
+            </p>
           </Card>
         ))
       }
