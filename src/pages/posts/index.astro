@@ -2,60 +2,89 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@components/layout/SectionHeading.astro";
-import Card from "@components/ui/Card.astro";
+import PostsSearch from "@components/react/PostsSearch";
 
-const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+const all = (await getCollection("posts", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
 
+const entries = all.map((entry) => ({
+  slug: entry.id,
+  title: entry.data.title,
+  description: entry.data.description,
+  date: entry.data.date.toISOString(),
+  tags: entry.data.tags,
+  isTil: entry.data.tags.includes("til"),
+}));
+
 const description =
-  "Long-form posts on Kubernetes, AWS, platform engineering, and SRE work — building operators, debugging clusters, and shipping infrastructure that doesn't fall over.";
+  "Posts and TIL notes on Kubernetes, AWS, Terraform, and platform engineering — long-form write-ups plus short notes worth remembering.";
 ---
 
 <BaseLayout title="Posts — Samuel Wibrow" description={description}>
-  <SectionHeading title="posts" subtitle="Sunday hacking">
-    <div class="flex flex-col gap-4">
-      {
-        posts.map((post) => (
-          <Card href={`/posts/${post.id}`}>
-            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <h2 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
-                  {post.data.title}
-                </h2>
-                {post.data.description && (
-                  <p class="mt-1 text-sm" style="color: var(--ctp-subtext1);">
-                    {post.data.description}
-                  </p>
-                )}
+  <SectionHeading title="posts" subtitle="Long-form write-ups and TIL notes">
+    <PostsSearch entries={entries} client:only="react" />
+
+    <noscript>
+      <div class="flex flex-col gap-4">
+        {
+          entries.map((entry) => (
+            <a
+              href={`/posts/${entry.slug}`}
+              class="block rounded-lg border p-4"
+              style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
+            >
+              <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <div class="flex items-center gap-2">
+                    {entry.isTil && (
+                      <span
+                        class="rounded px-1.5 py-0.5 font-mono text-[0.65rem] font-bold uppercase"
+                        style="background-color: var(--ctp-yellow); color: var(--ctp-base);"
+                      >
+                        til
+                      </span>
+                    )}
+                    <h2 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
+                      {entry.title}
+                    </h2>
+                  </div>
+                  {entry.description && (
+                    <p class="mt-1 text-sm" style="color: var(--ctp-subtext1);">
+                      {entry.description}
+                    </p>
+                  )}
+                </div>
+                <time
+                  class="shrink-0 font-mono text-xs"
+                  style="color: var(--ctp-subtext0);"
+                  datetime={entry.date}
+                >
+                  {new Date(entry.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
               </div>
-              <time
-                class="shrink-0 font-mono text-xs"
-                style="color: var(--ctp-subtext0);"
-                datetime={post.data.date.toISOString()}
-              >
-                {post.data.date.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </time>
-            </div>
-            {post.data.tags.length > 0 && (
-              <div class="mt-2 flex flex-wrap gap-2">
-                {post.data.tags.map((tag) => (
-                  <span
-                    class="rounded px-1.5 py-0.5 font-mono text-xs"
-                    style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </Card>
-        ))
-      }
-    </div>
+              {entry.tags.filter((t) => t !== "til").length > 0 && (
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {entry.tags
+                    .filter((t) => t !== "til")
+                    .map((tag) => (
+                      <span
+                        class="rounded px-1.5 py-0.5 font-mono text-xs"
+                        style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                </div>
+              )}
+            </a>
+          ))
+        }
+      </div>
+    </noscript>
   </SectionHeading>
 </BaseLayout>

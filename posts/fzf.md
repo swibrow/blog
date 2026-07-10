@@ -1,7 +1,8 @@
 ---
 title: "fzf and all its glory"
 date: 2025-09-13
-tags: [cli, fzf, tmux, productivity]
+description: "fzf fuzzy-finds files, commands, and git branches, and it's completely changed my command line workflow."
+tags: [til, cli, fzf, tmux, productivity]
 ---
 
 I've been using `fzf` for a while now, and it has completely transformed my command line experience. The ability to fuzzy-find files, commands, and even git branches is a game changer. If you haven't tried it yet, I highly recommend giving it a go!

@@ -19,6 +19,9 @@ interface Props {
 const { title, description, date, author, tags, slug, rawContent, headings } =
   Astro.props;
 
+const isTil = tags.includes("til");
+const visibleTags = tags.filter((tag) => tag !== "til");
+
 const minutes = readingTime(rawContent);
 const dateISO = date.toISOString();
 const dateDisplay = date.toLocaleDateString("en-US", {
@@ -31,7 +34,7 @@ const canonical = new URL(`/posts/${slug}`, Astro.site).toString();
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
+  "@type": isTil ? "TechArticle" : "BlogPosting",
   headline: title,
   description,
   datePublished: dateISO,
@@ -49,7 +52,7 @@ const jsonLd = {
     "@type": "WebPage",
     "@id": canonical,
   },
-  keywords: tags.join(", "),
+  keywords: visibleTags.join(", "),
   image: new URL("/me.jpg", Astro.site).toString(),
 };
 ---
@@ -72,6 +75,7 @@ const jsonLd = {
     <a class="back-link" href="/posts">← back to posts</a>
 
     <header class="post-header">
+      {isTil && <span class="til-badge">til</span>}
       <h1>{title}</h1>
       {description && <p class="post-description">{description}</p>}
       <div class="post-meta">
@@ -85,9 +89,9 @@ const jsonLd = {
           </>
         )}
       </div>
-      {tags.length > 0 && (
+      {visibleTags.length > 0 && (
         <div class="post-tags">
-          {tags.map((tag) => (
+          {visibleTags.map((tag) => (
             <a class="tag" href={`/posts?tag=${encodeURIComponent(tag)}`}>
               {tag}
             </a>
@@ -120,6 +124,18 @@ const jsonLd = {
   }
   .post-header {
     margin-bottom: 2rem;
+  }
+  .til-badge {
+    display: inline-block;
+    background: var(--ctp-yellow);
+    color: var(--ctp-base);
+    font-family: "Fira Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.125rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
   }
   .post-header h1 {
     color: var(--ctp-lavender);

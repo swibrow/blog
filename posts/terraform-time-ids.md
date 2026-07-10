@@ -1,7 +1,8 @@
 ---
 title: "Creating Terraform IDs based on time"
 date: 2025-09-28
-tags: [terraform, hcl]
+description: "Using time-based IDs for Terraform resources so they stay unique and sortable by creation time."
+tags: [til, terraform, hcl]
 ---
 
 When creating terraform resources most of the time they should be unique and dynamic, I like to use a time based ID rather than a random string. This way I can easily identify when the resource was created and order them by time if needed. Date string would probs be better but who doesn't like converting hex to decimal and then to date.
