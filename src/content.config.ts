@@ -13,14 +13,4 @@ const posts = defineCollection({
   }),
 });
 
-const til = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./til" }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    tags: z.array(z.string()).default([]),
-    draft: z.boolean().default(false),
-  }),
-});
-
-export const collections = { posts, til };
+export const collections = { posts };

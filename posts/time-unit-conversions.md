@@ -1,7 +1,8 @@
 ---
 title: "Random unit conversions"
 date: 2025-09-29
-tags: [sre, math, reference]
+description: "Handy time-unit conversions for SRE work — requests per month, cost over time, and the like."
+tags: [til, sre, math, reference]
 ---
 
 As an SRE, we're often measuring things in units of time. Eg. billions of requests per month, cost of running x in aws for y time, etc.

@@ -9,6 +9,9 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 export default defineConfig({
   site: "https://samuel.wibrow.dev",
   integrations: [react(), mdx(), sitemap()],
+  redirects: {
+    "/til": "/posts",
+  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

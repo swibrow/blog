@@ -1,7 +1,8 @@
 ---
 title: "Kubernetes Deployment that OOMKilled"
 date: 2025-09-27
-tags: [kubernetes, debugging]
+description: "A deployment that will eventually get OOMKilled once it tries to allocate more memory than its limit."
+tags: [til, kubernetes, debugging]
 ---
 
 This deployment will eventually get OOMKilled as it tries to allocate more memory than the limit set.

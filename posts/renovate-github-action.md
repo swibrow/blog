@@ -1,7 +1,8 @@
 ---
 title: "Renovate GitHub Action Migration"
 date: 2025-09-11
-tags: [renovate, github-actions, ci-cd]
+description: "Using Renovate packageRules to migrate action references across repos when a GitHub org changes."
+tags: [til, renovate, github-actions, ci-cd]
 ---
 
 Use Renovate packageRules to migrate action references across repos when Github org needs to be changed:
