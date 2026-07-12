@@ -7,7 +7,7 @@ import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
-  site: "https://samuel.wibrow.dev",
+  site: "https://wibrow.dev",
   integrations: [react(), mdx(), sitemap()],
   redirects: {
     "/til": "/posts",

@@ -1,0 +1,62 @@
+---
+const socials = [
+  { label: "github", href: "https://github.com/swibrow" },
+  { label: "linkedin", href: "https://www.linkedin.com/in/samuelwibrow/" },
+  { label: "strava", href: "https://www.strava.com/athletes/21868831" },
+  { label: "rss", href: "/rss.xml" },
+];
+---
+
+<section class="mx-auto max-w-6xl px-4 pt-14 pb-4 md:pt-20">
+  <h1
+    class="font-mono text-4xl font-bold md:text-5xl"
+    style="color: var(--ctp-green);"
+  >
+    Samuel Wibrow<span class="cursor-blink" aria-hidden="true">▍</span>
+  </h1>
+  <p class="mt-2 font-mono text-sm md:text-base" style="color: var(--ctp-subtext1);">
+    Senior SRE / Platform Engineer · Zürich
+  </p>
+  <p
+    id="masthead-tagline"
+    class="mt-1 font-mono text-sm"
+    style="color: var(--ctp-overlay1);"
+  >
+    Hexing YAML into compliance
+  </p>
+
+  <div class="mt-5 flex flex-wrap items-center gap-4">
+    {
+      socials.map((s) => (
+        <a
+          href={s.href}
+          target={s.href.startsWith("http") ? "_blank" : undefined}
+          rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
+          class="font-mono text-sm hover:underline"
+          style="color: var(--ctp-lavender);"
+        >
+          {s.label}
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    var lines = [
+      "Hexing YAML into compliance",
+      "Coaxing pods out of the void",
+      "Sweet-talking AWS bills down",
+      "Whispering sweet bytes to clouds",
+      "Reinventing wheels in Go",
+      "Yak-shaving on the weekends",
+      "Probably writing another CLI",
+      "Praying to the kube-scheduler",
+      "Reading kubectl entrails",
+      "Bargaining with cron daemons",
+    ];
+    var el = document.getElementById("masthead-tagline");
+    if (el) el.textContent = lines[Math.floor(Math.random() * lines.length)];
+  })();
+</script>

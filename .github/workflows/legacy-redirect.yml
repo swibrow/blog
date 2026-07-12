@@ -1,7 +1,7 @@
 name: Publish .net redirect to GitHub Pages
 
 # Serves samuel.wibrow.net via GitHub Pages with a path-preserving JS
-# redirect to samuel.wibrow.dev. Decoupled from the main build workflow
+# redirect to wibrow.dev. Decoupled from the main build workflow
 # so changes to the site don't redeploy the redirect.
 
 on:
