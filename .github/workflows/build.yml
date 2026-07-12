@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
+  schedule:
+    # Daily rebuild keeps the build-time GitHub stats on the home page fresh.
+    - cron: "17 5 * * *"
 
 permissions:
   contents: read
@@ -36,6 +39,10 @@ jobs:
 
       - name: Build
         run: bun run build
+        env:
+          # Used by src/lib/github.ts for the home-page GitHub stats
+          # (GraphQL contributions + higher REST rate limits).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to Cloudflare Pages
         id: deploy

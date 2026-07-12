@@ -1,0 +1,29 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  sub?: string;
+  /** ISO timestamp; when set, the sub text is rewritten client-side to a relative time. */
+  subIso?: string;
+  href?: string;
+  small?: boolean;
+  class?: string;
+}
+
+const {
+  label,
+  value,
+  sub,
+  subIso,
+  href,
+  small = false,
+  class: className = "",
+} = Astro.props;
+const Tag = href ? "a" : "div";
+---
+
+<Tag class={`stat-card ${className}`} href={href}>
+  <div class="stat-label">{label}</div>
+  <div class={`stat-value ${small ? "stat-value--sm" : ""}`}>{value}</div>
+  {sub && <div class="stat-sub" data-reltime={subIso}>{sub}</div>}
+</Tag>

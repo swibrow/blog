@@ -1,4 +1,4 @@
-# samuel.wibrow.dev
+# wibrow.dev
 
 Personal blog and portfolio. Astro 6 + React islands + Catppuccin theme. Deployed to Cloudflare Pages.
 
@@ -21,7 +21,7 @@ bun run preview  # preview the production build
 ## SEO smoke tests
 
 ```bash
-bun run seo:check                              # tests samuel.wibrow.dev
+bun run seo:check                              # tests wibrow.dev
 SITE=http://localhost:4321 bun run seo:check   # tests local preview
 ```
 

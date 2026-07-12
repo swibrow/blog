@@ -1,17 +1,26 @@
 ---
 import { getCollection } from "astro:content";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import Hero from "@components/home/Hero.astro";
-import Card from "@components/ui/Card.astro";
-import { projects } from "@/data/projects";
+import Masthead from "@components/home/Masthead.astro";
+import StatCard from "@components/home/StatCard.astro";
+import ClusterMetrics from "@components/react/ClusterMetrics";
+import { fetchGitHubStats } from "@/lib/github";
 
-const posts = (await getCollection("posts", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, 3);
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const latestPost = posts[0];
+const recentPosts = posts.slice(0, 5);
 
-const featuredProjects = projects
-  .filter((p) => p.links && p.links.length > 0)
-  .slice(0, 4);
+const gh = await fetchGitHubStats();
+
+function formatDate(date: Date) {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
 
 const description =
   "Senior SRE / Platform Engineer based in Zurich. Posts on Kubernetes, AWS, Terraform, and platform engineering — plus side projects, tools, and TIL notes.";
@@ -38,102 +47,114 @@ const websiteJsonLd = {
     set:html={JSON.stringify(websiteJsonLd)}
   />
 
-  <Hero />
+  <Masthead />
 
-  <section class="mx-auto max-w-6xl px-4 py-20">
-    <div class="mb-8 flex items-center justify-between">
-      <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
+  {
+    gh && (
+      <section class="mx-auto max-w-6xl px-4 py-10">
+        <h2 class="mb-6 font-mono text-xl font-bold" style="color: var(--ctp-green);">
+          ~/github
+        </h2>
+        <div class="grid grid-cols-2 gap-4">
+          {gh.contributions !== null && (
+            <StatCard
+              label="contributions (1y)"
+              value={gh.contributions.toLocaleString("en-US")}
+            />
+          )}
+          <StatCard label="public repos" value={String(gh.publicRepos)} />
+          {gh.contributions === null && (
+            <StatCard label="stack" value="Go / Py / TS" small />
+          )}
+        </div>
+        <div class="mt-4 grid gap-4 md:grid-cols-2">
+          {gh.latestPush && (
+            <StatCard
+              label="latest push"
+              value={gh.latestPush.repo}
+              sub={formatDate(new Date(gh.latestPush.date))}
+              subIso={gh.latestPush.date}
+              small
+              href={`https://github.com/swibrow/${gh.latestPush.repo}`}
+            />
+          )}
+          {latestPost && (
+            <StatCard
+              label="latest post"
+              value={latestPost.data.title}
+              sub={formatDate(latestPost.data.date)}
+              small
+              href={`/posts/${latestPost.id}`}
+            />
+          )}
+        </div>
+      </section>
+    )
+  }
+
+  <section
+    class="mx-auto max-w-6xl px-4 py-10"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
+    <h2 class="mb-6 font-mono text-xl font-bold" style="color: var(--ctp-green);">
+      ~/cluster
+    </h2>
+    <ClusterMetrics client:load />
+  </section>
+
+  <section
+    class="mx-auto max-w-6xl px-4 py-10"
+    style="border-top: 1px solid var(--ctp-surface0);"
+  >
+    <div class="mb-4 flex items-center justify-between">
+      <h2 class="font-mono text-xl font-bold" style="color: var(--ctp-green);">
         ~/recent-posts
       </h2>
       <a href="/posts" class="font-mono text-sm" style="color: var(--ctp-lavender);">
         view all →
       </a>
     </div>
-    <div class="flex flex-col gap-4">
+    <div>
       {
-        posts.map((post) => (
-          <Card href={`/posts/${post.id}`}>
-            <div class="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <h3 class="font-mono text-base font-bold" style="color: var(--ctp-blue);">
-                  {post.data.title}
-                </h3>
-                {post.data.description && (
-                  <p class="mt-1 text-sm" style="color: var(--ctp-subtext1);">
-                    {post.data.description}
-                  </p>
-                )}
-              </div>
-              <time
-                class="shrink-0 font-mono text-xs"
-                style="color: var(--ctp-subtext0);"
-                datetime={post.data.date.toISOString()}
-              >
-                {post.data.date.toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
-              </time>
-            </div>
-            {post.data.tags.length > 0 && (
-              <div class="mt-2 flex flex-wrap gap-2">
-                {post.data.tags.map((tag) => (
-                  <span
-                    class="rounded px-1.5 py-0.5 font-mono text-xs"
-                    style="background-color: var(--ctp-surface0); color: var(--ctp-subtext0);"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </Card>
-        ))
-      }
-    </div>
-  </section>
-
-  <section
-    class="mx-auto max-w-6xl px-4 py-20"
-    style="border-top: 1px solid var(--ctp-surface0);"
-  >
-    <div class="mb-8 flex items-center justify-between">
-      <h2 class="font-mono text-2xl font-bold" style="color: var(--ctp-green);">
-        ~/projects
-      </h2>
-      <a href="/projects" class="font-mono text-sm" style="color: var(--ctp-lavender);">
-        view all →
-      </a>
-    </div>
-    <div class="grid gap-4 sm:grid-cols-2">
-      {
-        featuredProjects.map((project) => (
-          <Card>
-            <h3 class="mb-1 font-mono text-base font-bold" style="color: var(--ctp-blue);">
-              {project.name}
+        recentPosts.map((post) => (
+          <a href={`/posts/${post.id}`} class="post-row">
+            <time
+              class="font-mono text-xs"
+              style="color: var(--ctp-sapphire);"
+              datetime={post.data.date.toISOString()}
+            >
+              {post.data.date.toISOString().slice(0, 10)}
+            </time>
+            <h3 class="post-row-title mt-1 font-mono text-base font-bold">
+              {post.data.title}
             </h3>
-            <p class="mb-2 text-sm" style="color: var(--ctp-text);">
-              {project.description}
-            </p>
-            {project.links && (
-              <div class="flex flex-wrap gap-3">
-                {project.links.map((link) => (
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="font-mono text-xs hover:underline"
-                    style="color: var(--ctp-lavender);"
-                  >
-                    {link.label} →
-                  </a>
-                ))}
-              </div>
+            {post.data.description && (
+              <p class="mt-1 text-sm" style="color: var(--ctp-subtext0);">
+                {post.data.description}
+              </p>
             )}
-          </Card>
+          </a>
         ))
       }
     </div>
   </section>
 </BaseLayout>
+
+<script is:inline>
+  // Rewrite build-time dates to live relative times (e.g. "3h ago").
+  (function () {
+    document.querySelectorAll("[data-reltime]").forEach(function (el) {
+      var iso = el.getAttribute("data-reltime");
+      if (!iso) return;
+      var diff = Date.now() - new Date(iso).getTime();
+      if (isNaN(diff) || diff < 0) return;
+      var mins = Math.floor(diff / 60000);
+      var text;
+      if (mins < 1) text = "just now";
+      else if (mins < 60) text = mins + "m ago";
+      else if (mins < 60 * 24) text = Math.floor(mins / 60) + "h ago";
+      else text = Math.floor(mins / (60 * 24)) + "d ago";
+      el.textContent = text;
+    });
+  })();
+</script>

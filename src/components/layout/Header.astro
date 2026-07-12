@@ -1,6 +1,7 @@
 ---
 import HeaderTerminal from "./HeaderTerminal";
 import ThemeToggle from "@components/react/ThemeToggle";
+import StatusPill from "@components/react/StatusPill";
 
 interface Props {
   currentPath?: string;
@@ -42,6 +43,7 @@ function isActive(item: { href: string; exact?: boolean }, path: string) {
           </a>
         ))
       }
+      <StatusPill client:only="react" />
       <ThemeToggle client:only="react" />
     </nav>
 

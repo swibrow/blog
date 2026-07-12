@@ -90,6 +90,77 @@ code:not(pre code) {
   font-size: 0.9em;
 }
 
+/* Dashboard stat cards (home page + cluster metrics island) */
+.stat-card {
+  display: block;
+  background-color: var(--ctp-mantle);
+  border: 1px solid var(--ctp-surface0);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  transition: border-color 0.2s ease;
+}
+
+a.stat-card:hover {
+  border-color: var(--ctp-surface2);
+}
+
+.stat-label {
+  color: var(--ctp-subtext0);
+  font-family: "Fira Mono", monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  color: var(--ctp-text);
+  font-family: "Fira Mono", monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.stat-value--sm {
+  font-size: 1.1rem;
+}
+
+.stat-sub {
+  color: var(--ctp-subtext0);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+/* Minimal post list rows (home + posts index) */
+.post-row {
+  display: block;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--ctp-surface0);
+}
+
+.post-row-title {
+  color: var(--ctp-text);
+  transition: color 0.15s ease;
+}
+
+.post-row:hover .post-row-title {
+  color: var(--ctp-blue);
+}
+
+/* Meta chips (post header) */
+.meta-chip {
+  display: inline-block;
+  border: 1px solid var(--ctp-surface1);
+  border-radius: 4px;
+  padding: 0.125rem 0.5rem;
+  font-family: "Fira Mono", monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ctp-subtext0);
+}
+
 /* Blinking cursor animation */
 @keyframes blink {
   0%, 100% { opacity: 1; }

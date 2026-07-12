@@ -147,62 +147,43 @@ export default function PostsSearch({ entries }: Props) {
         </p>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div>
         {filtered.map((entry) => (
-          <a
-            key={entry.slug}
-            href={`/posts/${entry.slug}`}
-            className="block rounded-lg border p-4 transition-all hover:-translate-y-0.5"
-            style={{ backgroundColor: "var(--ctp-mantle)", borderColor: "var(--ctp-surface0)" }}
-          >
-            <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
-              <div>
-                <div className="flex items-center gap-2">
-                  {entry.isTil && (
-                    <span
-                      className="rounded px-1.5 py-0.5 font-mono text-[0.65rem] font-bold uppercase"
-                      style={{ backgroundColor: "var(--ctp-yellow)", color: "var(--ctp-base)" }}
-                    >
-                      til
-                    </span>
-                  )}
-                  <h2 className="font-mono text-base font-bold" style={{ color: "var(--ctp-blue)" }}>
-                    <Highlight text={entry.title} query={search} />
-                  </h2>
-                </div>
-                {entry.description && (
-                  <p className="mt-1 text-sm" style={{ color: "var(--ctp-subtext1)" }}>
-                    <Highlight text={entry.description} query={search} />
-                  </p>
-                )}
-              </div>
-              <time
-                className="shrink-0 font-mono text-xs"
-                style={{ color: "var(--ctp-subtext0)" }}
-              >
-                {new Date(entry.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                })}
+          <a key={entry.slug} href={`/posts/${entry.slug}`} className="post-row">
+            <div className="flex items-center gap-2">
+              <time className="font-mono text-xs" style={{ color: "var(--ctp-sapphire)" }}>
+                {entry.date.slice(0, 10)}
               </time>
-            </div>
-            <div className="mt-2 flex flex-wrap gap-1.5">
+              {entry.isTil && (
+                <span
+                  className="rounded px-1.5 py-0.5 font-mono text-[0.6rem] font-bold uppercase"
+                  style={{ backgroundColor: "var(--ctp-yellow)", color: "var(--ctp-base)" }}
+                >
+                  til
+                </span>
+              )}
               {entry.tags
                 .filter((tag) => tag !== "til")
                 .map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full px-2 py-0.5 font-mono text-xs"
+                    className="hidden font-mono text-xs sm:inline"
                     style={{
-                      backgroundColor: activeTag === tag ? "var(--ctp-blue)" : "var(--ctp-surface0)",
-                      color: activeTag === tag ? "var(--ctp-base)" : "var(--ctp-subtext0)",
+                      color: activeTag === tag ? "var(--ctp-blue)" : "var(--ctp-overlay0)",
                     }}
                   >
                     <Highlight text={`#${tag}`} query={search} />
                   </span>
                 ))}
             </div>
+            <h2 className="post-row-title mt-1 font-mono text-base font-bold">
+              <Highlight text={entry.title} query={search} />
+            </h2>
+            {entry.description && (
+              <p className="mt-1 text-sm" style={{ color: "var(--ctp-subtext0)" }}>
+                <Highlight text={entry.description} query={search} />
+              </p>
+            )}
           </a>
         ))}
       </div>
