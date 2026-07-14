@@ -6,9 +6,11 @@
     "directory": "./dist",
     "not_found_handling": "404-page"
   },
+  "workers_dev": true,
+  "preview_urls": true,
   "routes": [
-    { "pattern": "wibrow.dev", "custom_domain": true },
-    { "pattern": "samuel.wibrow.dev", "custom_domain": true }
+    { "pattern": "wibrow.dev/*", "zone_name": "wibrow.dev" },
+    { "pattern": "samuel.wibrow.dev/*", "zone_name": "wibrow.dev" }
   ],
   "observability": {
     "enabled": true
