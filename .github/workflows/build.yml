@@ -44,13 +44,14 @@ jobs:
           # (GraphQL contributions + higher REST rate limits).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Workers
         id: deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=wibrow-blog --branch=${{ github.head_ref || github.ref_name }}
+          # PRs upload a preview version (no production traffic); main deploys live.
+          command: ${{ github.event_name == 'pull_request' && 'versions upload' || 'deploy' }}
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request'

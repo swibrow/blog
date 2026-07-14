@@ -1,6 +1,6 @@
 # wibrow.dev
 
-Personal blog and portfolio. Astro 6 + React islands + Catppuccin theme. Deployed to Cloudflare Pages.
+Personal blog and portfolio. Astro 6 + React islands + Catppuccin theme. Deployed to Cloudflare Workers (static assets).
 
 ## Local dev
 
@@ -27,5 +27,10 @@ SITE=http://localhost:4321 bun run seo:check   # tests local preview
 
 ## Deploy
 
-Pushes to `main` are built and deployed automatically by Cloudflare Pages.
-The GitHub Actions workflow only runs the build for PR validation.
+Config lives in `wrangler.jsonc` (Worker `wibrow-dev`, static assets from `dist/`).
+
+- Pushes to `main`: GitHub Actions builds and runs `wrangler deploy` (live).
+- Pull requests: `wrangler versions upload` publishes a preview version and comments the preview URL.
+- Manual: `bun run deploy` (builds + deploys from your machine; requires `wrangler login` or `CLOUDFLARE_API_TOKEN`).
+
+Custom domains `wibrow.dev` and `samuel.wibrow.dev` are declared in `wrangler.jsonc` and attached to the Worker on deploy.
