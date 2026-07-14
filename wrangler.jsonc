@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "wibrow-dev",
+  "compatibility_date": "2026-07-14",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [
+    { "pattern": "wibrow.dev", "custom_domain": true },
+    { "pattern": "samuel.wibrow.dev", "custom_domain": true }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
