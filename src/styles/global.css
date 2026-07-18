@@ -81,6 +81,29 @@ pre > code {
   color: var(--ctp-text);
 }
 
+/* astro.config.mjs sets shikiConfig.defaultColor: false, which emits colors
+   as --shiki-light/--shiki-dark custom properties per span instead of a
+   fixed color; apply them here so syntax highlighting actually renders. */
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style, inherit);
+  font-weight: var(--shiki-light-font-weight, inherit);
+}
+
+/* Shiki's catppuccin-latte token colors are fixed and don't follow the
+   muted --ctp-* palette above; tone them down to match in light mode. */
+.light .astro-code {
+  filter: saturate(0.78) brightness(0.92);
+}
+
+.dark .astro-code,
+.dark .astro-code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style, inherit);
+  font-weight: var(--shiki-dark-font-weight, inherit);
+}
+
 /* Inline code */
 code:not(pre code) {
   background-color: var(--ctp-surface0);

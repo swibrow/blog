@@ -28,32 +28,33 @@
   --ctp-rosewater: #f5e0dc;
 }
 
-/* Catppuccin Latte (light) - softened background for readability */
+/* Catppuccin Latte (light) - darkened background and muted accents so the
+   theme doesn't glare like a raw white page */
 .light {
-  --ctp-base: #dce0e8;
-  --ctp-mantle: #d2d6e0;
-  --ctp-crust: #c8ccd8;
-  --ctp-surface0: #bcc0cc;
-  --ctp-surface1: #acb0be;
-  --ctp-surface2: #9ca0b0;
-  --ctp-overlay0: #8c8fa1;
-  --ctp-overlay1: #7c7f93;
-  --ctp-overlay2: #6c6f85;
-  --ctp-text: #3c3f54;
-  --ctp-subtext1: #4c4f69;
-  --ctp-subtext0: #5c5f77;
-  --ctp-lavender: #7287fd;
-  --ctp-blue: #1e66f5;
-  --ctp-sapphire: #209fb5;
-  --ctp-sky: #04a5e5;
-  --ctp-teal: #179299;
-  --ctp-green: #40a02b;
-  --ctp-yellow: #df8e1d;
-  --ctp-peach: #fe640b;
-  --ctp-maroon: #e64553;
-  --ctp-red: #d20f39;
-  --ctp-mauve: #8839ef;
-  --ctp-pink: #ea76cb;
-  --ctp-flamingo: #dd7878;
-  --ctp-rosewater: #dc8a78;
+  --ctp-base: #ced4df;
+  --ctp-mantle: #c4cad7;
+  --ctp-crust: #bbc0ce;
+  --ctp-surface0: #afb4c2;
+  --ctp-surface1: #9fa4b4;
+  --ctp-surface2: #8f94a6;
+  --ctp-overlay0: #7f8397;
+  --ctp-overlay1: #707388;
+  --ctp-overlay2: #626478;
+  --ctp-text: #323547;
+  --ctp-subtext1: #42455c;
+  --ctp-subtext0: #52556a;
+  --ctp-lavender: #465de2;
+  --ctp-blue: #1e55c2;
+  --ctp-sapphire: #287b89;
+  --ctp-sky: #177ca4;
+  --ctp-teal: #207277;
+  --ctp-green: #37732a;
+  --ctp-yellow: #926323;
+  --ctp-peach: #be5518;
+  --ctp-maroon: #cd3a47;
+  --ctp-red: #a7203d;
+  --ctp-mauve: #722ad0;
+  --ctp-pink: #d667b8;
+  --ctp-flamingo: #c86969;
+  --ctp-rosewater: #c77a69;
 }

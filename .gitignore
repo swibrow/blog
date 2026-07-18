@@ -15,8 +15,9 @@ pnpm-lock.yaml
 .terraform
 .terraform.lock.hcl
 
-# Claude
-CLAUDE.md
+# Agent config (AGENTS.md / .agents are the source of truth; CLAUDE.md /
+# .claude are symlinks onto them, see AGENTS.md)
+.agents/settings.local.json
 
 # IDE
 .vscode/
