@@ -50,8 +50,11 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          # PRs upload a preview version (no production traffic); main deploys live.
-          command: ${{ github.event_name == 'pull_request' && 'versions upload' || 'deploy' }}
+          # PRs upload a preview version aliased to the PR number, so repeated
+          # pushes reuse the same preview URL instead of minting a new one
+          # each time (Cloudflare has no API to delete old versions, so this
+          # just slows the buildup rather than cleaning it up). Main deploys live.
+          command: ${{ github.event_name == 'pull_request' && format('versions upload --preview-alias pr-{0}', github.event.number) || 'deploy' }}
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request'
