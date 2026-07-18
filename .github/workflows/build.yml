@@ -50,15 +50,24 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          # PRs upload a preview version (no production traffic); main deploys live.
-          command: ${{ github.event_name == 'pull_request' && 'versions upload' || 'deploy' }}
+          # PRs upload a preview version tagged with a stable alias
+          # (pr-<number>), giving a fixed preview URL that always points at
+          # the latest push. Cloudflare has no API to delete old versions —
+          # each push still creates a new version under the hood — but the
+          # alias means reviewers get one evergreen link instead of a new URL
+          # every commit. Main deploys live.
+          command: ${{ github.event_name == 'pull_request' && format('versions upload --preview-alias pr-{0}', github.event.number) || 'deploy' }}
 
       - name: Comment preview URL on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v9
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+          WRANGLER_OUTPUT: ${{ steps.deploy.outputs.command-output }}
         with:
           script: |
-            const url = "${{ steps.deploy.outputs.deployment-url }}";
+            const aliasMatch = (process.env.WRANGLER_OUTPUT || "").match(/Version Preview Alias URL:\s*(\S+)/);
+            const url = aliasMatch ? aliasMatch[1] : process.env.DEPLOYMENT_URL;
             if (!url) return;
             const body = `🚀 **Preview deployed**: ${url}`;
             const { data: comments } = await github.rest.issues.listComments({
