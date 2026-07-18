@@ -68,14 +68,7 @@ const currentPath = Astro.url.pathname;
     <script is:inline>
       (function () {
         const stored = localStorage.getItem("theme");
-        const theme =
-          stored === "light"
-            ? "light"
-            : stored === "dark"
-            ? "dark"
-            : window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+        const theme = stored === "light" ? "light" : "dark";
         document.documentElement.classList.add(theme);
       })();
     </script>
