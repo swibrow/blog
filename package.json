@@ -21,10 +21,11 @@
     "@types/react-dom": "^19.2.3",
     "astro": "^7.0.0",
     "tailwindcss": "^4.2.1",
+    "typescript": "^7.0.0",
     "wrangler": "^4.110.0"
   },
   "peerDependencies": {
-    "typescript": "^5.9.3 || ^6.0.0 || ^7.0.0"
+    "typescript": "^7.0.0"
   },
   "dependencies": {
     "@giscus/react": "^3.1.0",
