@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
 import { fetchBadge } from "@/lib/kromgo";
 
-const BADGES = ["cpu", "memory", "pods", "uptime", "nodes", "apps", "appssynced"] as const;
+const BADGES = [
+  "cpu",
+  "memory",
+  "pods",
+  "uptime",
+  "nodes",
+  "apps",
+  "appssynced",
+  "cpuavailable",
+  "memavailable",
+  "diskavailable",
+] as const;
 type BadgeId = (typeof BADGES)[number];
 
 const CARDS: { id: BadgeId; label: string }[] = [
@@ -11,6 +22,9 @@ const CARDS: { id: BadgeId; label: string }[] = [
   { id: "uptime", label: "uptime" },
   { id: "nodes", label: "nodes" },
   { id: "appssynced", label: "apps synced" },
+  { id: "cpuavailable", label: "cpu available" },
+  { id: "memavailable", label: "memory available" },
+  { id: "diskavailable", label: "disk available" },
 ];
 
 type Values = Partial<Record<BadgeId, string>>;
@@ -66,7 +80,7 @@ export default function ClusterMetrics() {
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div className="grid grid-cols-3 gap-4">
         {CARDS.map(({ id, label }) => (
           <div key={id} className="stat-card">
             <div className="stat-label">{label}</div>
