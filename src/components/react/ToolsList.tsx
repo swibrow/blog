@@ -39,7 +39,7 @@ export default function ToolsList({ tools, categories }: Props) {
               Dotfiles
             </h2>
             <p className="mb-0 text-sm" style={{ color: "var(--ctp-subtext1)" }}>
-              My configuration files and setup scripts — the source of truth
+              My configuration files and setup scripts - the source of truth
             </p>
           </div>
         </div>

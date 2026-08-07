@@ -1,7 +1,7 @@
 ---
 title: "Terminal Spotify Client"
 date: 2025-09-12
-description: "ncspot is a cross-platform, terminal-based Spotify client written in Rust — a lightweight alternative to the desktop app."
+description: "ncspot is a cross-platform, terminal-based Spotify client written in Rust - a lightweight alternative to the desktop app."
 tags: [til, cli, spotify, rust, tui]
 ---
 

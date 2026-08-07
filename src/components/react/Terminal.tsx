@@ -553,7 +553,7 @@ function handleQuestion(
     terraform: () =>
       "I'm a Terraform certified professional with experience building reusable modules, managing multi-environment infrastructure, and implementing GitOps workflows. Check out the /terraform directory in this blog repo for examples!",
     ai: () =>
-      "I'm actively using AI/LLMs in my workflow. I built 'how' — a Go CLI that converts natural language to shell commands using Claude, OpenAI, or Ollama locally. I use Claude extensively for AI-assisted development and built my Kubernetes operator TFOut in an afternoon with it. I'm exploring how LLMs can transform infrastructure automation and developer tooling.",
+      "I'm actively using AI/LLMs in my workflow. I built 'how' - a Go CLI that converts natural language to shell commands using Claude, OpenAI, or Ollama locally. I use Claude extensively for AI-assisted development and built my Kubernetes operator TFOut in an afternoon with it. I'm exploring how LLMs can transform infrastructure automation and developer tooling.",
     llm: () =>
       "I work with multiple LLM providers: Claude/Anthropic API, OpenAI/ChatGPT, and Ollama for local inference. My 'how' CLI tool supports all three backends. I'm a big fan of running models locally with Ollama for privacy and offline use.",
     go: () =>
@@ -561,7 +561,7 @@ function handleQuestion(
     python: () =>
       "Python is one of my primary languages. I've developed internal libraries for CloudFormation generation, automation tools, and infrastructure management scripts.",
     typescript: () =>
-      "I use TypeScript and React for frontend development. This portfolio site is built with React 19, Vite, React Router, and Framer Motion — all in TypeScript.",
+      "I use TypeScript and React for frontend development. This portfolio site is built with React 19, Vite, React Router, and Framer Motion - all in TypeScript.",
     experience: () => {
       const years = new Date().getFullYear() - 2010;
       return `I have ${years}+ years of experience in IT, with the last ${years - 3} years focused on Site Reliability Engineering and Platform Engineering. Currently at ${data.work[0].company} as a ${data.work[0].position}.`;

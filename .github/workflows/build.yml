@@ -52,8 +52,8 @@ jobs:
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           # PRs upload a preview version tagged with a stable alias
           # (pr-<number>), giving a fixed preview URL that always points at
-          # the latest push. Cloudflare has no API to delete old versions —
-          # each push still creates a new version under the hood — but the
+          # the latest push. Cloudflare has no API to delete old versions -
+          # each push still creates a new version under the hood - but the
           # alias means reviewers get one evergreen link instead of a new URL
           # every commit. Main deploys live.
           command: ${{ github.event_name == 'pull_request' && format('versions upload --preview-alias pr-{0}', github.event.number) || 'deploy' }}

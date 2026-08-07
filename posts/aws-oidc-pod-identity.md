@@ -8,7 +8,7 @@ tags: [aws, oidc, kubernetes, talos, homelab]
 
 I had a Raspberry Pi 4 sitting in a drawer and a curiosity that wouldn't go away: how does AWS actually trust a Kubernetes service account with no static credentials in sight? IRSA is "just" OIDC and JWKS, but EKS makes it look like dark magic by hiding the issuer behind its own infrastructure.
 
-So I rebuilt it the dumb way. The OIDC issuer is a public GitHub repo. The Pi runs [Talos](https://www.talos.dev/). AWS happily federates with both, because it doesn't actually care — it just wants a JWT signed by a key whose public half is reachable over HTTPS at a URL it trusts.
+So I rebuilt it the dumb way. The OIDC issuer is a public GitHub repo. The Pi runs [Talos](https://www.talos.dev/). AWS happily federates with both, because it doesn't actually care - it just wants a JWT signed by a key whose public half is reachable over HTTPS at a URL it trusts.
 
 All the referenced files: [github.com/swibrow/aws-pod-identity-webhook](https://github.com/swibrow/aws-pod-identity-webhook).
 

@@ -71,11 +71,11 @@ export default function ClusterMetrics() {
   }
 
   const display = (id: BadgeId) => {
-    if (!values) return "—";
+    if (!values) return "-";
     if (id === "appssynced" && values.appssynced && values.apps) {
       return `${values.appssynced}/${values.apps}`;
     }
-    return values[id] ?? "—";
+    return values[id] ?? "-";
   };
 
   return (

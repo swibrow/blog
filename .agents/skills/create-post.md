@@ -18,7 +18,7 @@ Create a new blog post for the blog. The user provides a topic or title and you 
 
 2. **Generate a slug** from the title (lowercase, hyphens, no special chars).
 
-3. **Write the markdown to `posts/{slug}.md`** (at the repo root — Astro Content Collections is configured to glob from `./posts`). Frontmatter lives in the file itself:
+3. **Write the markdown to `posts/{slug}.md`** (at the repo root - Astro Content Collections is configured to glob from `./posts`). Frontmatter lives in the file itself:
 
    ```markdown
    ---
@@ -40,20 +40,20 @@ Create a new blog post for the blog. The user provides a topic or title and you 
 
 ## Voice guide
 
-Samuel's style — match these or the post will read like every other AI-generated tech blog.
+Samuel's style - match these or the post will read like every other AI-generated tech blog.
 
 - **Tell a story**, not a feature list. Open with the *why* (the Pi-in-a-drawer moment, the deadline-yesterday scenario, the rage at AI SEO spam). Don't open with "In this post we will…".
-- **Sarcasm and satire are fine**, even encouraged. "What could possibly go wrong?", "your CISO wakes up in cold sweats", "the universe telling you to set up the VPN" — that's the voice.
+- **Sarcasm and satire are fine**, even encouraged. "What could possibly go wrong?", "your CISO wakes up in cold sweats", "the universe telling you to set up the VPN" - that's the voice.
 - **No AI disclaimers.** Never write "Claude wrote this", "Claude and I vibed", "AI helped me with…". This actively hurts both reader trust and Google's Helpful Content scoring. Pretend you wrote it.
 - **No bloat sections.** Avoid "Production-Ready Features", "Key Takeaways" with 4 generic bullets, "Future Improvements" with pseudo-code, "Enterprise Security", "Get Started" with install instructions when there's already a link to the repo. These read as AI padding.
 - **No generic "find me on" outros.** The site header has socials already. End the post with a real conclusion that ties back to the opener, not a fluff paragraph.
-- **Headings start at `##`**, sub-sections `###`. Never start at `###` — breaks the auto-TOC.
+- **Headings start at `##`**, sub-sections `###`. Never start at `###` - breaks the auto-TOC.
 - **Code blocks need language tags.** Shiki provides Catppuccin syntax highlighting at build time.
 - **Show real commands and configs**, not pseudocode.
 - **Short paragraphs.** This is a terminal-themed blog, not a novel.
 - **Pragmatic over theoretical.** "Here's the one-liner, here's the fallback when it doesn't work, here's the checklist" beats "let's discuss the architecture of…".
 
-The gold-standard reference is `posts/eks-pod-identity-verify-iam.md` — tight, problem-driven, voice-y, ends with a checklist that's useful. Clone that shape.
+The gold-standard reference is `posts/eks-pod-identity-verify-iam.md` - tight, problem-driven, voice-y, ends with a checklist that's useful. Clone that shape.
 
 ## Common tags
 

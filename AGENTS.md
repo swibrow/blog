@@ -92,7 +92,7 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 ### Deployment
 - GitHub Actions (`/.github/workflows/build.yml`): bun build + wrangler-action `deploy` on `main` / `versions upload` on PRs (daily cron keeps GitHub stats fresh); `legacy-redirect.yml` serves the old samuel.wibrow.net redirect. Worker serves `dist/` as static assets; custom domains `wibrow.dev` + `samuel.wibrow.dev` are declared in `wrangler.jsonc`. The `dist/_headers` file (security + cache-control headers) and Astro's generated redirect pages are honored by Workers static assets.
 - Terraform in `/terraform/` manages GitHub repository settings
-- No staging environment — commits to main go live
+- No staging environment - commits to main go live
 
 ## Key Configuration
 
@@ -141,9 +141,9 @@ Samuel Wibrow - Senior SRE / Platform Engineer based in Zurich, Switzerland. Ori
 ## Important Notes
 
 - Pages are static by default. Add a React island only when you need interactivity, and pick the lightest hydration directive (`client:visible` > `client:load` > `client:only`).
-- Don't import `react-router-dom` — navigation uses plain `<a href>` for full-page loads.
+- Don't import `react-router-dom` - navigation uses plain `<a href>` for full-page loads.
 - Browser-only code (window/document) inside React islands must be guarded or moved into `useEffect`. Astro renders islands during SSR.
 - Static assets go in `public/` (resume.json, resume.html, me.jpg, images/, robots.txt, favicon).
 - The Terminal component fetches `/resume.json` for dynamic resume data.
-- Use Catppuccin CSS custom properties (e.g., `var(--ctp-green)`) for theming — never hardcode hex.
+- Use Catppuccin CSS custom properties (e.g., `var(--ctp-green)`) for theming - never hardcode hex.
 - Framer Motion only inside React islands; use CSS animations for static page transitions.

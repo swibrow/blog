@@ -93,7 +93,7 @@ function isActive(item: { href: string; exact?: boolean }, path: string) {
   .nav-link[data-active="true"] {
     color: var(--ctp-green);
   }
-  /* Popover slot — empty until HeaderTerminal portals content into it */
+  /* Popover slot - empty until HeaderTerminal portals content into it */
   #header-terminal-popover-slot:not(:empty) {
     border-bottom: 1px solid var(--ctp-surface0);
   }
@@ -107,7 +107,7 @@ function isActive(item: { href: string; exact?: boolean }, path: string) {
 </style>
 
 <script>
-  // Mobile menu toggle — keeps Header server-rendered (no React island for nav).
+  // Mobile menu toggle - keeps Header server-rendered (no React island for nav).
   (function () {
     const root = document.querySelector<HTMLElement>(".site-header");
     if (!root) return;

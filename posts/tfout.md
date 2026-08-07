@@ -8,15 +8,15 @@ tags: [kubernetes, operator, kubebuilder, claude, ai]
 
 ## The problem
 
-At work we recently moved application deployment from Terraform to ArgoCD. Good move — except now there's a gap. Things like our AWS Managed Prometheus endpoint live in Terraform state, but the apps that need that URL are now deployed via Argo with no idea Terraform exists.
+At work we recently moved application deployment from Terraform to ArgoCD. Good move - except now there's a gap. Things like our AWS Managed Prometheus endpoint live in Terraform state, but the apps that need that URL are now deployed via Argo with no idea Terraform exists.
 
-External Secrets Operator solves it for secrets, and we do use it. But for non-sensitive outputs — endpoints, ARNs, region-specific bucket names — going through Secrets Manager felt like wrapping a string in three layers of bubble wrap. I wanted something dumber: read the Terraform state, dump the outputs into a ConfigMap, done.
+External Secrets Operator solves it for secrets, and we do use it. But for non-sensitive outputs - endpoints, ARNs, region-specific bucket names - going through Secrets Manager felt like wrapping a string in three layers of bubble wrap. I wanted something dumber: read the Terraform state, dump the outputs into a ConfigMap, done.
 
 ## The operator
 
-I'd been looking for an excuse to build a Kubernetes operator from scratch. Looked at [Metacontroller](https://metacontroller.github.io/metacontroller/intro.html) for about an hour, then settled on [Kubebuilder](https://book.kubebuilder.io/) — same framework as Karpenter, well-trodden path, sensible defaults.
+I'd been looking for an excuse to build a Kubernetes operator from scratch. Looked at [Metacontroller](https://metacontroller.github.io/metacontroller/intro.html) for about an hour, then settled on [Kubebuilder](https://book.kubebuilder.io/) - same framework as Karpenter, well-trodden path, sensible defaults.
 
-The result is **TFOut** — an operator that reads Terraform state from S3 and projects the outputs into ConfigMaps (or Secrets, when the output is marked sensitive).
+The result is **TFOut** - an operator that reads Terraform state from S3 and projects the outputs into ConfigMaps (or Secrets, when the output is marked sensitive).
 
 ### Quick Example
 
@@ -45,7 +45,7 @@ All your Terraform outputs become ConfigMaps and Secrets. Sensitive outputs land
 The reconciliation loop is the boring kind of simple:
 
 1. Watch `TerraformOutputs` resources.
-2. Fetch state from S3 — but only if the object's ETag changed since the last sync. No point re-downloading 200KB of state every five minutes when nothing's moved.
+2. Fetch state from S3 - but only if the object's ETag changed since the last sync. No point re-downloading 200KB of state every five minutes when nothing's moved.
 3. Parse the outputs.
 4. Create or update the matching ConfigMap and Secret.
 5. If multiple backends are configured, merge them by output key (last writer wins, with a warning log).
@@ -76,7 +76,7 @@ backends:
       key: other/terraform.tfstate
 ```
 
-Conflicting keys are logged loudly. You will eventually have a conflict. The operator doesn't try to be clever about it — it picks the last one and tells you.
+Conflicting keys are logged loudly. You will eventually have a conflict. The operator doesn't try to be clever about it - it picks the last one and tells you.
 
 ## Get started
 
@@ -179,6 +179,6 @@ spec:
 
 ## What I learned
 
-Kubebuilder is genuinely good now. The CRD scaffolding, controller-runtime, and the whole reconcile-loop pattern are well-trodden enough that you spend your time on the actual problem instead of arguing with the framework. The hardest part of TFOut wasn't the operator bits — it was deciding what to do when two states define the same output key, and that's a product decision, not a framework one.
+Kubebuilder is genuinely good now. The CRD scaffolding, controller-runtime, and the whole reconcile-loop pattern are well-trodden enough that you spend your time on the actual problem instead of arguing with the framework. The hardest part of TFOut wasn't the operator bits - it was deciding what to do when two states define the same output key, and that's a product decision, not a framework one.
 
 Was building this strictly necessary? Absolutely not. External Secrets Operator covers the secret case. We probably could have abused ConfigMaps and a CronJob for the rest. But sometimes you build the operator just because you wanted to know what was inside the box, and that's a perfectly good reason.

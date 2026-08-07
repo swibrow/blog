@@ -67,7 +67,7 @@ cat <&3
 
 Distroless images, scratch images, and anything that's been hardened down to the binary won't even give you a shell. This is where [ephemeral debug containers](https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container) earn their keep.
 
-Say you want to check the IAM role Grafana is using. `kubectl debug` injects a sidecar into the running pod, sharing its process namespace and — crucially — its environment:
+Say you want to check the IAM role Grafana is using. `kubectl debug` injects a sidecar into the running pod, sharing its process namespace and - crucially - its environment:
 
 ```shell
 kubectl debug -n monitoring pod/grafana-0 \
@@ -131,10 +131,10 @@ Same answer, different route. You're proving two things at once: the association
 
 If `RoleArn` comes back wrong or the request fails:
 
-1. **`kubectl get pods -n kube-system -l app.kubernetes.io/name=eks-pod-identity-agent`** — agent must be running on the node the pod landed on. It's a DaemonSet; a failed node taint or tolerations mismatch is the usual culprit.
-2. **`aws eks list-pod-identity-associations --cluster-name <name>`** — verify the association targets the right namespace and service account. Typos here are silent; the pod just gets no credentials and falls back to whatever the SDK finds next (often nothing).
+1. **`kubectl get pods -n kube-system -l app.kubernetes.io/name=eks-pod-identity-agent`** - agent must be running on the node the pod landed on. It's a DaemonSet; a failed node taint or tolerations mismatch is the usual culprit.
+2. **`aws eks list-pod-identity-associations --cluster-name <name>`** - verify the association targets the right namespace and service account. Typos here are silent; the pod just gets no credentials and falls back to whatever the SDK finds next (often nothing).
 3. **The service account name in the pod spec matches the association exactly.** Helm charts with `serviceAccount.create: false` plus a custom name are a classic trap.
-4. **Trust policy.** Pod Identity uses `pods.eks.amazonaws.com` as the service principal — not the OIDC federated principal IRSA uses. Roles copied over from an IRSA setup will fail to assume.
+4. **Trust policy.** Pod Identity uses `pods.eks.amazonaws.com` as the service principal - not the OIDC federated principal IRSA uses. Roles copied over from an IRSA setup will fail to assume.
 
 ## Why bother when the SDK does this for you?
 

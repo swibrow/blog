@@ -1,7 +1,7 @@
 ---
 title: "Random unit conversions"
 date: 2025-09-29
-description: "Handy time-unit conversions for SRE work — requests per month, cost over time, and the like."
+description: "Handy time-unit conversions for SRE work - requests per month, cost over time, and the like."
 tags: [til, sre, math, reference]
 ---
 

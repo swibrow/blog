@@ -172,6 +172,6 @@ The pod is ephemeral, so when you `Ctrl+C` the cleanup trap deletes it. Nobody's
 
 ## When to actually do this
 
-Never in a customer's environment. Probably not in your own production either. But for your own dev/staging clusters where the alternative is half a day of VPN tickets, this is fine — and it's a good teaching example of how thin the line between "infrastructure" and "two unix tools wired together" really is.
+Never in a customer's environment. Probably not in your own production either. But for your own dev/staging clusters where the alternative is half a day of VPN tickets, this is fine - and it's a good teaching example of how thin the line between "infrastructure" and "two unix tools wired together" really is.
 
 If you find yourself reaching for this more than twice, that's the universe telling you to set up the VPN.

@@ -6,7 +6,7 @@ author: "Samuel Wibrow"
 tags: [go, cli, ai, ollama, llm]
 ---
 
-You know *what* you want to do in the terminal, but can't remember the exact flags. Was it `find -mtime` or `find -mmin`? Does `tar` need `-xvf` or `-xzf`? You Google it, wade through Stack Overflow circa 2012, and eventually find the answer buried under AI-generated SEO spam — three blog posts deep into "Best 10 ways to find files in Linux 2024 (Updated!)".
+You know *what* you want to do in the terminal, but can't remember the exact flags. Was it `find -mtime` or `find -mmin`? Does `tar` need `-xvf` or `-xzf`? You Google it, wade through Stack Overflow circa 2012, and eventually find the answer buried under AI-generated SEO spam - three blog posts deep into "Best 10 ways to find files in Linux 2024 (Updated!)".
 
 So I wrote a small Go binary that asks an LLM what I meant and gets out of the way. **[how](https://github.com/swibrow/how)** turns plain English into shell commands.
 
@@ -97,4 +97,4 @@ $ how rename all .jpeg files to .jpg in this folder
   Renames every .jpeg file in the current directory to .jpg.
 ```
 
-The code is on GitHub: **[github.com/swibrow/how](https://github.com/swibrow/how)** — MIT licensed, written in Go, contributions welcome.
+The code is on GitHub: **[github.com/swibrow/how](https://github.com/swibrow/how)** - MIT licensed, written in Go, contributions welcome.
