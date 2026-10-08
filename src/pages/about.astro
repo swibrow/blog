@@ -5,7 +5,7 @@ import Card from "@components/ui/Card.astro";
 
 const title = "About - Samuel Wibrow";
 const description =
-  "Senior SRE / Platform Engineer based in Zurich. 15+ years in IT infrastructure, currently working with AWS, Kubernetes, and Terraform at Tamedia.";
+  "Staff Engineer, AI Platforms, based in Zurich. 15+ years in IT infrastructure, currently working with AWS, Kubernetes, and Terraform at Tamedia.";
 
 const skills = [
   { category: "Platform & Orchestration", items: ["Kubernetes", "AWS EKS", "Karpenter", "Helm", "Kustomize", "Kubebuilder", "Talos"] },
@@ -22,7 +22,7 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Samuel Wibrow",
-  jobTitle: "Senior SRE / Platform Engineer",
+  jobTitle: "Staff Engineer, AI Platforms",
   url: Astro.site!.toString(),
   image: new URL("/me.jpg", Astro.site).toString(),
   sameAs: [
@@ -51,7 +51,7 @@ const personJsonLd = {
   <SectionHeading title="about">
     <div class="prose">
       <p>
-        Senior SRE / Platform Engineer at Tamedia in Zurich. I build platforms
+        Staff Engineer, AI Platforms at Tamedia in Zurich. I build platforms
         and keep production running, mostly with AWS, Kubernetes, and
         Terraform. 15+ years in IT infrastructure, the last decade in cloud
         and platform engineering.

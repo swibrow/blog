@@ -478,7 +478,7 @@ Press ESC to exit any game.`,
     // Fallback commands when resume data is unavailable
     cmds.about = {
       response: `<strong>Samuel Wibrow</strong>
-Senior Site Reliability Engineer / Platform Engineer
+Staff Engineer, AI Platforms
 
 Experienced SRE with 13+ years designing and operating highly available, scalable infrastructure.
 Currently focused on AWS, Kubernetes, and building internal developer platforms.
@@ -716,7 +716,7 @@ const welcomeArt = (host: string) => `<div style="display:flex;gap:2ch;font-fami
 <span style="color:var(--ctp-text);font-weight:bold">samuel</span><span style="color:var(--ctp-subtext0)">@</span><span style="color:var(--ctp-green);font-weight:bold">${host}</span>
 <span style="color:var(--ctp-surface1)">─────────────────────────</span>
 <span style="color:var(--ctp-blue)">OS</span>       <span style="color:var(--ctp-text)">Zurich, CH 🇨🇭</span>
-<span style="color:var(--ctp-blue)">Role</span>     <span style="color:var(--ctp-text)">Senior SRE @ Tamedia</span>
+<span style="color:var(--ctp-blue)">Role</span>     <span style="color:var(--ctp-text)">Staff Engineer, AI Platforms @ Tamedia</span>
 <span style="color:var(--ctp-blue)">Uptime</span>   <span style="color:var(--ctp-text)">15+ years</span>
 <span style="color:var(--ctp-blue)">Stack</span>    <span style="color:var(--ctp-text)">AWS / K8s / Terraform</span>
 <span style="color:var(--ctp-blue)">Lang</span>     <span style="color:var(--ctp-text)">Go / Python / TS</span>
