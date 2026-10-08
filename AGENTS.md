@@ -39,11 +39,10 @@ Frontmatter schema (til): `title`, `date`, `tags[]`, `draft?`
 
 ### Layouts
 - `/src/layouts/BaseLayout.astro` - HTML shell, all SEO meta tags, font links, theme init script, `<Header client:load>`, `<Footer>`. Accepts `title`, `description`, `image`, `type`, `publishedTime`, `tags`, `noindex` props.
-- `/src/layouts/PostLayout.astro` - Wraps a rendered post with header (title, date, reading time, tags), JSON-LD `BlogPosting` schema, Table of Contents, prose body, Comments island.
+- `/src/layouts/PostLayout.astro` - Wraps a rendered post with header (title, date, reading time, tags), JSON-LD `BlogPosting` schema, prose body, Comments island.
 
 ### Components
 - `/src/components/SEO.astro` - All `<title>`, meta description, canonical, Open Graph, Twitter Card, article tags. Used by BaseLayout.
-- `/src/components/TableOfContents.astro` - Renders TOC from Astro `headings` (depth 2-3). Hidden if fewer than 3 headings.
 - `/src/components/layout/Header.tsx` - React island. Sticky nav + Terminal popover with command input. Receives `currentPath` prop.
 - `/src/components/layout/Footer.astro` - Static footer + SnowEffect island.
 - `/src/components/layout/SectionHeading.astro` - `~/title` heading + optional subtitle, with CSS fade-in.

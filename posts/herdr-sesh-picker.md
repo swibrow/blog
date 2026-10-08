@@ -5,7 +5,6 @@ description: "A sesh-style fzf picker for herdr that lists open workspaces, zoxi
 author: "Samuel Wibrow"
 tags: [cli, fzf, github, herdr, zsh, productivity]
 draft: true
-toc: false
 ---
 
 Every morning goes roughly the same way. Open the terminal, remember a repo exists, `cd ~/dev/` and start tab-completing. Wrong org. Back up. Right org, but it turns out I never cloned it on this laptop. Open the browser, find the repo, copy the clone URL, back to the terminal, `gh repo clone`, `cd`, open a new workspace. By then I've forgotten why I wanted it, which is honestly a pretty efficient way to avoid work.

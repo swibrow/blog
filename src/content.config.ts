@@ -10,7 +10,6 @@ const posts = defineCollection({
     author: z.string().default("Samuel Wibrow"),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
-    toc: z.boolean().default(true),
   }),
 });
 
