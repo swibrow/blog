@@ -30,7 +30,7 @@ One fzf list, three kinds of things in it:
 - **▸ directories** from [zoxide](https://github.com/ajeetdsouza/zoxide) - pick one and it starts a new workspace there
 - **⇣ GitHub repos I haven't cloned yet** - pick one and it clones to `~/dev/<owner>/<repo>`, *then* starts a workspace there
 
-![herdr-sesh picker](/images/posts/herdr-sesh-picker/picker.gif)
+<video src="/images/posts/herdr-sesh-picker/picker.mp4" autoplay loop muted playsinline aria-label="herdr-sesh picker"></video>
 
 ---
 

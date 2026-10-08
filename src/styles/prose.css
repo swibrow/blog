@@ -89,7 +89,8 @@
 }
 
 /* Images */
-.prose img {
+.prose img,
+.prose video {
   max-width: 100%;
   height: auto;
   display: block;
