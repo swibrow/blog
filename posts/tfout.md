@@ -3,7 +3,7 @@ title: "Building a Kubernetes Operator for the sake of building a Kubernetes Ope
 date: 2025-05-28
 description: "A simple operator to sync Terraform outputs into Kubernetes ConfigMaps and Secrets"
 author: "Samuel Wibrow"
-tags: [kubernetes, operator, kubebuilder, claude, ai]
+tags: [kubernetes, terraform]
 ---
 
 ## The problem

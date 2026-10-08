@@ -3,7 +3,7 @@ title: "Sandboxing AI Agents for Garrison in Kubernetes"
 date: 2026-07-31
 description: "Why I stopped letting AI coding agents run against my home-ops cluster directly, and how kubernetes-sigs/agent-sandbox (SIG Apps) boxes them into pausable, disposable Kubernetes sandboxes instead"
 author: "Samuel Wibrow"
-tags: [kubernetes, ai, agents, security, claude, talos]
+tags: [ai, kubernetes]
 ---
 
 ## The problem

@@ -2,7 +2,7 @@
 title: "Removing Resources from Terraform State"
 date: 2025-09-10
 description: "How to remove a resource from Terraform state without destroying it."
-tags: [til, terraform, hcl]
+tags: [til, terraform]
 ---
 
 Its the simple stuff I always forget. Remove resource from state but don't destroy it.

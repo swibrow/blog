@@ -2,7 +2,7 @@
 title: "AWS ALB Transform Actions for URL Rewrites"
 date: 2025-10-24
 description: "AWS ALB now supports URL rewrites via transform actions, no more redirects or backend rewrites needed."
-tags: [til, aws, alb, kubernetes, ingress]
+tags: [til, aws, kubernetes]
 ---
 
 AWS ALB now supports URL rewrites using the **transform action** - no need to rely on redirects or backend rewrites anymore! This is particularly useful for path-based routing scenarios where you want to modify the request before it reaches your backend.

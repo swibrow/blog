@@ -2,7 +2,7 @@
 title: "One alias to view or create a GitHub PR"
 date: 2026-03-12
 description: "A simple shell alias that saves a surprising amount of context switching."
-tags: [til, cli, github, productivity]
+tags: [til, cli]
 ---
 
 A simple shell alias that saves a surprising amount of context switching:

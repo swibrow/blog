@@ -3,7 +3,7 @@ title: "One Keybinding to Find, Clone, or Jump to Any Repo"
 date: 2026-10-05
 description: "A sesh-style fzf picker for herdr that lists open workspaces, zoxide directories, and GitHub repos I haven't even cloned yet"
 author: "Samuel Wibrow"
-tags: [cli, fzf, github, herdr, zsh, productivity]
+tags: [cli]
 draft: true
 ---
 

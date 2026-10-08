@@ -3,7 +3,7 @@ title: "Replicating AWS IRSA on a Raspberry Pi with Talos"
 date: 2024-06-09
 description: "Self-hosting an OIDC issuer on a GitHub repo so a Raspberry Pi running Talos can hand out AWS IAM credentials, IRSA-style, with no AWS keys mounted anywhere."
 author: "Samuel Wibrow"
-tags: [aws, oidc, kubernetes, talos, homelab]
+tags: [aws, kubernetes]
 ---
 
 I had a Raspberry Pi 4 sitting in a drawer and a curiosity that wouldn't go away: how does AWS actually trust a Kubernetes service account with no static credentials in sight? IRSA is "just" OIDC and JWKS, but EKS makes it look like dark magic by hiding the issuer behind its own infrastructure.

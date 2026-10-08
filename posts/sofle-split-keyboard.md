@@ -3,7 +3,7 @@ title: "Trying a 66-Key Sofle Split Keyboard"
 date: 2025-09-10
 description: "First impressions building and configuring a 66-key Sofle wireless split keyboard with Gateron Browns, XDA keycaps, and QMK"
 author: "Samuel Wibrow"
-tags: [keyboards, mechanical-keyboards, ergonomics, diy]
+tags: [keyboards]
 ---
 
 My first attempt at a split keyboard was a Corne I soldered with a $20 iron a few years back. It worked for about three weeks before something gave up and I quietly went back to my 80% board, defeated. The appeal never went away though - better ergonomics, fewer reaches, and the masochistic thrill of relearning to type from scratch as a 30-something engineer who supposedly does this for a living.

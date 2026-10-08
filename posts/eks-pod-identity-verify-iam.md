@@ -3,7 +3,7 @@ title: "Verifying the IAM Role Attached to a Pod with EKS Pod Identity"
 date: 2026-04-22
 description: "Poking the Pod Identity Agent from inside a running pod to confirm which IAM role you actually got, with curl, wget, and a debug sidecar fallback for distroless containers"
 author: "Samuel Wibrow"
-tags: [aws, eks, kubernetes, iam, pod-identity]
+tags: [aws, kubernetes]
 ---
 
 [EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html) is great until it isn't, and when it isn't, the AWS SDK helpfully tells you "access denied" with no further details. So before you spend an hour blaming IAM, let's just ask the pod what role it actually got.

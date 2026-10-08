@@ -2,7 +2,7 @@
 title: "ArgoCD multi source applications"
 date: 2025-09-14
 description: "Any Kubernetes resource in a multi-source ref source path gets included in the rendered template."
-tags: [til, argocd, kubernetes, gitops]
+tags: [til, kubernetes]
 ---
 
 I was creating some basic app deployments in ArgoCD and was using a multi source app to pass in values to a Helm chart. Little did I know, that any Kubernetes resource in the path of the ref source will actually also be included in the rendered template.

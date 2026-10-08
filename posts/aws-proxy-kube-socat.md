@@ -3,7 +3,7 @@ title: "Building a Hacky AWS Proxy Service with kube-proxy, socat, and Bash"
 date: 2025-08-15
 description: "A simple solution for tunneling AWS services through Kubernetes using bash, socat, and port forwarding"
 author: "Samuel Wibrow"
-tags: [AWS, Kubernetes, Bash, Proxy, DevOps]
+tags: [aws, kubernetes]
 ---
 
 RDS in a private subnet, no VPN, deadline yesterday, and a Kubernetes cluster sitting right there with a pristine network path to the database. You know what's coming. You know it's a bad idea. You're going to do it anyway.
