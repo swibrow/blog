@@ -6,7 +6,7 @@ import StatCard from "@components/home/StatCard.astro";
 import ClusterMetrics from "@components/react/ClusterMetrics";
 import { fetchGitHubStats } from "@/lib/github";
 
-const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+const posts = (await getCollection("posts", ({ data }) => import.meta.env.DEV || !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
 const latestPost = posts[0];

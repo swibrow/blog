@@ -4,7 +4,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import SectionHeading from "@components/layout/SectionHeading.astro";
 import PostsSearch from "@components/react/PostsSearch";
 
-const all = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+const all = (await getCollection("posts", ({ data }) => import.meta.env.DEV || !data.draft)).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
 
