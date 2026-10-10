@@ -110,7 +110,14 @@ Qwen3.8 27B is on [OpenRouter](https://openrouter.ai/qwen/qwen3.8-27b) with 19 p
 
 The local input numbers are upper bounds: I didn't measure power during prompt processing, so they assume the card sat at its power limit the whole time.
 
-On electricity alone, local output is 3-5x cheaper than the median. Add the hardware and it gets less flattering. Spread the PRO 4000's 1,600 CHF over three years of nonstop single-user generation (about 3 billion tokens) and it adds roughly 0.53 CHF per million, so about 0.88 CHF all in. To beat the median price the card has to be generating about a third of the time, around the clock, for three years; to beat the cheapest provider, about 70%. My card mostly idles. Concurrency helps a lot: at 16 parallel requests the PRO 4000 did 214 t/s at the same 145W, which cuts electricity to about 0.05 CHF per million.
+On electricity alone, local output is 3-5x cheaper than the median. The cards aren't free though, so here's how long each one takes to pay for itself against OpenRouter: the saving per generated token, minus the idle power for the rest of the day, against what I paid. "Busy" is the share of the day the card spends generating for a single user.
+
+| Payback (vs median / vs cheapest) | Busy 10% | Busy 33% | Busy 100% |
+| :--- | :--- | :--- | :--- |
+| **3090 Ti, 300W (750 CHF)** | 10 / never | 1.8 / 5.9 years | 0.5 / 1.4 years |
+| **PRO 4000 (1,600 CHF)** | 11 / 23 years | 3.1 / 6.4 years | 1.0 / 2.1 years |
+
+My cards mostly idle, so on single-user traffic the honest answer is "about a decade, maybe never". Concurrency changes that completely. At 16 parallel requests the PRO 4000 did 214 t/s and the 3090 Ti 205 t/s at the same power, so electricity drops to about 0.05-0.11 CHF per million and even 10% busy pays the 3090 Ti back in under a year and the PRO 4000 in 1.3 years against the median. That assumes the cards sit at their power limit under load (I didn't measure power for the batched runs) and that you actually have 16 agents to keep them fed. It also ignores input tokens, which agents burn far more of than output and which OpenRouter also charges for, so if anything it's conservative.
 
 So for the plain 27B, OpenRouter is cheaper unless you keep the card busy. What it doesn't have is Qwen3.8-Flash-Next or any abliterated builds, and it doesn't keep my data in the house. That's the actual reason the card exists.
 
