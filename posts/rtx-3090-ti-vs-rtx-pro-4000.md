@@ -15,9 +15,25 @@ This wasn't a "what is the best card" test; it was a "what is the best way to ru
 *   **Model:** Qwen3.8-27B (Dense)
 *   **Quantization:** GGUF UD-Q4_K_M (16.5GB, what I run day to day); I also ran Q4_0 and UD-Q5_K_M
 *   **Infrastructure:** Homelab Kubernetes (Talos), llama.cpp (B11096, CUDA 12), 128-token generation, 512/2048 prompt sizes.
-*   **The Cards:**
-    *   **RTX 3090 Ti (Ampere):** 450W TDP. I usually run it at 300W.
-    *   **RTX PRO 4000 (Blackwell):** 145W Max, single-slot blower.
+*   **The Cards:** I usually run the 3090 Ti capped at 300W.
+
+| | RTX 3090 Ti | RTX PRO 4000 Blackwell |
+| :--- | :--- | :--- |
+| **Architecture** | Ampere (GA102), 2022 | Blackwell (GB203), 2025 |
+| **Launch price (US)** | $1,999 | $1,799 (reported) |
+| **Swiss price today** | Not sold new; used ~CHF 750 on Ricardo | New from CHF 2,250 (OEM), CHF 2,556 (PNY retail) |
+| **What I paid** | CHF 750, used (about a day of use) | CHF 1,600 |
+| **Memory** | 24GB GDDR6X, 384-bit | 24GB GDDR7 ECC, 192-bit |
+| **Memory bandwidth** | 1,008 GB/s | 672 GB/s |
+| **CUDA cores** | 10,752 | 8,960 |
+| **Tensor cores** | 3rd gen | 5th gen (FP4 support) |
+| **FP32** | 40 TFLOPS | 40 TFLOPS |
+| **Power** | 450W, 3x 8-pin or 16-pin | 145W, 1x 16-pin |
+| **Idle power (measured)** | 22-31W | ~4W |
+| **Size** | 3-slot | Single-slot blower |
+| **PCIe** | Gen 4 x16 (x8 in my box) | Gen 5 x16 (x8 in my box) |
+
+*Swiss prices from Toppreise and Ricardo on 10 October 2026. Used 3090 Tis are rare; plain 3090s go for CHF 550-800.*
 
 *Note: I couldn't test FP8 or NVFP4 via vLLM because the weights exceed 24GB. This is a pure llama.cpp comparison.*
 
