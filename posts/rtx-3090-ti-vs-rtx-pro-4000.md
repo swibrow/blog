@@ -21,7 +21,7 @@ This wasn't a "what is the best card" test; it was a "what is the best way to ru
 | :--- | :--- | :--- |
 | **Architecture** | Ampere (GA102), 2022 | Blackwell (GB203), 2025 |
 | **Launch price (US)** | $1,999 | $1,799 (reported) |
-| **Swiss price today** | Not sold new; used ~CHF 750 on Ricardo | New from CHF 2,250 (OEM), CHF 2,556 (PNY retail) |
+| **Swiss price today** | Not sold new; used roughly CHF 1,000-1,850 on Ricardo | New from CHF 2,250 (OEM), CHF 2,556 (PNY retail) |
 | **What I paid** | CHF 750, used (about a day of use) | CHF 1,600 |
 | **Memory** | 24GB GDDR6X, 384-bit | 24GB GDDR7 ECC, 192-bit |
 | **Memory bandwidth** | 1,008 GB/s | 672 GB/s |
@@ -33,7 +33,7 @@ This wasn't a "what is the best card" test; it was a "what is the best way to ru
 | **Size** | 3-slot | Single-slot blower |
 | **PCIe** | Gen 4 x16 (x8 in my box) | Gen 5 x16 (x8 in my box) |
 
-*Swiss prices from Toppreise and Ricardo on 10 October 2026. Used 3090 Tis are rare; plain 3090s go for CHF 550-800.*
+*Prices from Toppreise and Ricardo on 10 October 2026. Used 3090 Tis are rare in Switzerland; in Germany they're listed at €1,100-1,800. My CHF 750 was a lucky find.*
 
 *Note: I couldn't test FP8 or NVFP4 via vLLM because the weights exceed 24GB. This is a pure llama.cpp comparison.*
 
