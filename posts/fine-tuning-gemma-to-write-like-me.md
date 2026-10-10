@@ -1,10 +1,9 @@
 ---
-title: "Fine-Tuning Gemma to Write Like Me"
-date: 2026-10-08
+title: "Fine-tuning Gemma to write like me"
+date: 2026-10-10
 description: "QLoRA on Gemma 4 12B with 17k of my own Slack, email and WhatsApp messages, trained on a 3090 Ti in my home Kubernetes cluster"
 author: "Samuel Wibrow"
 tags: [ai, kubernetes]
-draft: true
 ---
 
 Ask any instruction-tuned model to write a quick message to a mate and you get the same thing every time: a short preamble about what it's going to do, three options with headings, and a closing line offering to adjust the tone. Nobody I know writes like that. I certainly don't.
@@ -21,9 +20,9 @@ Three sources, all text I wrote myself:
 
 | Source | Samples | Median length |
 |---|---|---|
-| Slack | 14,061 | |
-| Gmail | 2,645 | 51 words |
-| WhatsApp | 1,122 | 8 words |
+| Slack | 14,061 | 9 words |
+| Gmail | 2,645 | 48 words |
+| WhatsApp | 1,122 | 9 words |
 
 That's 17,828 samples, split 95/5 into 16,937 train and 891 validation.
 
@@ -90,20 +89,20 @@ That last one is easy to miss and it matters. Without it, a good chunk of the lo
 
 ### Running it on the home cluster
 
-The GPU is an RTX 3090 Ti in one worker node of my home Talos cluster, so training runs as a Kubernetes `Job`. The PVC and the GPU `ResourceClaimTemplate` (dynamic resource allocation, rather than the old `nvidia.com/gpu` resource) live in my home-ops repo; the job itself is a plain manifest submitted by a wrapper script.
+The GPU sits in one worker node of my home Talos cluster, so training runs there. The first run was a plain Kubernetes `Job` with an init container that waited for a marker file while a wrapper script `kubectl cp`'d the dataset onto the volume. It worked, but every run meant scaling the other GPU apps to zero by hand first.
 
-The fiddly part is getting a 5 MB dataset onto the volume before training starts. Rather than building an image or adding an upload service, the pod starts with an init container that waits for a marker file:
+Now it's an [Argo Workflows](https://argoproj.github.io/workflows/) `WorkflowTemplate` in my home-ops repo, one submit per version:
 
-```yaml
-initContainers:
-  - name: wait-for-data
-    image: docker.io/library/busybox:1.37
-    command: ["sh", "-c", "until [ -f /workspace/data/.ready-$HOSTNAME ]; do sleep 5; done"]
+```bash
+argo -n ai submit --from workflowtemplate/train -p version=v2 -p gguf=true
 ```
 
-`run.sh` creates the job, waits for that init container to be running, `kubectl cp`s the JSONL files in, touches the marker, and follows the training logs. The training code itself goes in through a ConfigMap, so changing a hyperparameter doesn't need an image rebuild. Two other small things: `/dev/shm` is an 8Gi memory-backed `emptyDir`, because the default 64Mi is too small for dataloader workers, and the Hugging Face token comes from a secret that's already in the cluster.
+- **check**: fails the run before any GPU time is spent if that version already exists in S3. My object store has no versioning, so nothing ever gets overwritten.
+- **train**: Unsloth on a PVC that already has the dataset and the Hugging Face cache, metrics going to MLflow. The training code comes in through a ConfigMap, so changing a hyperparameter doesn't need an image rebuild.
+- **publish**: the LoRA adapter goes to `s3://models/<name>/<version>/`.
+- **export** (with `gguf=true`): merges the adapter into the base model and publishes a llama.cpp GGUF next to it.
 
-The one real annoyance: there's only one GPU, and other apps on the cluster (image generation, a local LLM) grab it whenever they're awake. Before every run they have to be scaled to zero, and ArgoCD keeps putting one of them back on sync. That needs an `ignoreDifferences` on `/spec/replicas`, which I still haven't done.
+The GPU comes from a `ResourceClaimTemplate` (dynamic resource allocation, rather than the old `nvidia.com/gpu` resource), and `/dev/shm` is an 8Gi memory-backed `emptyDir` because the default 64Mi is too small for dataloader workers. Since then a [second GPU](/posts/rtx-3090-ti-vs-rtx-pro-4000/) went into the box, so a training run usually gets a card to itself instead of fighting the image generator for it.
 
 ### Numbers
 
@@ -111,7 +110,7 @@ The one real annoyance: there's only one GPU, and other apps on the cluster (ima
 |---|---|
 | Steps | 1,059 |
 | Wall time | 1h 19m |
-| Time per step | ~4.3 s |
+| Time per step | ~4.5 s |
 | VRAM | 10.2 GB |
 | Average train loss | 2.10 |
 
@@ -123,9 +122,11 @@ Validation loss drops steadily and flattens out towards the end of the epoch. A 
 
 ---
 
-## Running it locally
+## Running it
 
-I didn't want to need the cluster just to try it out, so the adapter gets converted to GGUF and served on my Mac with llama.cpp, on top of Unsloth's Q4_K_M quantisation of the base model:
+The merged GGUF from the export step is served in the cluster like any other model: `style-gemma4`, a llama.cpp server that scales to zero when nobody's talking to it. It loads in about ten seconds on the next request.
+
+For comparisons I still use the adapter on its own on my Mac, on top of Unsloth's Q4_K_M quantisation of the base model:
 
 ```bash
 llama-server \
@@ -142,7 +143,22 @@ The nice thing about loading the adapter separately is that `llama-server` lets 
 
 ## What it learned
 
-**The style transfers.** Fine-tuned output is short and casual, uses my sign-offs, and goes straight to the point. Base Gemma, given the same prompt, thinks out loud and then offers a list of templates. On tone alone, it's convincing.
+**The style transfers.** Fine-tuned output is short and casual, uses my sign-offs, and goes straight to the point. Base Gemma, given the same prompt, thinks out loud and then offers a list of templates. Same prompt, "Write a WhatsApp message to a friend asking if they want to grab a beer on Friday.", both ways:
+
+Base Gemma 4 12B, after about a thousand characters of thinking:
+
+> Depending on how close you are with the friend, here are a few different ways to phrase it:
+>
+> **Option 1: Casual & Short (Best for a close friend)**
+> "Hey! You down for a beer this Friday? 🍻"
+>
+> **Option 2: The "Catch up" (Best if you haven't seen them in a while)** ...
+
+And three more options after that. With the adapter:
+
+> Hey mate, you free for a beer on Friday?
+
+On tone alone, it's convincing.
 
 **But it writes like it's halfway through a conversation.** A lot of outputs read like replies to something you can't see: "Yeah that would be great...". Looking back at the data, that's exactly what I trained it on:
 
@@ -151,6 +167,8 @@ The nice thing about loading the adapter separately is that `llama-server` lets 
 - The prompts carry almost no information. "Write a Slack message in #channel" says nothing about *what* the message should say, so the model learns to produce plausible-sounding text with no particular content.
 
 It learned my style perfectly well. It just had nothing to learn content *from*.
+
+I got a very concrete demonstration of this when I had it write a first draft of my [GPU benchmark post](/posts/rtx-3090-ti-vs-rtx-pro-4000/). I gave it every number. It still swapped "faster" for "slower" in a comparison, turned "per million tokens" into "per 100 million", invented a power connector claim and promised a GitHub repo that doesn't exist. The voice was fine; every fact needed checking.
 
 **It also memorised things it shouldn't have.** Redacting emails, phone numbers and IBANs isn't enough: the model happily reproduces colleagues' names, internal links and my full name. Regex redaction catches the structured stuff, not the people. The adapter stays private, and anything trained on personal messages should be treated as if it contains those messages, because to a degree it does.
 
@@ -163,6 +181,5 @@ The fix for the content problem is better prompts, not more data:
 1. **Instruction back-translation**: have base Gemma read each message and write a specific instruction for it ("Tell the team the deploy is delayed until tomorrow because of the failing migration"), so the model learns to map *what to say* to *how I'd say it*.
 2. **Reply versus new**: train replies as `Reply to this email: <original>` with the quoted text kept, and new messages as `Write a new email about <subject>`. Same for Slack threads and WhatsApp.
 3. **Rebalance the sources**: Slack is almost 80% of the data. Cap it, and pull the full WhatsApp history from an iPhone backup, which uses the same `ChatStorage.sqlite` schema.
-4. **Make the GPU dance automatic**: an Argo Workflow that scales the GPU apps down, trains, and scales them back up.
 
 The interesting lesson for me is how much of fine-tuning is dataset work. The training script barely changed after the first run. Every problem with the output came straight back to how the samples were built, and the model was very good at learning exactly what I gave it, including the bits I didn't mean to.
