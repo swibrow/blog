@@ -113,5 +113,8 @@ The 16-request batch hit 242 t/s total across the two. Row split failed to load 
 2.  **The "Server" Choice:** If you need a single-slot card, low heat, or want to run the server 24/7 with minimal idle power, the PRO 4000 offers ~85% of the performance of a 300W-capped 3090 Ti at under half the power.
 3.  **The 145W Trap:** Never try to run a 3090 Ti at 145W. You lose all the benefits of the high-end silicon because the cores get starved of power.
 
-**What's next?**
-I have the full raw jsonl and manifest files if anyone wants to dig into the raw numbers. If you'd like to see a different model (maybe something that fits in VRAM for vLLM) or a different batch size, let me know!
+## What's next
+
+The RTX PRO 4000 will now become the always-on card. I plan to run an abliterated model, meaning the refusals have been removed, that my SRE agent and my Hermes agent use. I chose abliterated because I use it to pentest my own homelab. A normal model refuses half the questions you need to ask when attacking your own setup, and I would rather find the gaping holes an AI-generated config leaves behind before someone else does. The PRO 4000 suits this perfectly since it idles at about 4W and sips 145W under load, so leaving it running 24/7 is cheap.
+
+The RTX 3090 Ti will become the flexible card for things like ComfyUI image generation, game streaming, and testing new models as they drop. It is the muscle for my personal projects while the PRO 4000 does the heavy lifting for the system. What would you like to see tested next in this lab?
