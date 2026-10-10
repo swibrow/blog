@@ -114,7 +114,7 @@ On electricity alone, local output is 3-5x cheaper than the median. The cards ar
 
 | Payback (vs median / vs cheapest) | Busy 10% | Busy 33% | Busy 100% |
 | :--- | :--- | :--- | :--- |
-| **3090 Ti, 300W (750 CHF)** | 10 / never | 1.8 / 5.9 years | 0.5 / 1.4 years |
+| **3090 Ti, 300W (750 CHF)** | 10 years / never | 1.8 / 5.9 years | 0.5 / 1.4 years |
 | **PRO 4000 (1,600 CHF)** | 11 / 23 years | 3.1 / 6.4 years | 1.0 / 2.1 years |
 
 My cards mostly idle, so on single-user traffic the honest answer is "about a decade, maybe never". Concurrency changes that completely. At 16 parallel requests the PRO 4000 did 214 t/s and the 3090 Ti 205 t/s at the same power, so electricity drops to about 0.05-0.11 CHF per million and even 10% busy pays the 3090 Ti back in under a year and the PRO 4000 in 1.3 years against the median. That assumes the cards sit at their power limit under load (I didn't measure power for the batched runs) and that you actually have 16 agents to keep them fed. It also ignores input tokens, which agents burn far more of than output and which OpenRouter also charges for, so if anything it's conservative.
