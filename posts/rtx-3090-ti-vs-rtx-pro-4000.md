@@ -89,12 +89,30 @@ This is where the PRO 4000 starts to make sense. I pay 0.28 CHF/kWh.
 | Metric | 3090 Ti (450W) | 3090 Ti (300W) | PRO 4000 (145W) |
 | :--- | :--- | :--- | :--- |
 | **Energy per Gen Token** | 9.5 J | 8.3 J | 4.5 J |
-| **Cost/Million Tokens** | 0.74 CHF | 0.65 CHF | 0.35 CHF |
+| **Cost/Million Generated Tokens** | 0.74 CHF | 0.65 CHF | 0.35 CHF |
 | **Idle Power** | 22-31W | 22-31W | ~4W |
 | **Annual Idle Cost (24/7)** | 55-77 CHF | 55-77 CHF | ~10 CHF |
 | **Cost per t/s (CapEx)** | 15.80 CHF | 20.90 CHF | 50.00 CHF |
 
 The PRO 4000 is roughly twice as efficient per token. While the 3090 Ti is cheaper per t/s of hardware, the power savings would take years to offset the ~850 CHF price difference. Generating nonstop, it pays back after about 2.2 billion tokens, roughly 2.2 years of 24/7 generation. If the card mostly idles like mine does, the 45-67 CHF a year idle saving alone takes 13-19 years. It doesn't pay for itself on power; you buy it for the 145W envelope, the single slot, and the heat and noise.
+
+### Versus just paying OpenRouter
+
+Qwen3.8 27B is on [OpenRouter](https://openrouter.ai/qwen/qwen3.8-27b) with 19 providers, most of them serving FP8 or FP4. Prices per million tokens on 9 October 2026, converted at 0.83 CHF/USD:
+
+| | Input | Output |
+| :--- | :--- | :--- |
+| **OpenRouter, cheapest** | 0.02 CHF | 1.12 CHF |
+| **OpenRouter, median** | 0.19 CHF | 1.91 CHF |
+| **OpenRouter, most expensive** | 0.82 CHF | 3.91 CHF |
+| **PRO 4000, electricity only** | under 0.01 CHF | 0.35 CHF |
+| **3090 Ti (300W), electricity only** | under 0.02 CHF | 0.65 CHF |
+
+The local input numbers are upper bounds: I didn't measure power during prompt processing, so they assume the card sat at its power limit the whole time.
+
+On electricity alone, local output is 3-5x cheaper than the median. Add the hardware and it gets less flattering. Spread the PRO 4000's 1,600 CHF over three years of nonstop single-user generation (about 3 billion tokens) and it adds roughly 0.53 CHF per million, so about 0.88 CHF all in. To beat the median price the card has to be generating about a third of the time, around the clock, for three years; to beat the cheapest provider, about 70%. My card mostly idles. Concurrency helps a lot: at 16 parallel requests the PRO 4000 did 214 t/s at the same 145W, which cuts electricity to about 0.05 CHF per million.
+
+So for the plain 27B, OpenRouter is cheaper unless you keep the card busy. What it doesn't have is Qwen3.8-Flash-Next or any abliterated builds, and it doesn't keep my data in the house. That's the actual reason the card exists.
 
 ## Two is better than one
 
