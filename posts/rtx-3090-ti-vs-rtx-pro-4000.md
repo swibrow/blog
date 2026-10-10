@@ -33,7 +33,7 @@ This wasn't a "what is the best card" test; it was a "what is the best way to ru
 | **Size** | 3-slot | Single-slot blower |
 | **PCIe** | Gen 4 x16 (x8 in my box) | Gen 5 x16 (x8 in my box) |
 
-*Prices from Toppreise and Ricardo on 10 October 2026. Used 3090 Tis are rare in Switzerland; in Germany they're listed at €1,100-1,800. My CHF 750 was a lucky find.*
+*Prices from Toppreise and Ricardo on 10 October 2026. Used 3090 Tis are rare in Switzerland; in Germany they're listed at €1,100-1,800. On eBay, used prices have roughly doubled from a low under $800 to about [$1,500](https://bestvaluegpu.com/history/new-and-used-rtx-3090-ti-price-history-and-specs/), presumably thanks to people like me wanting 24GB for local models. My CHF 750 was a lucky find.*
 
 *Note: I couldn't test FP8 or NVFP4 via vLLM because the weights exceed 24GB. This is a pure llama.cpp comparison.*
 
