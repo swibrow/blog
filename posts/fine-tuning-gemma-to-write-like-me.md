@@ -1,6 +1,6 @@
 ---
 title: "Fine-tuning Gemma to write like me"
-date: 2026-10-10
+date: 2026-10-03
 description: "QLoRA on Gemma 4 12B with 17k of my own Slack, email and WhatsApp messages, trained on a 3090 Ti in my home Kubernetes cluster"
 author: "Samuel Wibrow"
 tags: [ai, kubernetes]
