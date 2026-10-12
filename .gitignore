@@ -22,3 +22,6 @@ pnpm-lock.yaml
 # IDE
 .vscode/
 .idea/
+
+# Wrangler local state (D1, dev server)
+.wrangler/

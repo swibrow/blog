@@ -43,6 +43,15 @@ jobs:
           # Used by src/lib/github.ts for the home-page GitHub stats
           # (GraphQL contributions + higher REST rate limits).
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+
+      - name: Apply D1 migrations
+        if: github.event_name != 'pull_request'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: d1 migrations apply blog-comments --remote
 
       - name: Deploy to Cloudflare Workers
         id: deploy

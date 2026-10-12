@@ -48,7 +48,7 @@ Frontmatter schema (til): `title`, `date`, `tags[]`, `draft?`
 - `/src/components/layout/SectionHeading.astro` - `~/title` heading + optional subtitle, with CSS fade-in.
 - `/src/components/ui/Card.astro` - Static card with hover effect (used by Astro pages).
 - `/src/components/ui/Card.tsx` - React equivalent (used inside React islands when needed).
-- `/src/components/ui/Comments.tsx` - giscus comments, hydrates on visibility.
+- `/src/components/ui/Comments.tsx` - Comments list + form (Turnstile-protected), talks to `/api/comments`.
 - `/src/components/home/Masthead.astro` - Name + blinking cursor, subtitle, rotating tagline, social links.
 - `/src/components/home/StatCard.astro` - Dashboard stat card (label/value/sub), styles in `global.css` (`.stat-card`).
 - `/src/components/react/ClusterMetrics.tsx` - Island fetching kromgo badges (`kromgo.wibrow.dev`) with offline fallback.
@@ -100,7 +100,7 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 - **Terminal prompt**: `samuel@wibrow.dev`
 - **Cluster metrics**: kromgo at `kromgo.wibrow.dev` (deployed in the home-ops repo, `kubernetes/apps/pitower/networking/kromgo`)
 - **Analytics**: Self-hosted at `insights.wibrow.dev`
-- **Comments**: giscus, repo `swibrow/blog`, mapped by post/til slug
+- **Comments**: D1 database `blog-comments` via the Worker in `/worker/index.ts` (`GET`/`POST /api/comments`, keyed by post/til slug). Schema in `/migrations/`, applied by CI on main. Anonymous with Cloudflare Turnstile: site key from repo var `TURNSTILE_SITE_KEY` at build, secret as Worker secret `TURNSTILE_SECRET_KEY`. Run `bunx wrangler types worker/worker-configuration.d.ts` after changing `wrangler.jsonc`.
 - **Social links**: GitHub, LinkedIn, Strava
 
 ## Working with Content

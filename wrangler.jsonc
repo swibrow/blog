@@ -1,18 +1,40 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "wibrow-dev",
-  "compatibility_date": "2026-07-14",
-  "assets": {
-    "directory": "./dist",
-    "not_found_handling": "404-page"
-  },
-  "workers_dev": true,
-  "preview_urls": true,
-  "routes": [
-    { "pattern": "wibrow.dev/*", "zone_name": "wibrow.dev" },
-    { "pattern": "samuel.wibrow.dev/*", "zone_name": "wibrow.dev" }
-  ],
-  "observability": {
-    "enabled": true
-  }
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"name": "wibrow-dev",
+	"main": "./worker/index.ts",
+	"compatibility_date": "2026-07-14",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"not_found_handling": "404-page",
+		"run_worker_first": [
+			"/api/*"
+		]
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "blog-comments",
+			"database_id": "17968187-3d38-47e3-b134-da242ce54adf",
+			"migrations_dir": "./migrations"
+		}
+	],
+	"secrets": {
+		"required": ["TURNSTILE_SECRET_KEY"]
+	},
+	"workers_dev": true,
+	"preview_urls": true,
+	"routes": [
+		{
+			"pattern": "wibrow.dev/*",
+			"zone_name": "wibrow.dev"
+		},
+		{
+			"pattern": "samuel.wibrow.dev/*",
+			"zone_name": "wibrow.dev"
+		}
+	],
+	"observability": {
+		"enabled": true
+	}
 }
