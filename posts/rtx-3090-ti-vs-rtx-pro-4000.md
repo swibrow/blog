@@ -121,8 +121,6 @@ Payback against OpenRouter, single user, counting idle power for the rest of the
 | **3090 Ti, 300W (750 CHF)** | 10 years / never | 1.8 / 5.9 years | 0.5 / 1.4 years |
 | **PRO 4000 (1,600 CHF)** | 11 / 23 years | 3.1 / 6.4 years | 1.0 / 2.1 years |
 
-At 16 parallel requests, electricity drops to ~0.05-0.11 CHF per million output tokens. At 10% busy that pays the 3090 Ti back in under a year and the PRO 4000 in 1.3 years against the median. This assumes both cards sit at their power limit under batched load (not measured) and ignores input tokens.
-
 ## Both cards together
 
 llama.cpp layer split, 3090 Ti at 300W, both cards on PCIe x8 through the CPU, no NVLink.
