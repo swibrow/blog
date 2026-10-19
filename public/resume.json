@@ -155,6 +155,30 @@
   ],
   "skills": [
     {
+      "name": "AI Agents & Tooling",
+      "keywords": [
+        "Amazon Bedrock AgentCore",
+        "Claude Code",
+        "Agent SDKs",
+        "MCP",
+        "Agent Skills",
+        "Multi-Agent Systems",
+        "Agent Sandboxing"
+      ]
+    },
+    {
+      "name": "LLM Infrastructure",
+      "keywords": [
+        "Self-Hosted LLMs",
+        "Model Serving",
+        "LLM Gateways",
+        "Fine-Tuning",
+        "RAG",
+        "GPU Workloads on Kubernetes",
+        "MLOps"
+      ]
+    },
+    {
       "name": "Platform & Orchestration",
       "keywords": [
         "Kubernetes",
@@ -176,17 +200,6 @@
         "CloudFormation",
         "CDK",
         "GCP (basic)"
-      ]
-    },
-    {
-      "name": "AI & Automation",
-      "keywords": [
-        "Claude / Anthropic API",
-        "OpenAI / ChatGPT",
-        "Ollama",
-        "LLM Tooling",
-        "AI-Assisted Development",
-        "Renovate"
       ]
     },
     {
@@ -217,7 +230,8 @@
         "GitLab CI",
         "ArgoCD",
         "Flux",
-        "CircleCI"
+        "CircleCI",
+        "Renovate"
       ]
     },
     {

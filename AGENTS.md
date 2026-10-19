@@ -116,12 +116,13 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 Samuel Wibrow - Staff Engineer, AI Platforms, based in Zurich, Switzerland. Originally from Brisbane, Australia. Moved to Germany in 2015 (Stylight in Munich), then Switzerland in 2023 (Tamedia in Zurich). 15+ years in IT infrastructure.
 
 ### Skills Profile
+- **AI Agents & Tooling**: Amazon Bedrock AgentCore, Claude Code, Agent SDKs, MCP, Agent Skills, Multi-Agent Systems, Agent Sandboxing
+- **LLM Infrastructure**: Self-Hosted LLMs, Model Serving, LLM Gateways, Fine-Tuning, RAG, GPU Workloads on Kubernetes, MLOps
 - **Platform & Orchestration**: Kubernetes, AWS EKS, Karpenter, Helm, Kustomize, Kubebuilder, Talos, AWS ECS
 - **Cloud & Infrastructure**: AWS (10+ years), Terraform, Terragrunt, CloudFormation, CDK, GCP (basic)
-- **AI & Automation**: Claude / Anthropic API, OpenAI / ChatGPT, Ollama, LLM Tooling, AI-Assisted Development, Renovate
 - **Observability**: Datadog, Prometheus Stack, LGTM Stack, EFK Stack, AWS CloudWatch
 - **Languages**: Go, Python, TypeScript, Bash, React, PowerShell
-- **CI/CD & GitOps**: GitHub Actions, GitLab CI, ArgoCD, Flux, CircleCI
+- **CI/CD & GitOps**: GitHub Actions, GitLab CI, ArgoCD, Flux, CircleCI, Renovate
 - **Networking & Security**: TCP/IP, DNS, VPN, OAuth2/OIDC, Hashicorp Vault, Secrets Operator
 - **Tools**: Git, Linux, Docker, Neovim, CNCF Ecosystem
 

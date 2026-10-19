@@ -489,7 +489,8 @@ Currently focused on AWS, Kubernetes, and building internal developer platforms.
       response: `<strong>Technical Skills:</strong>
 
 <strong>Cloud & Infrastructure:</strong> AWS (10+ years), Terraform, Terragrunt, Kubernetes, Docker
-<strong>AI & Automation:</strong> Claude, ChatGPT/OpenAI, Ollama, LLM Tooling
+<strong>AI Agents & Tooling:</strong> Amazon Bedrock AgentCore, Claude Code, Agent SDKs, MCP, Multi-Agent Systems
+<strong>LLM Infrastructure:</strong> Self-Hosted LLMs, Model Serving, LLM Gateways, Fine-Tuning, RAG, MLOps
 <strong>Languages:</strong> Go, Python, TypeScript, Bash, React
 <strong>CI/CD & GitOps:</strong> GitHub Actions, ArgoCD, GitLab CI, Renovate
 <strong>Observability:</strong> Datadog, Prometheus, LGTM Stack, EFK Stack`,
