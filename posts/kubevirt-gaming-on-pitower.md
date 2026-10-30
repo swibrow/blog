@@ -1,7 +1,7 @@
 ---
 title: "Gaming on Kubernetes"
 date: 2026-10-30
-description: "Switching my 3090 Ti between serving LLMs and running a gaming VM, and the upstream bugs Claude vibing found along the way"
+description: "Switching my 3090 Ti between serving LLMs and running a gaming VM on Talos with KubeVirt and the NVIDIA DRA driver, and the upstream bugs Claude vibing found along the way"
 author: "Samuel Wibrow"
 tags: [kubernetes, ai]
 ---
