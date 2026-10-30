@@ -1,0 +1,58 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+import { uses } from "@/data/uses";
+
+const description =
+  "What I use day to day: Claude Code and local LLMs, Ghostty and herdr, Neovim, chezmoi dotfiles, and a Talos Kubernetes homelab with GPUs.";
+---
+
+<BaseLayout title="Uses - Samuel Wibrow" description={description}>
+  <SectionHeading title="uses" subtitle="What I actually run, day to day.">
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        uses.map((section) => (
+          <section
+            class="rounded-lg border p-4"
+            style="background-color: var(--ctp-mantle); border-color: var(--ctp-surface0);"
+          >
+            <h2 class="mb-3 font-mono text-sm font-bold" style="color: var(--ctp-green);">
+              ~/{section.title}
+            </h2>
+            <ul class="m-0 list-none space-y-2 p-0">
+              {section.items.map((item) => (
+                <li class="text-sm leading-snug">
+                  {item.url ? (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="font-mono font-bold hover:underline"
+                      style="color: var(--ctp-blue);"
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <span class="font-mono font-bold" style="color: var(--ctp-text);">
+                      {item.name}
+                    </span>
+                  )}
+                  <span style="color: var(--ctp-subtext1);"> - {item.note}</span>
+                  {item.post && (
+                    <a
+                      href={item.post}
+                      class="ml-1 font-mono text-xs hover:underline"
+                      style="color: var(--ctp-lavender);"
+                    >
+                      post →
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </SectionHeading>
+</BaseLayout>

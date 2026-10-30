@@ -59,7 +59,7 @@ assert_status "$SITE/posts/aws-oidc-pod-identity/" 200 "Post detail"
 assert_status "$SITE/til/" 200 "TIL list"
 assert_status "$SITE/til/fzf/" 200 "TIL detail"
 assert_status "$SITE/projects/" 200 "Projects"
-assert_status "$SITE/tools/" 200 "Tools"
+assert_status "$SITE/uses/" 200 "Uses"
 assert_status "$SITE/sitemap-index.xml" 200 "Sitemap"
 assert_status "$SITE/rss.xml" 200 "RSS"
 assert_status "$SITE/robots.txt" 200 "robots.txt"
@@ -119,7 +119,7 @@ ENC=$(curl -sI -H "Accept-Encoding: gzip, br" "$SITE/" | grep -i "^content-encod
 [[ -n "$ENC" ]] && ok "Compression: $ENC" || fail "No compression header"
 
 hdr "10. Page weights (compressed, first response)"
-for path in / /posts/ /posts/aws-oidc-pod-identity/ /til/ /tools/; do
+for path in / /posts/ /posts/aws-oidc-pod-identity/ /til/ /uses/; do
   size=$(curl -sH "Accept-Encoding: gzip, br" "$SITE$path" -o /dev/null -w "%{size_download}")
   printf "  %-42s %s bytes\n" "$path" "$size"
 done

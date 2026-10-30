@@ -11,6 +11,7 @@ export default defineConfig({
   integrations: [react(), mdx(), sitemap()],
   redirects: {
     "/til": "/posts",
+    "/tools": "/uses",
   },
   vite: {
     plugins: [tailwindcss()],

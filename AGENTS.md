@@ -6,7 +6,7 @@ This file provides guidance to AI coding agents (Claude Code, Cursor, etc.) when
 
 Astro static site generator with React islands for interactivity. Portfolio/blog with a terminal-style theme (Catppuccin Mocha/Latte). Deployed to Cloudflare Workers (static assets) at wibrow.dev.
 
-Pages are pre-rendered to static HTML at build time; React only hydrates the parts that need interactivity (Header terminal popover, status pill, theme toggle, games, snow effect, cluster metrics dashboard, Tools filter, posts search).
+Pages are pre-rendered to static HTML at build time; React only hydrates the parts that need interactivity (Header terminal popover, status pill, theme toggle, games, snow effect, cluster metrics dashboard, posts search).
 
 ## Development Commands
 
@@ -29,7 +29,7 @@ Pages are pre-rendered to static HTML at build time; React only hydrates the par
 - `/posts/*.md` - Blog posts (root of repo, plain Markdown with frontmatter)
 - `/til/*.md` - Today I Learned entries (root of repo)
 - `/src/data/projects.ts` - Project listings
-- `/src/data/tools.ts` - Tools listing
+- `/src/data/uses.ts` - Uses page sections
 - `/src/content.config.ts` - Content collection schemas (Zod) for `posts` and `til`
 
 Frontmatter schema (posts): `title`, `date`, `description`, `author`, `tags[]`, `draft?`
@@ -58,7 +58,6 @@ Frontmatter schema (til): `title`, `date`, `tags[]`, `draft?`
 - `/src/components/react/SnowEffect.tsx` - Canvas snow toggle, respects `prefers-reduced-motion`.
 - `/src/components/react/ThemeToggle.tsx` - Light/dark toggle, writes to `localStorage`.
 - `/src/components/react/TilSearch.tsx` - Search/filter island for the TIL index page.
-- `/src/components/react/ToolsList.tsx` - Category filter island for the Tools page.
 
 ### Styling
 - `/src/styles/global.css` - Tailwind directive + imports for the rest
@@ -76,7 +75,7 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 - `/src/pages/til/index.astro` - TIL list with search/filter island + `<noscript>` fallback
 - `/src/pages/til/[slug].astro` - Individual TIL entry with `TechArticle` JSON-LD
 - `/src/pages/projects.astro` - Projects list
-- `/src/pages/tools.astro` - Tools list with category filter island
+- `/src/pages/uses.astro` - What I use, static (`/tools` redirects here)
 - `/src/pages/404.astro` - Terminal-themed 404 (proper 404 status, `noindex`)
 - `/src/pages/rss.xml.ts` - RSS feed (posts + TIL combined)
 
