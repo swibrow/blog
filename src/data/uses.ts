@@ -76,7 +76,7 @@ export const uses: UsesSection[] = [
     items: [
       { name: "pitower", note: "Talos Kubernetes in a 12U rack in the laundry room", url: "https://github.com/swibrow/home-ops" },
       { name: "worker-ai-01", note: "Ryzen 7 9700X, 64GB, RTX 3090 Ti, RTX PRO 4000" },
-      { name: "KubeVirt + Omarchy", note: "The 3090 Ti switches between LLMs and gaming" },
+      { name: "KubeVirt + Omarchy", note: "The 3090 Ti switches between LLMs and gaming", post: "/posts/kubevirt-gaming-on-pitower/" },
     ],
   },
   {

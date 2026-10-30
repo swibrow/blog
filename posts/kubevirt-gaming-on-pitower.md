@@ -4,7 +4,6 @@ date: 2026-10-30
 description: "How one RTX 3090 Ti switches between serving LLMs and running a gaming VM on Talos with KubeVirt and the NVIDIA DRA driver, and the upstream bugs I fixed with AI along the way"
 author: "Samuel Wibrow"
 tags: [kubernetes, ai]
-draft: true
 ---
 
 ![A server rack in the laundry room, cables running to the office](/images/posts/kubevirt-gaming-on-pitower/hero.jpg)
@@ -19,10 +18,6 @@ Getting there took a month of spare moments between work, my wife and two kids, 
 ## The physical bit
 
 The cluster lives in a 12U rack in the laundry room. The office is a room away, so a long HDMI cable and a long USB cable run from the 3090 Ti and a USB card straight to my desk.
-
-<!-- TODO: photo of the rack in the laundry room -->
-<!-- TODO: photo of the cables running into the office -->
-<!-- TODO: photo of the desk -->
 
 | | |
 |---|---|
@@ -147,8 +142,6 @@ template:
 KubeVirt's USB passthrough attaches devices by bus and device number. Both have to be plugged in at VM start, and a replug gives the device a new number, so it drops until the VM restarts. Passing the board's own AMD USB controller instead hung the host.
 
 An Exsys ASM2142 PCIe card fixed it. The whole controller goes to the VM as a PCI device, so the guest does its own enumeration. Replug anything, it just works.
-
-<!-- TODO: photo of the USB card -->
 
 ## Upstream fixes
 
