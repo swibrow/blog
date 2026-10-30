@@ -162,8 +162,6 @@ Two problems had no upstream fix:
 - `nvidia_drm fbdev=1` holds the GPU inside the kernel, invisible to any process scan. Talos config, not a driver bug.
 - dcgm-exporter keeps the card open. Handled by the node label in `just game-on`.
 
-## Moving fast
-
 Without AI, a missing `fuser` deep in a GPU driver is where I'd have given up and gone back to Proxmox. Or worse, read the source myself. With it, an upstream blocker becomes a loop: read the code, patch it, run it, send it back.
 
 Everything is in [swibrow/home-ops](https://github.com/swibrow/home-ops):
