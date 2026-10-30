@@ -1,7 +1,7 @@
 ---
 title: "Gaming on my Kubernetes cluster: KubeVirt, GPU passthrough and five upstream fixes"
 date: 2026-10-30
-description: "How one RTX 3090 Ti switches between serving LLMs and running a gaming VM on Talos with KubeVirt and the NVIDIA DRA driver, and the upstream bugs I fixed with AI along the way"
+description: "How one RTX 3090 Ti switches between serving LLMs and running a gaming VM on Talos with KubeVirt and the NVIDIA DRA driver, and the upstream bugs Claude vibing found along the way"
 author: "Samuel Wibrow"
 tags: [kubernetes, ai]
 ---
