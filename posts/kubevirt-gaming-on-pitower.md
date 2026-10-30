@@ -164,8 +164,6 @@ Two problems had no upstream fix:
 
 ## Moving fast
 
-First DRA commit: 29 September. Gaming on bare-metal Kubernetes: mid-October. Five upstream PRs, each with a working fork image behind it and an AI-assistance note per the [Kubernetes contributor guidance](https://www.kubernetes.dev/docs/guide/pull-requests/#ai-guidance).
-
 Without AI, a missing `fuser` deep in a GPU driver is where I'd have given up and gone back to Proxmox. Or worse, read the source myself. With it, an upstream blocker becomes a loop: read the code, patch it, run it, send it back.
 
 Everything is in [swibrow/home-ops](https://github.com/swibrow/home-ops):
