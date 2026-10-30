@@ -112,7 +112,7 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 
 ## About the Owner
 
-Samuel Wibrow - Staff Engineer, AI Platforms, based in Zurich, Switzerland. Originally from Brisbane, Australia. Moved to Germany in 2015 (Stylight in Munich), then Switzerland in 2023 (Tamedia in Zurich). 15+ years in IT infrastructure.
+Samuel Wibrow - Staff Engineer, AI Platforms, based in Zurich, Switzerland. Originally from the Sunshine Coast, Australia. Moved to Germany in 2015 (Stylight in Munich), then Switzerland in 2023 (Tamedia in Zurich). 15+ years in IT infrastructure.
 
 ### Skills Profile
 - **AI Agents & Tooling**: Amazon Bedrock AgentCore, Claude Code, Agent SDKs, MCP, Agent Skills, Multi-Agent Systems, Agent Sandboxing
