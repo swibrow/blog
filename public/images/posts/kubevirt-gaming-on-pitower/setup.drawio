@@ -1,0 +1,101 @@
+<mxfile host="drawio">
+  <diagram id="setup" name="pitower gaming setup">
+    <mxGraphModel dx="1200" dy="700" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1200" pageHeight="700" background="#1e1e2e" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="laundry" value="laundry room · 12U rack" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#181825;strokeColor=#45475a;fontColor=#a6adc8;fontFamily=Menlo;fontSize=14;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="760" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="worker" value="worker-ai-01 · Talos · Ryzen 7 9700X · 64GB" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#1e1e2e;strokeColor=#585b70;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=13;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="720" height="570" as="geometry" />
+        </mxCell>
+
+        <mxCell id="work" value="&lt;b&gt;work mode&lt;/b&gt;&lt;br&gt;ai namespace: llmkube, comfyui&lt;br&gt;KEDA scale-to-zero" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#89b4fa;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="game" value="&lt;b&gt;gaming mode&lt;/b&gt;&lt;br&gt;omarchy VM (virt-launcher)&lt;br&gt;8 vCPU · 16Gi · Sunshine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#a6e3a1;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="420" y="120" width="320" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dra" value="&lt;b&gt;NVIDIA DRA driver&lt;/b&gt; (patched)&lt;br&gt;gpu.nvidia.com · vfio.gpu.nvidia.com&lt;br&gt;rebinds 3090 Ti: nvidia ⇄ vfio-pci" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#cba6f7;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="290" width="420" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="kv" value="&lt;b&gt;KubeVirt&lt;/b&gt;&lt;br&gt;pciHostDevices" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#cba6f7;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="520" y="290" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pro" value="&lt;b&gt;RTX PRO 4000&lt;/b&gt;&lt;br&gt;always nvidia&lt;br&gt;LLMs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#89b4fa;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="470" width="200" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="ti" value="&lt;b&gt;RTX 3090 Ti&lt;/b&gt;&lt;br&gt;GPU: nvidia ⇄ vfio-pci&lt;br&gt;HDMI audio: vfio-pci" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#fab387;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="280" y="470" width="230" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="usb" value="&lt;b&gt;Exsys ASM2142&lt;/b&gt;&lt;br&gt;USB PCIe card&lt;br&gt;vfio-pci at boot" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#fab387;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="530" y="470" width="210" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="office" value="office" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;fillColor=#181825;strokeColor=#45475a;fontColor=#a6adc8;fontFamily=Menlo;fontSize=14;verticalAlign=top;align=left;spacingLeft=12;spacingTop=6;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="860" y="20" width="320" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="laptop" value="&lt;b&gt;laptop&lt;/b&gt;&lt;br&gt;just game-on&lt;br&gt;just game-off" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#f9e2af;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="890" y="70" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="monitor" value="&lt;b&gt;monitor&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#a6e3a1;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="890" y="300" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="kbm" value="&lt;b&gt;keyboard + G502&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#a6e3a1;strokeWidth=2;fontColor=#cdd6f4;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="890" y="400" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="moonlight" value="or stream it anywhere&lt;br&gt;with Moonlight" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#313244;strokeColor=#585b70;dashed=1;fontColor=#a6adc8;fontFamily=Menlo;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="890" y="540" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-work-dra" value="claim" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#89b4fa;strokeWidth=2;fontColor=#89b4fa;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.5;exitY=1;entryX=0.381;entryY=0;" edge="1" parent="1" source="work" target="dra">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-game-dra" value="vfio claim" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#a6e3a1;strokeWidth=2;fontColor=#a6e3a1;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.1;exitY=1;entryX=0.93;entryY=0;" edge="1" parent="1" source="game" target="dra">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-game-kv" value="host devices" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#a6e3a1;strokeWidth=2;fontColor=#a6e3a1;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.8;exitY=1;entryX=0.709;entryY=0;" edge="1" parent="1" source="game" target="kv">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dra-pro" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#89b4fa;strokeWidth=2;exitX=0.19;exitY=1;entryX=0.4;entryY=0;" edge="1" parent="1" source="dra" target="pro">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-dra-ti" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#cba6f7;strokeWidth=2;exitX=0.8;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="dra" target="ti">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kv-usb" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#cba6f7;strokeWidth=2;exitX=0.52;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="kv" target="usb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-kv-ti" value="audio fn" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#cba6f7;strokeWidth=2;dashed=1;fontColor=#cba6f7;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.1;exitY=1;entryX=0.9;entryY=0;" edge="1" parent="1" source="kv" target="ti">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e-hdmi" value="long HDMI run" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#fab387;strokeWidth=3;fontColor=#fab387;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="ti" target="monitor">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="395" y="605" />
+              <mxPoint x="820" y="605" />
+              <mxPoint x="820" y="335" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-usb" value="long USB run" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#fab387;strokeWidth=3;fontColor=#fab387;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="usb" target="kbm">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="635" y="625" />
+              <mxPoint x="840" y="625" />
+              <mxPoint x="840" y="435" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-laptop" value="kubectl" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#f9e2af;strokeWidth=2;dashed=1;fontColor=#f9e2af;fontFamily=Menlo;fontSize=11;labelBackgroundColor=#1e1e2e;exitX=0;exitY=0.5;entryX=1;entryY=0.08;" edge="1" parent="1" source="laptop" target="worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
