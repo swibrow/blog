@@ -9,9 +9,9 @@ tags: [kubernetes, ai]
 ![A server rack in the laundry room, cables running to the office](/images/posts/kubevirt-gaming-on-pitower/hero.jpg)
 *Generated with Qwen-Image in ComfyUI, on the same RTX 3090 Ti.*
 
-One RTX 3090 Ti. By day it serves LLMs and ComfyUI. By night it's a gaming PC. Both are Kubernetes workloads, and one command flips between them.
+One RTX 3090 Ti. By day it serves LLMs and ComfyUI. By night it's a gaming PC. Both are Kubernetes workloads, because buying a second PC would have been too easy. One command flips between them.
 
-Getting there took a month of spare moments between work, my wife and two kids, 13 patched driver images, and five upstream PRs. Claude Code did most of the digging; I did the testing on real hardware.
+Getting there took a month of spare moments between work, my wife and two kids, 13 patched driver images, and five upstream PRs. Claude Code did most of the digging; I did the testing on real hardware and nodded confidently at the diffs.
 
 ![Setup: the cluster in the laundry room, the monitor and keyboard in the office](/images/posts/kubevirt-gaming-on-pitower/setup.png)
 
@@ -31,10 +31,10 @@ The cluster lives in a 12U rack in the laundry room. The office is a room away, 
 ## The journey
 
 1. **Proxmox.** The AI worker was a Talos VM on Proxmox, next to Bazzite and Omarchy VMs. A hookscript shut the AI VM down when a desktop VM started. Passthrough pins all guest RAM, so the AI VM was capped at ~55GiB and hung the host twice.
-2. **Bare metal.** Wiped Proxmox, installed Talos directly. Full 64GB for models.
+2. **Bare metal.** Wiped Proxmox, installed Talos directly. Full 64GB for models. Proxmox took it well.
 3. **KubeVirt + CDI.** VMs as Kubernetes objects, disks from Ceph and a local NVMe.
-4. **DRA driver.** Swapped the NVIDIA device plugin for the DRA driver. Its `PassthroughSupport` gate rebinds a GPU from `nvidia` to `vfio-pci` when a VM claims it. On Talos it didn't work. That's where the patching started.
-5. **USB card.** Passing single USB devices works until you replug one. Then the VM has to restart. Fixed with hardware.
+4. **DRA driver.** Swapped the NVIDIA device plugin for the DRA driver. Its `PassthroughSupport` gate rebinds a GPU from `nvidia` to `vfio-pci` when a VM claims it. On Talos it didn't work. Naturally. That's where the vibing started.
+5. **USB card.** Passing single USB devices works until you replug one. Then the VM has to restart. Fixed the old-fashioned way: buying something.
 
 ## Switching modes
 
@@ -55,11 +55,11 @@ just game-off  # stop omarchy, resume GPU apps
 3. Labels the node `gpu.wibrow.dev/mode=vfio`, which evicts the 3090 Ti's dcgm-exporter. It keeps the card open otherwise.
 4. Starts the VM via the KubeVirt subresource API.
 
-The DRA driver then unbinds the card from `nvidia` and hands it to the VM on `vfio-pci`. Stopping the VM reverses it.
+The DRA driver then unbinds the card from `nvidia` and hands it to the VM on `vfio-pci`. Stopping the VM reverses it. Simple, if you ignore the 13 driver images behind it.
 
 ## The config
 
-The VM claims the 3090 Ti through the DRA passthrough class. The RTX PRO 4000 publishes a vfio device too, so a CEL selector picks the right card:
+Here's the YAML, because nothing says "relaxing evening" like a `ResourceClaimTemplate`. The VM claims the 3090 Ti through the DRA passthrough class. The RTX PRO 4000 publishes a vfio device too, so a CEL selector picks the right card:
 
 ```yaml
 apiVersion: resource.k8s.io/v1
@@ -141,11 +141,11 @@ template:
 
 KubeVirt's USB passthrough attaches devices by bus and device number. Both have to be plugged in at VM start, and a replug gives the device a new number, so it drops until the VM restarts. Passing the board's own AMD USB controller instead hung the host.
 
-An Exsys ASM2142 PCIe card fixed it. The whole controller goes to the VM as a PCI device, so the guest does its own enumeration. Replug anything, it just works.
+An Exsys ASM2142 PCIe card fixed it. The whole controller goes to the VM as a PCI device, so the guest does its own enumeration. Replug anything, it just works. A sentence I never expected to write about USB.
 
 ## Upstream fixes
 
-Every one of these came from a failure on my hardware. The loop: Claude Code reads the driver source and the logs, finds the cause, writes the fix and tests. I build a `-talos.N` image, run it on the cluster, and open the PR once it works.
+Every one of these came from a failure on my hardware. The loop: Claude Code reads the driver source and the logs, finds the cause, writes the fix and tests. I build a `-talos.N` image, run it on the cluster, and open the PR once it works. My main contributions are owning the hardware and typing "try again".
 
 | Repo | Problem | PR |
 |---|---|---|
@@ -166,7 +166,7 @@ Two problems had no upstream fix:
 
 First DRA commit: 29 September. Gaming on bare-metal Kubernetes: mid-October. Five upstream PRs, each with a working fork image behind it and an AI-assistance note per the [Kubernetes contributor guidance](https://www.kubernetes.dev/docs/guide/pull-requests/#ai-guidance).
 
-Without AI, a missing `fuser` deep in a GPU driver is where I'd have given up and gone back to Proxmox. With it, an upstream blocker becomes a loop: read the code, patch it, run it, send it back.
+Without AI, a missing `fuser` deep in a GPU driver is where I'd have given up and gone back to Proxmox. Or worse, read the source myself. With it, an upstream blocker becomes a loop: read the code, patch it, run it, send it back.
 
 Everything is in [swibrow/home-ops](https://github.com/swibrow/home-ops):
 
@@ -175,4 +175,4 @@ Everything is in [swibrow/home-ops](https://github.com/swibrow/home-ops):
 - [`kubernetes/apps/pitower/system/dra-driver-nvidia-gpu`](https://github.com/swibrow/home-ops/tree/main/kubernetes/apps/pitower/system/dra-driver-nvidia-gpu)
 - [`.justfiles/vm/justfile`](https://github.com/swibrow/home-ops/blob/main/.justfiles/vm/justfile)
 
-Now I just need to find some free time for gaming...
+All that, just to play some games. Now I just need to find some free time for gaming...
