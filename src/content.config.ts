@@ -9,6 +9,7 @@ const posts = defineCollection({
     description: z.string().default(""),
     author: z.string().default("Samuel Wibrow"),
     tags: z.array(z.string()).default([]),
+    image: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });

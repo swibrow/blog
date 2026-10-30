@@ -9,12 +9,16 @@ interface Props {
   date: Date;
   author: string;
   tags: string[];
+  image?: string;
   slug: string;
   rawContent: string;
 }
 
-const { title, description, date, author, tags, slug, rawContent } =
+const { title, description, date, author, tags, image, slug, rawContent } =
   Astro.props;
+
+const socialImage =
+  image ?? rawContent.match(/!\[[^\]]*\]\((\/[^)\s]+)\)/)?.[1] ?? "/me.jpg";
 
 const isTil = tags.includes("til");
 const visibleTags = tags.filter((tag) => tag !== "til");
@@ -51,7 +55,7 @@ const jsonLd = {
     "@id": canonical,
   },
   keywords: visibleTags.join(", "),
-  image: new URL("/me.jpg", Astro.site).toString(),
+  image: new URL(socialImage, Astro.site).toString(),
 };
 ---
 
@@ -61,6 +65,7 @@ const jsonLd = {
   type="article"
   publishedTime={dateISO}
   tags={tags}
+  image={socialImage}
 >
   <script
     slot="head"
