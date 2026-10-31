@@ -28,7 +28,7 @@
     "typescript": "^7.0.0"
   },
   "dependencies": {
-    "framer-motion": "^13.0.0",
+    "framer-motion": "^14.0.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "rehype-autolink-headings": "^7.1.0",
