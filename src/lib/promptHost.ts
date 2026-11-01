@@ -1,6 +1,6 @@
 // Returns the bare second-level domain for the terminal prompt label
 // (samuel@<host>). Strips the leftmost subdomain so the prompt reads
-// "samuel@wibrow.dev" instead of "samuel@samuel.wibrow.dev".
+// "samuel@wibrow.dev" instead of "samuel@www.wibrow.dev".
 //
 // Pass nothing in the browser to read window.location.hostname, or pass
 // Astro.url.hostname / a literal from server-side code.

@@ -88,7 +88,7 @@ Theme via CSS custom properties (`var(--ctp-green)`, `var(--ctp-blue)`, etc.). D
 - 404 page returns proper 404 status (no soft-404)
 
 ### Deployment
-- GitHub Actions (`/.github/workflows/build.yml`): bun build + wrangler-action `deploy` on `main` / `versions upload` on PRs (daily cron keeps GitHub stats fresh); `legacy-redirect.yml` serves the old samuel.wibrow.net redirect. Worker serves `dist/` as static assets; custom domains `wibrow.dev` + `samuel.wibrow.dev` are declared in `wrangler.jsonc`. The `dist/_headers` file (security + cache-control headers) and Astro's generated redirect pages are honored by Workers static assets.
+- GitHub Actions (`/.github/workflows/build.yml`): bun build + wrangler-action `deploy` on `main` / `versions upload` on PRs (daily cron keeps GitHub stats fresh); `legacy-redirect.yml` serves the old samuel.wibrow.net redirect. Worker serves `dist/` as static assets; custom domain `wibrow.dev` is declared in `wrangler.jsonc`. The `dist/_headers` file (security + cache-control headers) and Astro's generated redirect pages are honored by Workers static assets.
 - Terraform in `/terraform/` manages GitHub repository settings
 - No staging environment - commits to main go live
 

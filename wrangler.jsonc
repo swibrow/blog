@@ -28,10 +28,6 @@
 		{
 			"pattern": "wibrow.dev/*",
 			"zone_name": "wibrow.dev"
-		},
-		{
-			"pattern": "samuel.wibrow.dev/*",
-			"zone_name": "wibrow.dev"
 		}
 	],
 	"observability": {

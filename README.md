@@ -33,4 +33,4 @@ Config lives in `wrangler.jsonc` (Worker `wibrow-dev`, static assets from `dist/
 - Pull requests: `wrangler versions upload` publishes a preview version and comments the preview URL.
 - Manual: `bun run deploy` (builds + deploys from your machine; requires `wrangler login` or `CLOUDFLARE_API_TOKEN`).
 
-Custom domains `wibrow.dev` and `samuel.wibrow.dev` are declared in `wrangler.jsonc` and attached to the Worker on deploy.
+The custom domain `wibrow.dev` is declared in `wrangler.jsonc` and attached to the Worker on deploy.
