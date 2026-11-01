@@ -1,0 +1,12 @@
+/til /posts/ 301
+/til/ /posts/ 301
+/til/:slug /posts/:slug/ 301
+/til/:slug/ /posts/:slug/ 301
+/tools /uses/ 301
+/tools/ /uses/ 301
+/posts /posts/ 301
+/posts/:slug /posts/:slug/ 301
+/tags/:tag /tags/:tag/ 301
+/about /about/ 301
+/projects /projects/ 301
+/uses /uses/ 301

@@ -8,11 +8,8 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
 export default defineConfig({
   site: "https://wibrow.dev",
+  trailingSlash: "always",
   integrations: [react(), mdx(), sitemap()],
-  redirects: {
-    "/til": "/posts",
-    "/tools": "/uses",
-  },
   vite: {
     plugins: [tailwindcss()],
     resolve: {

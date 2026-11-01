@@ -1,7 +1,7 @@
 ---
 title: "Verifying the IAM Role Attached to a Pod with EKS Pod Identity"
 date: 2026-04-22
-description: "Poking the Pod Identity Agent from inside a running pod to confirm which IAM role you actually got, with curl, wget, and a debug sidecar fallback for distroless containers"
+description: "Confirm which IAM role a pod really got by querying the EKS Pod Identity Agent with curl or wget, plus a debug sidecar for distroless images"
 author: "Samuel Wibrow"
 tags: [aws, kubernetes]
 ---

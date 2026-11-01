@@ -56,8 +56,11 @@ assert_status "$SITE/" 200 "Home"
 assert_status "$SITE/about/" 200 "About"
 assert_status "$SITE/posts/" 200 "Posts list"
 assert_status "$SITE/posts/aws-oidc-pod-identity/" 200 "Post detail"
-assert_status "$SITE/til/" 200 "TIL list"
-assert_status "$SITE/til/fzf/" 200 "TIL detail"
+assert_status "$SITE/til/" 301 "Legacy TIL list redirect"
+assert_status "$SITE/til/fzf" 301 "Legacy TIL detail redirect"
+assert_status "$SITE/posts/fzf" 301 "No-slash post redirect"
+assert_status "$SITE/tags/kubernetes/" 200 "Tag page"
+assert_status "$SITE/og/fzf.png" 200 "OG image"
 assert_status "$SITE/projects/" 200 "Projects"
 assert_status "$SITE/uses/" 200 "Uses"
 assert_status "$SITE/sitemap-index.xml" 200 "Sitemap"
@@ -86,7 +89,7 @@ assert_contains    "$POST_HTML" "<title>Replicating AWS IRSA"        "post title
 hdr "4. SSR content visible to crawlers (no JS)"
 assert_contains    "$HOME_HTML" "Samuel Wibrow</h1>"                              "Hero h1 in static HTML"
 assert_contains    "$HOME_HTML" "SRE by trade, over-engineer by nature"           "Hero subtitle in static HTML"
-assert_contains_re "$HOME_HTML" 'href="/posts"[^>]*nav-link'                      "Nav link to /posts in static HTML"
+assert_contains_re "$HOME_HTML" 'href="/posts/"[^>]*nav-link'                      "Nav link to /posts in static HTML"
 assert_contains    "$POST_HTML" "Raspberry Pi 4 sitting in a drawer"              "Post body in static HTML"
 
 hdr "5. Sitemap"
@@ -95,7 +98,8 @@ SITEMAP=$(curl -s "$SITE/sitemap-0.xml")
 COUNT=$(printf '%s' "$SITEMAP" | grep -oE '<loc>[^<]+</loc>' | wc -l | xargs)
 [[ "$COUNT" -ge 20 ]] && ok "Sitemap has $COUNT URLs (≥20)" || fail "Sitemap has only $COUNT URLs"
 assert_contains "$SITEMAP" "wibrow.dev/posts/aws-oidc-pod-identity" "Sitemap includes post URLs"
-assert_contains "$SITEMAP" "wibrow.dev/til/fzf"                     "Sitemap includes TIL URLs"
+if printf '%s' "$SITEMAP" | grep -q "wibrow.dev/til/"; then fail "Sitemap lists legacy /til/ URLs"; else ok "Sitemap has no legacy /til/ URLs"; fi
+assert_contains "$SITEMAP" "wibrow.dev/tags/kubernetes/"            "Sitemap includes tag pages"
 
 hdr "6. robots.txt"
 ROBOTS=$(curl -s "$SITE/robots.txt")
@@ -119,7 +123,7 @@ ENC=$(curl -sI -H "Accept-Encoding: gzip, br" "$SITE/" | grep -i "^content-encod
 [[ -n "$ENC" ]] && ok "Compression: $ENC" || fail "No compression header"
 
 hdr "10. Page weights (compressed, first response)"
-for path in / /posts/ /posts/aws-oidc-pod-identity/ /til/ /uses/; do
+for path in / /posts/ /posts/aws-oidc-pod-identity/ /tags/kubernetes/ /uses/; do
   size=$(curl -sH "Accept-Encoding: gzip, br" "$SITE$path" -o /dev/null -w "%{size_download}")
   printf "  %-42s %s bytes\n" "$path" "$size"
 done

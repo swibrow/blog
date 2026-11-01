@@ -149,7 +149,7 @@ export default function PostsSearch({ entries }: Props) {
 
       <div>
         {filtered.map((entry) => (
-          <a key={entry.slug} href={`/posts/${entry.slug}`} className="post-row">
+          <a key={entry.slug} href={`/posts/${entry.slug}/`} className="post-row">
             <div className="flex items-center gap-2">
               <time className="font-mono text-xs" style={{ color: "var(--ctp-sapphire)" }}>
                 {entry.date.slice(0, 10)}

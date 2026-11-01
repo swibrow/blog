@@ -1,0 +1,56 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SectionHeading from "@components/layout/SectionHeading.astro";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.getTime() - a.data.date.getTime()
+  );
+  const tags = [...new Set(posts.flatMap((p) => p.data.tags))].filter((t) => t !== "til");
+  return tags.map((tag) => ({
+    params: { tag },
+    props: { posts: posts.filter((p) => p.data.tags.includes(tag)) },
+  }));
+}
+
+const { tag } = Astro.params;
+const { posts } = Astro.props as { posts: CollectionEntry<"posts">[] };
+const description = `${posts.length} post${posts.length === 1 ? "" : "s"} and notes tagged ${tag}, by Samuel Wibrow.`;
+---
+
+<BaseLayout title={`#${tag} - Samuel Wibrow`} description={description}>
+  <SectionHeading title={`tags/${tag}`} subtitle={description}>
+    <div>
+      {
+        posts.map((post) => (
+          <a href={`/posts/${post.id}/`} class="post-row">
+            <div class="flex items-center gap-2">
+              <time
+                class="font-mono text-xs"
+                style="color: var(--ctp-sapphire);"
+                datetime={post.data.date.toISOString()}
+              >
+                {post.data.date.toISOString().slice(0, 10)}
+              </time>
+              {post.data.tags.includes("til") && (
+                <span
+                  class="rounded px-1.5 py-0.5 font-mono text-[0.6rem] font-bold uppercase"
+                  style="background-color: var(--ctp-yellow); color: var(--ctp-base);"
+                >
+                  til
+                </span>
+              )}
+            </div>
+            <h2 class="post-row-title mt-1 font-mono text-base font-bold">{post.data.title}</h2>
+            {post.data.description && (
+              <p class="mt-1 text-sm" style="color: var(--ctp-subtext0);">
+                {post.data.description}
+              </p>
+            )}
+          </a>
+        ))
+      }
+    </div>
+  </SectionHeading>
+</BaseLayout>

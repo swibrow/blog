@@ -7,6 +7,7 @@ interface Props {
   title: string;
   description: string;
   date: Date;
+  updated?: Date;
   author: string;
   tags: string[];
   image?: string;
@@ -14,11 +15,11 @@ interface Props {
   rawContent: string;
 }
 
-const { title, description, date, author, tags, image, slug, rawContent } =
+const { title, description, date, updated, author, tags, image, slug, rawContent } =
   Astro.props;
 
 const socialImage =
-  image ?? rawContent.match(/!\[[^\]]*\]\((\/[^)\s]+)\)/)?.[1] ?? "/me.jpg";
+  image ?? rawContent.match(/!\[[^\]]*\]\((\/[^)\s]+\.(?:png|jpe?g|webp))\)/i)?.[1] ?? `/og/${slug}.png`;
 
 const isTil = tags.includes("til");
 const visibleTags = tags.filter((tag) => tag !== "til");
@@ -26,13 +27,14 @@ const visibleTags = tags.filter((tag) => tag !== "til");
 const minutes = readingTime(rawContent);
 const words = rawContent.trim().split(/\s+/).length;
 const dateISO = date.toISOString();
+const updatedISO = (updated ?? date).toISOString();
 const dateDisplay = date.toLocaleDateString("en-US", {
   year: "numeric",
   month: "long",
   day: "numeric",
 });
 
-const canonical = new URL(`/posts/${slug}`, Astro.site).toString();
+const canonical = new URL(`/posts/${slug}/`, Astro.site).toString();
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -40,11 +42,11 @@ const jsonLd = {
   headline: title,
   description,
   datePublished: dateISO,
-  dateModified: dateISO,
+  dateModified: updatedISO,
   author: {
     "@type": "Person",
     name: author,
-    url: new URL("/about", Astro.site).toString(),
+    url: new URL("/about/", Astro.site).toString(),
   },
   publisher: {
     "@type": "Person",
@@ -64,6 +66,7 @@ const jsonLd = {
   description={description}
   type="article"
   publishedTime={dateISO}
+  modifiedTime={updated && updatedISO}
   tags={tags}
   image={socialImage}
 >
@@ -75,7 +78,7 @@ const jsonLd = {
   />
 
   <article class="post mx-auto max-w-3xl px-4 py-12">
-    <a class="back-link" href="/posts">← back to posts</a>
+    <a class="back-link" href="/posts/">← back to posts</a>
 
     <header class="post-header">
       <div class="post-chips">
@@ -91,7 +94,7 @@ const jsonLd = {
       {visibleTags.length > 0 && (
         <div class="post-tags">
           {visibleTags.map((tag) => (
-            <a class="tag" href={`/posts?tag=${encodeURIComponent(tag)}`}>
+            <a class="tag" href={`/tags/${tag}/`}>
               {tag}
             </a>
           ))}

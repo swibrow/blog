@@ -1,7 +1,7 @@
 ---
 title: "RTX PRO 4000 Blackwell vs RTX 3090 Ti for local LLMs: Qwen3.8-27B benchmarks"
 date: 2026-10-10
-description: "Is a single-slot RTX PRO 4000 Blackwell a viable second GPU instead of another 3090 Ti? llama.cpp benchmarks on Qwen3.8-27B, power cost in CHF, and both cards split together"
+description: "Single-slot RTX PRO 4000 Blackwell vs RTX 3090 Ti: llama.cpp benchmarks on Qwen3.8-27B, power cost in CHF, and both cards split together"
 author: "Samuel Wibrow"
 tags: [ai, kubernetes]
 ---

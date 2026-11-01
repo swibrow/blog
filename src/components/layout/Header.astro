@@ -11,15 +11,15 @@ const { currentPath = "/" } = Astro.props;
 
 const navItems = [
   { name: "~/home", href: "/", exact: true },
-  { name: "~/posts", href: "/posts" },
-  { name: "~/projects", href: "/projects" },
-  { name: "~/uses", href: "/uses" },
-  { name: "~/about", href: "/about" },
+  { name: "~/posts", href: "/posts/" },
+  { name: "~/projects", href: "/projects/" },
+  { name: "~/uses", href: "/uses/" },
+  { name: "~/about", href: "/about/" },
 ];
 
 function isActive(item: { href: string; exact?: boolean }, path: string) {
   if (item.exact) return path === item.href;
-  return path === item.href || path.startsWith(item.href + "/");
+  return path.startsWith(item.href);
 }
 ---
 

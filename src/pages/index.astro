@@ -34,7 +34,7 @@ const websiteJsonLd = {
   author: {
     "@type": "Person",
     name: "Samuel Wibrow",
-    url: new URL("/about", Astro.site).toString(),
+    url: new URL("/about/", Astro.site).toString(),
   },
 };
 ---
@@ -84,7 +84,7 @@ const websiteJsonLd = {
               value={latestPost.data.title}
               sub={formatDate(latestPost.data.date)}
               small
-              href={`/posts/${latestPost.id}`}
+              href={`/posts/${latestPost.id}/`}
             />
           )}
         </div>
@@ -110,14 +110,14 @@ const websiteJsonLd = {
       <h2 class="font-mono text-xl font-bold" style="color: var(--ctp-green);">
         ~/recent-posts
       </h2>
-      <a href="/posts" class="font-mono text-sm" style="color: var(--ctp-lavender);">
+      <a href="/posts/" class="font-mono text-sm" style="color: var(--ctp-lavender);">
         view all →
       </a>
     </div>
     <div>
       {
         recentPosts.map((post) => (
-          <a href={`/posts/${post.id}`} class="post-row">
+          <a href={`/posts/${post.id}/`} class="post-row">
             <time
               class="font-mono text-xs"
               style="color: var(--ctp-sapphire);"
