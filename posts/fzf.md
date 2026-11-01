@@ -1,5 +1,5 @@
 ---
-title: "fzf and all its glory"
+title: "fzf + tmux: jump to any project in a popup"
 date: 2025-09-13
 description: "fzf fuzzy-finds files, commands, and git branches, and it's completely changed my command line workflow."
 tags: [til, cli]
@@ -9,7 +9,7 @@ I've been using `fzf` for a while now, and it has completely transformed my comm
 
 ![fzf.gif](/images/til/fzf.gif)
 
-In this demo, I'm using fzf to find git project directory and then creating a new tmux window.
+In this demo, I'm using fzf to find a git project directory and then creating a new tmux window.
 
 `ctrl + a + f`
 

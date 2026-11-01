@@ -1,5 +1,5 @@
 ---
-title: "Kubernetes Deployment that OOMKilled"
+title: "A Kubernetes Deployment that triggers OOMKilled on purpose"
 date: 2025-09-27
 description: "A deployment that will eventually get OOMKilled once it tries to allocate more memory than its limit."
 tags: [til, kubernetes]

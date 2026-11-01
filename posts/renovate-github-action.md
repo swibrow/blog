@@ -1,11 +1,11 @@
 ---
-title: "Renovate GitHub Action Migration"
+title: "Migrating GitHub Actions to a new org with Renovate replacementName"
 date: 2025-09-11
 description: "Using Renovate packageRules to migrate action references across repos when a GitHub org changes."
 tags: [til, github]
 ---
 
-Use Renovate packageRules to migrate action references across repos when Github org needs to be changed:
+Use Renovate packageRules to migrate action references across repos when a GitHub org changes:
 
 ```json
 {
@@ -20,4 +20,4 @@ Use Renovate packageRules to migrate action references across repos when Github 
 }
 ```
 
-This was super helpful when we migrated our shared workflows over to a new org and needed to update 100s of repos. We then we able to handover the work for merging to the devs responsible for each repo.
+This was super helpful when we migrated our shared workflows over to a new org and needed to update 100s of repos. We were then able to hand over the work for merging to the devs responsible for each repo.

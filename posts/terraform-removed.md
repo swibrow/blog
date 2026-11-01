@@ -5,7 +5,7 @@ description: "How to remove a resource from Terraform state without destroying i
 tags: [til, terraform]
 ---
 
-Its the simple stuff I always forget. Remove resource from state but don't destroy it.
+It's the simple stuff I always forget. Remove a resource from state but don't destroy it.
 
 ```hcl
 removed {

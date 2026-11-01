@@ -1,11 +1,11 @@
 ---
-title: "Random unit conversions"
+title: "Time unit conversions for SRE: requests per second from monthly totals"
 date: 2025-09-29
 description: "Handy time-unit conversions for SRE work - requests per month, cost over time, and the like."
 tags: [til, sre]
 ---
 
-As an SRE, we're often measuring things in units of time. Eg. billions of requests per month, cost of running x in aws for y time, etc.
+As an SRE, we're often measuring things in units of time. e.g. billions of requests per month, cost of running x in AWS for y time, etc.
 
 ## Seconds
 
@@ -26,7 +26,7 @@ As an SRE, we're often measuring things in units of time. Eg. billions of reques
 | Hour      | 60                                               |
 | Day       | 1,440 (24 hours × 60 minutes)                    |
 | Week      | 10,080 (7 days × 1,440 minutes)                  |
-| Month     | 43,800 (30.44 days × 1,440 minutes)              |
+| Month     | 43,829 (30.44 days × 1,440 minutes)              |
 | Year      | 525,600 (365 days × 1,440 minutes)               |
 
 ## Hours
@@ -45,9 +45,9 @@ As an SRE, we're often measuring things in units of time. Eg. billions of reques
 | Unit      | Number of Units per Month                        |
 |-----------|--------------------------------------------------|
 | Per Second| ~380 (1,000,000,000 / 2,629,746 seconds)         |
-| Per Minute| ~22,831 (1,000,000,000 / 43,829 minutes)         |
+| Per Minute| ~22,816 (1,000,000,000 / 43,829 minutes)         |
 | Per Hour  | ~1,369,863 (1,000,000,000 / 730 hours)           |
-| Per Day   | ~32,894,737 (1,000,000,000 / 30.44 days)         |
-| Per Week  | ~230,263,158 (1,000,000,000 / 4.35 weeks)        |
+| Per Day   | ~32,851,511 (1,000,000,000 / 30.44 days)         |
+| Per Week  | ~229,885,057 (1,000,000,000 / 4.35 weeks)        |
 | Per Month | 1,000,000,000                                    |
 | Per Year  | 12,000,000,000 (1,000,000,000 × 12 months)       |

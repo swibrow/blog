@@ -1,11 +1,11 @@
 ---
-title: "Creating Terraform IDs based on time"
+title: "Time-based hex IDs in Terraform with time_static"
 date: 2025-09-28
 description: "Using time-based IDs for Terraform resources so they stay unique and sortable by creation time."
 tags: [til, terraform]
 ---
 
-When creating terraform resources most of the time they should be unique and dynamic, I like to use a time based ID rather than a random string. This way I can easily identify when the resource was created and order them by time if needed. Date string would probs be better but who doesn't like converting hex to decimal and then to date.
+When creating Terraform resources most of the time they should be unique and dynamic, I like to use a time based ID rather than a random string. This way I can easily identify when the resource was created and order them by time if needed. Date string would probs be better but who doesn't like converting hex to decimal and then to date.
 
 This does cause some chicken and egg problems in Terraform sometimes.
 
