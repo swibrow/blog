@@ -2,7 +2,7 @@
   "basics": {
     "name": "Samuel Wibrow",
     "label": "Staff Engineer, AI Platforms",
-    "summary": "Highly driven and experienced Site Reliability Engineer with 15+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, networking, and building internal developer platforms that enable teams to move fast while maintaining reliability. Actively leveraging AI and LLMs to accelerate infrastructure automation and developer tooling.",
+    "summary": "Staff Engineer focused on AI platforms, with 15+ years designing and operating highly available, scalable infrastructure. Expertise in AWS, Kubernetes, networking, and internal developer platforms, now building the infrastructure and tooling that lets teams run AI agents and LLMs in production.",
     "location": {
       "city": "Zurich",
       "countryCode": "CH"
@@ -24,8 +24,16 @@
     {
       "company": "Tamedia",
       "location": "Zurich, Switzerland",
+      "position": "Staff Engineer, AI Platforms",
+      "startDate": "2026-08",
+      "summary": "Building the platform for AI at Tamedia: agent runtimes, LLM gateways, and developer tooling for AI-assisted engineering."
+    },
+    {
+      "company": "Tamedia",
+      "location": "Zurich, Switzerland",
       "position": "Site Reliability Engineer",
       "startDate": "2023-08",
+      "endDate": "2026-07",
       "highlights": [
         "Migrated from Cluster Autoscaler to Karpenter and transitioned all environments to spot instances, reducing EC2 costs by 50%.",
         "Led the migration from CircleCI to GitHub Actions, implementing a centrally managed workflows library for standardised CI/CD across teams.",

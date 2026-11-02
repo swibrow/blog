@@ -480,8 +480,8 @@ Press ESC to exit any game.`,
       response: `<strong>Samuel Wibrow</strong>
 Staff Engineer, AI Platforms
 
-Experienced SRE with 13+ years designing and operating highly available, scalable infrastructure.
-Currently focused on AWS, Kubernetes, and building internal developer platforms.
+15+ years designing and operating highly available, scalable infrastructure.
+Currently building AI platforms on AWS and Kubernetes.
 
 \uD83D\uDCCD Zurich, Switzerland`,
     };
@@ -497,10 +497,10 @@ Currently focused on AWS, Kubernetes, and building internal developer platforms.
     };
     cmds.experience = {
       response: `<strong>Current Role:</strong>
-Site Reliability Engineer at Tamedia (2023-Present)
+Staff Engineer, AI Platforms at Tamedia (2026-Present)
 
-Previous experience includes Platform Engineering at Dock Financial
-and Cloud Engineering at Stylight. 15+ years in IT infrastructure.`,
+Previous experience includes Site Reliability Engineering at Tamedia,
+Platform Engineering at Dock Financial and Cloud Engineering at Stylight. 15+ years in IT infrastructure.`,
     };
     cmds.contact = {
       response: `<strong>Get in touch:</strong>
@@ -526,7 +526,7 @@ ${data.basics.summary}
     // Company-specific commands
     data.work.forEach((job) => {
       const companyKey = job.company.toLowerCase().replace(/\s+/g, "");
-      cmds[companyKey] = { response: formatJob(job) };
+      cmds[companyKey] ??= { response: formatJob(job) };
     });
   }
 
@@ -565,7 +565,7 @@ function handleQuestion(
       "I use TypeScript and React for frontend development. This portfolio site is built with React 19, Vite, React Router, and Framer Motion - all in TypeScript.",
     experience: () => {
       const years = new Date().getFullYear() - 2010;
-      return `I have ${years}+ years of experience in IT, with the last ${years - 3} years focused on Site Reliability Engineering and Platform Engineering. Currently at ${data.work[0].company} as a ${data.work[0].position}.`;
+      return `I have ${years}+ years of experience in IT, with the last ${years - 3} years focused on Site Reliability, Platform Engineering and, most recently, AI platforms. Currently at ${data.work[0].company} as a ${data.work[0].position}.`;
     },
     current: () => formatJob(data.work[0]),
     certifications: () => formatEducation(data),

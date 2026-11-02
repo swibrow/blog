@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --open --port $((RANDOM % 1000 + 4000))",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
